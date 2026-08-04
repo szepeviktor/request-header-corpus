@@ -1,0 +1,339 @@
+name: Capture browser request headers
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: header-capture-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ubuntu:
+    name: Capture ${{ matrix.browser }} on Ubuntu
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, edge, firefox]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install CA and NSS tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates libnss3-tools
+          go install filippo.io/mkcert@v1.4.4
+          mkdir -p "$RUNNER_TEMP/bin"
+          cp "$(go env GOPATH)/bin/mkcert" "$RUNNER_TEMP/bin/mkcert"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Install Microsoft Edge
+        if: matrix.browser == 'edge'
+        id: edge
+        uses: browser-actions/setup-edge@v1
+        with:
+          edge-version: stable
+
+      - name: Install Firefox
+        if: matrix.browser == 'firefox'
+        id: firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
+      - name: Install GeckoDriver
+        if: matrix.browser == 'firefox'
+        id: geckodriver
+        uses: browser-actions/setup-geckodriver@v1
+        with:
+          geckodriver-version: "0.36.0"
+
+      - name: Record browser and driver configuration
+        shell: bash
+        run: |
+          case "${{ matrix.browser }}" in
+            chrome)
+              google-chrome --version
+              chromedriver --version
+              echo "CHROME_BINARY=$(command -v google-chrome)" >> "$GITHUB_ENV"
+              echo "CHROMEDRIVER=$(command -v chromedriver)" >> "$GITHUB_ENV"
+              echo "DRIVER_VERSION=$(chromedriver --version | awk '{print $2}')" >> "$GITHUB_ENV"
+              ;;
+            edge)
+              "${{ steps.edge.outputs.edge-path }}" --version
+              echo "EDGE_BINARY=${{ steps.edge.outputs.edge-path }}" >> "$GITHUB_ENV"
+              ;;
+            firefox)
+              "${{ steps.firefox.outputs.firefox-path }}" --version
+              "${{ steps.geckodriver.outputs.geckodriver-path }}" --version
+              echo "FIREFOX_BINARY=${{ steps.firefox.outputs.firefox-path }}" >> "$GITHUB_ENV"
+              echo "GECKODRIVER=${{ steps.geckodriver.outputs.geckodriver-path }}" >> "$GITHUB_ENV"
+              echo "DRIVER_VERSION=$("${{ steps.geckodriver.outputs.geckodriver-path }}" --version | head -1 | awk '{print $2}')" >> "$GITHUB_ENV"
+              ;;
+          esac
+          echo "OBSERVATION_OS=ubuntu-24.04" >> "$GITHUB_ENV"
+          echo "OBSERVATION_ARCH=$(uname -m)" >> "$GITHUB_ENV"
+          echo "HEADLESS=true" >> "$GITHUB_ENV"
+
+      - name: Create and trust the ephemeral CA
+        shell: bash
+        run: |
+          export CAROOT="$RUNNER_TEMP/mkcert-ca"
+          mkdir -p "$CAROOT" "$RUNNER_TEMP/tls" "$RUNNER_TEMP/captures"
+          mkcert -install
+          mkcert \
+            -cert-file "$RUNNER_TEMP/tls/server.crt" \
+            -key-file "$RUNNER_TEMP/tls/server.key" \
+            app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
+
+          if [ "${{ matrix.browser }}" = "firefox" ]; then
+            FIREFOX_PROFILE="$RUNNER_TEMP/firefox-profile"
+            mkdir -p "$FIREFOX_PROFILE"
+            certutil -N --empty-password -d "sql:$FIREFOX_PROFILE"
+            certutil -A \
+              -d "sql:$FIREFOX_PROFILE" \
+              -n "GHA Header Capture Root CA" \
+              -t "CT,CT," \
+              -i "$CAROOT/rootCA.pem"
+            echo "FIREFOX_PROFILE=$FIREFOX_PROFILE" >> "$GITHUB_ENV"
+          else
+            for NSS_DB in "$HOME/.local/share/pki/nssdb" "$HOME/.pki/nssdb"; do
+              mkdir -p "$NSS_DB"
+              if [ ! -f "$NSS_DB/cert9.db" ]; then
+                certutil -N --empty-password -d "sql:$NSS_DB"
+              fi
+              certutil -D \
+                -d "sql:$NSS_DB" \
+                -n "GHA Header Capture Root CA" 2>/dev/null || true
+              certutil -A \
+                -d "sql:$NSS_DB" \
+                -n "GHA Header Capture Root CA" \
+                -t "C,," \
+                -i "$CAROOT/rootCA.pem"
+            done
+          fi
+
+          echo "CAROOT=$CAROOT" >> "$GITHUB_ENV"
+          echo "TLS_CERT=$RUNNER_TEMP/tls/server.crt" >> "$GITHUB_ENV"
+          echo "TLS_KEY=$RUNNER_TEMP/tls/server.key" >> "$GITHUB_ENV"
+          echo "CAPTURE_DIR=$RUNNER_TEMP/captures" >> "$GITHUB_ENV"
+
+      - name: Configure local test domains
+        run: |
+          echo "127.0.0.1 app.test api.app.test attacker.test" \
+            | sudo tee -a /etc/hosts >/dev/null
+
+      - name: Start the HTTPS capture server
+        shell: bash
+        run: |
+          sudo --preserve-env=TLS_CERT,TLS_KEY,CAPTURE_DIR \
+            "$(command -v node)" collector/server.mjs >"$RUNNER_TEMP/capture-server.log" 2>&1 &
+          echo "CAPTURE_SERVER_PID=$!" >> "$GITHUB_ENV"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error https://app.test/health | grep -qx ok; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/capture-server.log"
+          exit 1
+
+      - name: Capture all three scenarios
+        run: node collector/capture.mjs --browser "${{ matrix.browser }}"
+
+      - name: Validate and normalize this browser
+        env:
+          EXPECTED_BROWSERS: ${{ matrix.browser }}
+        run: |
+          npm run validate
+          npm run normalize
+          npm run check:keys
+
+      - name: Stop capture server
+        if: always()
+        run: |
+          if [ -n "${CAPTURE_SERVER_PID:-}" ]; then
+            sudo kill "$CAPTURE_SERVER_PID" 2>/dev/null || true
+          fi
+
+      - name: Upload browser corpus
+        uses: actions/upload-artifact@v4
+        with:
+          name: capture-ubuntu-${{ matrix.browser }}
+          path: |
+            raw
+            observations
+            normalized
+          if-no-files-found: error
+          retention-days: 14
+
+  safari:
+    name: Capture Safari on macOS
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies and mkcert
+        run: |
+          npm ci
+          go install filippo.io/mkcert@v1.4.4
+          mkdir -p "$RUNNER_TEMP/bin"
+          cp "$(go env GOPATH)/bin/mkcert" "$RUNNER_TEMP/bin/mkcert"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Enable and record Safari
+        run: |
+          sudo safaridriver --enable
+          safaridriver --version
+          defaults read /Applications/Safari.app/Contents/Info CFBundleShortVersionString
+          echo "DRIVER_VERSION=$(safaridriver --version | head -1)" >> "$GITHUB_ENV"
+          echo "OBSERVATION_OS=macos-15" >> "$GITHUB_ENV"
+          echo "OBSERVATION_ARCH=$(uname -m)" >> "$GITHUB_ENV"
+          echo "HEADLESS=false" >> "$GITHUB_ENV"
+
+      - name: Create and trust the ephemeral CA
+        run: |
+          export CAROOT="$RUNNER_TEMP/mkcert-ca"
+          mkdir -p "$CAROOT" "$RUNNER_TEMP/tls" "$RUNNER_TEMP/captures"
+          mkcert -install
+          mkcert \
+            -cert-file "$RUNNER_TEMP/tls/server.crt" \
+            -key-file "$RUNNER_TEMP/tls/server.key" \
+            app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
+          sudo security add-trusted-cert \
+            -d -r trustRoot -p ssl \
+            -k /Library/Keychains/System.keychain \
+            "$CAROOT/rootCA.pem"
+          echo "CAROOT=$CAROOT" >> "$GITHUB_ENV"
+          echo "TLS_CERT=$RUNNER_TEMP/tls/server.crt" >> "$GITHUB_ENV"
+          echo "TLS_KEY=$RUNNER_TEMP/tls/server.key" >> "$GITHUB_ENV"
+          echo "CAPTURE_DIR=$RUNNER_TEMP/captures" >> "$GITHUB_ENV"
+
+      - name: Configure local test domains
+        run: |
+          echo "127.0.0.1 app.test api.app.test attacker.test" \
+            | sudo tee -a /etc/hosts >/dev/null
+
+      - name: Start the HTTPS capture server
+        run: |
+          sudo --preserve-env=TLS_CERT,TLS_KEY,CAPTURE_DIR \
+            "$(command -v node)" collector/server.mjs >"$RUNNER_TEMP/capture-server.log" 2>&1 &
+          echo "CAPTURE_SERVER_PID=$!" >> "$GITHUB_ENV"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error https://app.test/health | grep -qx ok; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/capture-server.log"
+          exit 1
+
+      - name: Capture all three scenarios
+        run: node collector/capture.mjs --browser safari
+
+      - name: Validate and normalize Safari
+        env:
+          EXPECTED_BROWSERS: safari
+        run: |
+          npm run validate
+          npm run normalize
+          npm run check:keys
+
+      - name: Stop capture server
+        if: always()
+        run: |
+          if [ -n "${CAPTURE_SERVER_PID:-}" ]; then
+            sudo kill "$CAPTURE_SERVER_PID" 2>/dev/null || true
+          fi
+
+      - name: Upload Safari corpus
+        uses: actions/upload-artifact@v4
+        with:
+          name: capture-macos-safari
+          path: |
+            raw
+            observations
+            normalized
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Validate and publish weekly corpus
+    needs: [ubuntu, safari]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Merge browser artifacts
+        uses: actions/download-artifact@v5
+        with:
+          pattern: capture-*
+          path: .
+          merge-multiple: true
+
+      - name: Validate complete corpus and build report
+        env:
+          EXPECTED_BROWSERS: chrome,edge,firefox,safari
+        run: |
+          npm run validate
+          npm run normalize
+          npm run report
+          npm run check:keys
+
+      - name: Upload complete corpus
+        uses: actions/upload-artifact@v4
+        with:
+          name: request-header-corpus
+          path: |
+            raw
+            observations
+            normalized
+            reports/latest.md
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Commit refreshed corpus to the repository
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add raw observations normalized reports/latest.md
+          if git diff --cached --quiet; then
+            echo "Corpus is already current"
+            exit 0
+          fi
+          git commit -m "data: refresh weekly browser header corpus"
+          git push
