@@ -214,11 +214,10 @@ jobs:
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "HEADLESS=true" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "ACCEPT_INSECURE_CERTS=true" |
-            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Create the ephemeral TLS certificate
+      - name: Create and trust the ephemeral CA
         shell: pwsh
+        timeout-minutes: 3
         run: |
           $env:CAROOT = Join-Path $env:RUNNER_TEMP "mkcert-ca"
           $tls = Join-Path $env:RUNNER_TEMP "tls"
@@ -234,6 +233,12 @@ jobs:
             app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
           if ($LASTEXITCODE -ne 0) {
             throw "mkcert failed to create the server certificate"
+          }
+          $rootCaPath = Join-Path $env:CAROOT "rootCA.pem"
+          Write-Host "Adding the CA to the CurrentUser Root store with certutil"
+          & certutil.exe -user -f -addstore Root $rootCaPath
+          if ($LASTEXITCODE -ne 0) {
+            throw "certutil failed to trust the root CA"
           }
           "CAROOT=$env:CAROOT" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -268,7 +273,6 @@ jobs:
             try {
               $response = Invoke-WebRequest `
                 -Uri "https://app.test/health" `
-                -SkipCertificateCheck `
                 -UseBasicParsing
               if ($response.StatusCode -eq 200 -and $response.Content -eq "ok") {
                 exit 0
