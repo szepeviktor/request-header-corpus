@@ -2,14 +2,13 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseRawHeaders } from '../collector/raw-headers.mjs';
-import { listJsonFiles, readJson } from './lib/files.mjs';
+import { loadManifest } from './lib/manifest.mjs';
 import { normalizeObservation } from './lib/normalize.mjs';
 
 export async function normalizeCorpus(root = resolve('.')) {
-  const observationsDirectory = resolve(root, 'observations');
   const output = [];
-  for (const observationPath of await listJsonFiles(observationsDirectory)) {
-    const observation = await readJson(observationPath);
+  const manifest = await loadManifest(root);
+  for (const observation of manifest.observations) {
     const { headers } = parseRawHeaders(
       await readFile(resolve(root, observation.request.raw_file), 'utf8'),
     );
@@ -18,7 +17,8 @@ export async function normalizeCorpus(root = resolve('.')) {
     const outputPath = resolve(
       root,
       'normalized',
-      relative(observationsDirectory, observationPath),
+      relative(resolve(root, 'raw'), resolve(root, observation.request.raw_file))
+        .replace(/\.txt$/, '.json'),
     );
     await mkdir(dirname(outputPath), { recursive: true });
     const temporary = `${outputPath}.${process.pid}.tmp`;

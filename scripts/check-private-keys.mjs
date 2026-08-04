@@ -2,7 +2,8 @@ import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOTS = ['artifacts', 'observations', 'raw', 'normalized', 'reports'];
+const ROOTS = ['artifacts', 'manifest-fragments', 'raw', 'normalized', 'reports'];
+const FILES = ['manifest.json'];
 const PRIVATE_KEY_MARKER = /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
 
 export async function findPrivateKeys(root = resolve('.')) {
@@ -28,6 +29,14 @@ export async function findPrivateKeys(root = resolve('.')) {
     }
   }
   for (const directory of ROOTS) await visit(resolve(root, directory));
+  for (const file of FILES) {
+    const path = resolve(root, file);
+    try {
+      if (PRIVATE_KEY_MARKER.test(await readFile(path, 'utf8'))) findings.push(path);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
   return findings.sort();
 }
 

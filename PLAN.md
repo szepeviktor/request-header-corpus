@@ -331,61 +331,16 @@ Ha tanúsítványhiba vagy warning oldal jelenik meg, a job hibával álljon le.
 
 ## Kimeneti formátum
 
-Minden böngészőhöz és profilhoz külön JSON-fájl készüljön.
-
-Példa útvonal:
+Minden böngésző, protokoll és scenario külön, közvetlenül olvasható raw
+szövegfájlt kapjon:
 
 ```text
-observations/
-  chrome/
-    150.0.0.0/
-      windows-2025/
-        navigation-get.json
-        form-post.json
-        ajax-post.json
+raw/chrome/150.0.0.0/windows-2025/http1/navigation-get.txt
+raw/chrome/150.0.0.0/windows-2025/http2/navigation-get.txt
 ```
 
-Példa JSON:
-
-```json
-{
-  "schema_version": 1,
-  "client": {
-    "name": "chrome",
-    "version": "150.0.0.0",
-    "engine": "chromium",
-    "channel": "stable"
-  },
-  "environment": {
-    "os": "windows-2025",
-    "architecture": "x64",
-    "headless": true,
-    "runner_image": "windows-2025",
-    "runner_image_version": "unknown"
-  },
-  "tls": {
-    "trusted_by_browser": true,
-    "alpn": "h2",
-    "secure_context": true
-  },
-  "scenario": {
-    "id": "ajax-post",
-    "method": "POST",
-    "url": "https://app.test/capture/ajax"
-  },
-  "request": {
-    "http_version": "2.0",
-    "headers": {
-      "content-type": "application/json"
-    },
-    "raw_headers": [
-      "content-type",
-      "application/json"
-    ]
-  },
-  "observed_at": "2026-08-04T00:00:00Z"
-}
-```
+A fejlécek soronként `név: érték` formában, az eredeti sorrendben szerepeljenek.
+Az összes mérési metaadat egyetlen gyökérszintű `manifest.json` fájlba kerüljön.
 
 Ne normalizáld vagy töröld a következőket a nyers adatból:
 
@@ -420,14 +375,17 @@ Készíts külön normalizált nézetet is diffeléshez, de a raw mérés mindig
 │       ├── form-post.mjs
 │       └── ajax-post.mjs
 ├── schema/
-│   └── observation.schema.json
-├── observations/
+│   └── manifest.schema.json
+├── raw/
+├── normalized/
 ├── scripts/
+│   ├── generate-manifest.mjs
 │   ├── normalize.mjs
 │   ├── validate.mjs
 │   └── generate-report.mjs
 ├── reports/
 │   └── latest.md
+├── manifest.json
 ├── package.json
 ├── package-lock.json
 ├── README.md

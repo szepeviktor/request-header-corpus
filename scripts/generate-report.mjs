@@ -2,7 +2,7 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseRawHeaders } from '../collector/raw-headers.mjs';
-import { listJsonFiles, readJson } from './lib/files.mjs';
+import { loadManifest } from './lib/manifest.mjs';
 import { normalizedHeaders } from './lib/normalize.mjs';
 
 const WATCHED = new Set([
@@ -58,8 +58,8 @@ function displayChanges(diff) {
 
 export async function renderReport(root = resolve('.')) {
   const entries = [];
-  for (const path of await listJsonFiles(resolve(root, 'observations'))) {
-    const observation = await readJson(path);
+  const manifest = await loadManifest(root);
+  for (const observation of manifest.observations) {
     const { headers } = parseRawHeaders(
       await readFile(resolve(root, observation.request.raw_file), 'utf8'),
     );

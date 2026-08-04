@@ -7,6 +7,7 @@ import { mkdtemp } from 'node:fs/promises';
 import test from 'node:test';
 import { CAPTURE_PROTOCOLS, CAPTURE_SCENARIOS } from '../collector/capture.mjs';
 import { findPrivateKeys } from '../scripts/check-private-keys.mjs';
+import { buildManifest } from '../scripts/lib/manifest.mjs';
 import { validateCorpus } from '../scripts/validate.mjs';
 
 const BROWSERS = {
@@ -18,7 +19,7 @@ const BROWSERS = {
 
 async function copySchemas(root) {
   await mkdir(join(root, 'schema'), { recursive: true });
-  const name = 'observation.schema.json';
+  const name = 'manifest.schema.json';
   await writeFile(join(root, 'schema', name), await readFile(resolve('schema', name)));
 }
 
@@ -44,7 +45,6 @@ async function writeFixture(root, browser, engine, protocol, scenario) {
     .map(([name, value]) => `${name}: ${value}`)
     .join('\n')}\n`;
   const observation = {
-    schema_version: 4,
     client: {
       name: browser,
       version,
@@ -80,19 +80,9 @@ async function writeFixture(root, browser, engine, protocol, scenario) {
     observed_at: '2026-08-04T00:00:00.000Z',
   };
   const rawPath = join(root, rawRelative);
-  const observationPath = join(
-    root,
-    'observations',
-    browser,
-    version,
-    os,
-    protocol,
-    `${scenario.id}.json`,
-  );
   await mkdir(dirname(rawPath), { recursive: true });
-  await mkdir(dirname(observationPath), { recursive: true });
   await writeFile(rawPath, rawText);
-  await writeFile(observationPath, JSON.stringify(observation));
+  return observation;
 }
 
 test('schema validation requires both protocols and all scenarios for every browser', async (context) => {
@@ -103,13 +93,17 @@ test('schema validation requires both protocols and all scenarios for every brow
     CAPTURE_SCENARIOS.map((item) => item.scenario.id),
     ['navigation-get', 'form-post', 'ajax-post'],
   );
+  const observations = [];
   for (const [browser, engine] of Object.entries(BROWSERS)) {
     for (const protocol of CAPTURE_PROTOCOLS.map(({ id }) => id)) {
       for (const scenarioModule of CAPTURE_SCENARIOS) {
-        await writeFixture(root, browser, engine, protocol, scenarioModule.scenario);
+        observations.push(
+          await writeFixture(root, browser, engine, protocol, scenarioModule.scenario),
+        );
       }
     }
   }
+  await writeFile(join(root, 'manifest.json'), JSON.stringify(buildManifest(observations)));
   assert.equal(await validateCorpus(root, Object.keys(BROWSERS)), 24);
 });
 

@@ -10,6 +10,7 @@
     "capture": "node collector/capture.mjs",
     "server": "node collector/server.mjs",
     "normalize": "node scripts/normalize.mjs",
+    "manifest": "node scripts/generate-manifest.mjs",
     "validate": "node scripts/validate.mjs",
     "report": "node scripts/generate-report.mjs",
     "check:keys": "node scripts/check-private-keys.mjs",

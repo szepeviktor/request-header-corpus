@@ -29,25 +29,25 @@ repository contents, and branch protection must permit the bot commit.
 
 ## Repository data
 
-Each request is stored as a protocol-decoded raw header file and a separate
-observation:
+Each request is stored as a protocol-decoded raw header file. All measurement
+metadata is stored in one repository-level manifest:
 
 ```text
 raw/<browser>/<version>/<os>/<http1|http2>/<scenario>.txt
-observations/<browser>/<version>/<os>/<http1|http2>/<scenario>.json
+manifest.json
 ```
 
 Each raw file is directly readable text with one `name: value` header per line.
 Lines are written in exactly the order exposed by Node.js after HTTP/1.1 parsing
 or HTTP/2 HPACK decoding; they are never sorted or combined, and duplicate
 headers remain separate lines. HTTP/2 pseudo-headers such as `:method` are
-retained. Observation schema version 4 stores the browser, driver, operating
-system, protocol, scenario, HTTP version and ALPN metadata separately.
+retained. `manifest.json` stores the browser, driver, operating system, protocol,
+scenario, HTTP version, ALPN, measurement ID, timestamp, and raw-file reference
+for all observations.
 
-`observations/` contains browser, driver, operating-system, runner, TLS and scenario
-metadata, plus a relative reference to the raw file. `normalized/` contains a
-deterministic, lower-cased view intended only for diffs. `reports/latest.md`
-compares observations and highlights security-relevant header changes.
+`normalized/` contains a deterministic, lower-cased view intended only for
+diffs. `reports/latest.md` compares observations and highlights
+security-relevant header changes.
 
 `Cookie`, `Authorization`, `Proxy-Authorization`, and `Set-Cookie` values are
 replaced with `[REDACTED]` in the raw text files.
@@ -119,13 +119,20 @@ OBSERVATION_OS=local \
 node collector/capture.mjs --browser chrome
 ```
 
+The capture writes a browser-specific temporary manifest fragment. Convert it to
+the single repository manifest before validation:
+
+```bash
+npm run manifest
+```
+
 Supported values are `chrome`, `edge`, `firefox`, and `safari`. Linux captures are
 headless by default; set `HEADLESS=false` to show the browser. Safari is always
 non-headless.
 
 ## Validation
 
-The validator checks the observation JSON Schema, raw/observation
+The validator checks the central manifest JSON Schema, manifest/raw
 cross-references, raw `name: value` syntax, redaction, HTTP version and ALPN
 negotiation, content types and expected Fetch Metadata context. In CI, it
 requires all three scenarios over both protocols for each browser.

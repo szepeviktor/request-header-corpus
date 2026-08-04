@@ -5,7 +5,8 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
 import { parseRawHeaders } from '../collector/raw-headers.mjs';
 import { isSecretHeader } from '../collector/request.mjs';
-import { listFiles, listJsonFiles, readJson } from './lib/files.mjs';
+import { listFiles } from './lib/files.mjs';
+import { loadManifest } from './lib/manifest.mjs';
 
 function formatErrors(errors) {
   return errors
@@ -49,21 +50,26 @@ function assertScenarioMatches(observation, headers, path) {
 }
 
 export async function validateCorpus(root = resolve('.'), expectedBrowsers = []) {
-  const observationSchema = JSON.parse(
-    await readFile(resolve(root, 'schema/observation.schema.json'), 'utf8'),
+  const manifestSchema = JSON.parse(
+    await readFile(resolve(root, 'schema/manifest.schema.json'), 'utf8'),
   );
   const ajv = new Ajv2020({ allErrors: true, strict: true });
   addFormats(ajv);
-  const validateObservation = ajv.compile(observationSchema);
-  const observationPaths = await listJsonFiles(resolve(root, 'observations'));
+  const validateManifest = ajv.compile(manifestSchema);
+  const manifest = await loadManifest(root);
+  if (!validateManifest(manifest)) {
+    throw new Error(`manifest.json: ${formatErrors(validateManifest.errors)}`);
+  }
   const scenariosByBrowser = new Map();
   const referencedRawPaths = new Set();
+  const measurementIds = new Set();
 
-  for (const path of observationPaths) {
-    const observation = await readJson(path);
-    if (!validateObservation(observation)) {
-      throw new Error(`${path}: ${formatErrors(validateObservation.errors)}`);
+  for (const observation of manifest.observations) {
+    const path = `manifest.json:${observation.request.measurement_id}`;
+    if (measurementIds.has(observation.request.measurement_id)) {
+      throw new Error(`${path}: duplicate measurement ID`);
     }
+    measurementIds.add(observation.request.measurement_id);
     const rawPath = resolve(root, observation.request.raw_file);
     if (!observation.request.raw_file.includes(`/${observation.request.protocol}/`)) {
       throw new Error(`${path}: raw file path does not match the protocol`);
@@ -73,6 +79,9 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
       : 'https://http1.app.test:444';
     if (new URL(observation.scenario.url).origin !== expectedOrigin) {
       throw new Error(`${path}: scenario URL does not match the protocol`);
+    }
+    if (referencedRawPaths.has(rawPath)) {
+      throw new Error(`${path}: duplicate raw file reference`);
     }
     referencedRawPaths.add(rawPath);
     const rawText = await readFile(rawPath, 'utf8');
@@ -109,6 +118,13 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
   if (rawPaths.length !== referencedRawPaths.size) {
     throw new Error('One or more observations reference a missing raw header file');
   }
+  const latestObservation = manifest.observations
+    .map(({ observed_at: observedAt }) => observedAt)
+    .sort()
+    .at(-1);
+  if (manifest.generated_at !== latestObservation) {
+    throw new Error('manifest.json: generated_at must equal the latest observation timestamp');
+  }
 
   const requiredScenarios = ['navigation-get', 'form-post', 'ajax-post'];
   for (const browser of expectedBrowsers) {
@@ -121,7 +137,7 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
       }
     }
   }
-  return observationPaths.length;
+  return manifest.observations.length;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

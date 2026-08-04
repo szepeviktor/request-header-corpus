@@ -114,7 +114,6 @@ export function buildObservation({
   const headless = browser !== 'safari' && process.env.HEADLESS !== 'false';
 
   return {
-    schema_version: 4,
     client: {
       name: DISPLAY_NAMES[browser],
       version,
@@ -166,6 +165,7 @@ async function main() {
     }
     const version = safeSegment(capabilities.get('browserVersion') || 'unknown');
     const osName = safeSegment(process.env.OBSERVATION_OS || `${process.platform}-${process.release.name}`);
+    const observations = [];
 
     for (const protocol of CAPTURE_PROTOCOLS) {
       const baseUrl = protocol.baseUrl();
@@ -194,7 +194,7 @@ async function main() {
         const rawPath = join(outputRoot, rawRelative);
         await atomicText(rawPath, formatRawHeaders(raw.raw_headers));
 
-        const observation = buildObservation({
+        observations.push(buildObservation({
           browser,
           capabilities,
           raw,
@@ -202,20 +202,13 @@ async function main() {
           scenario: scenarioModule.scenario,
           protocol,
           baseUrl,
-        });
-        const observationPath = join(
-          outputRoot,
-          'observations',
-          browser,
-          version,
-          osName,
-          protocol.id,
-          `${scenarioModule.scenario.id}.json`,
-        );
-        await atomicJson(observationPath, observation);
-        process.stdout.write(`${relative(outputRoot, observationPath)}\n`);
+        }));
+        process.stdout.write(`${relative(outputRoot, rawPath)}\n`);
       }
     }
+    const fragmentPath = join(outputRoot, 'manifest-fragments', `${browser}.json`);
+    await atomicJson(fragmentPath, { observations });
+    process.stdout.write(`${relative(outputRoot, fragmentPath)}\n`);
   } finally {
     await driver.quit();
   }

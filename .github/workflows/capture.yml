@@ -34,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Reset generated corpus
-        run: rm -rf raw observations normalized reports
+        run: rm -rf raw normalized reports manifest.json manifest-fragments
 
       - name: Install CA and NSS tools
         run: |
@@ -154,7 +154,7 @@ jobs:
           name: capture-ubuntu-${{ matrix.browser }}
           path: |
             raw
-            observations
+            manifest-fragments
             normalized
           if-no-files-found: error
           retention-days: 14
@@ -184,7 +184,11 @@ jobs:
 
       - name: Reset generated corpus
         shell: pwsh
-        run: Remove-Item -Recurse -Force raw, observations, normalized, reports -ErrorAction SilentlyContinue
+        run: |
+          Remove-Item -Recurse -Force `
+            raw, normalized, reports, manifest-fragments `
+            -ErrorAction SilentlyContinue
+          Remove-Item -Force manifest.json -ErrorAction SilentlyContinue
 
       - name: Record browser and driver configuration
         shell: pwsh
@@ -317,7 +321,7 @@ jobs:
           name: capture-windows-${{ matrix.browser }}
           path: |
             raw
-            observations
+            manifest-fragments
             normalized
           if-no-files-found: error
           retention-days: 14
@@ -342,7 +346,7 @@ jobs:
           test "$(mkcert -version)" = "v1.4.4"
 
       - name: Reset generated corpus
-        run: rm -rf raw observations normalized reports
+        run: rm -rf raw normalized reports manifest.json manifest-fragments
 
       - name: Enable and record Safari
         run: |
@@ -415,7 +419,7 @@ jobs:
           name: capture-macos-safari
           path: |
             raw
-            observations
+            manifest-fragments
             normalized
           if-no-files-found: error
           retention-days: 14
@@ -439,7 +443,7 @@ jobs:
       - run: npm ci
 
       - name: Reset generated corpus
-        run: rm -rf raw observations normalized reports
+        run: rm -rf raw normalized reports manifest.json manifest-fragments
 
       - name: Merge browser artifacts
         uses: actions/download-artifact@v5
@@ -452,6 +456,7 @@ jobs:
         env:
           EXPECTED_BROWSERS: chrome,edge,firefox,safari
         run: |
+          npm run manifest
           npm run validate
           npm run normalize
           npm run report
@@ -463,7 +468,7 @@ jobs:
           name: request-header-corpus
           path: |
             raw
-            observations
+            manifest.json
             normalized
             reports/latest.md
           if-no-files-found: error
@@ -474,7 +479,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add raw observations normalized reports/latest.md
+          git add raw manifest.json normalized reports/latest.md
           if git diff --cached --quiet; then
             echo "Corpus is already current"
             exit 0
