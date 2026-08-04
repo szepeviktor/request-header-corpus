@@ -57,7 +57,7 @@ Every job creates a disposable mkcert v1.4.4 CA under `RUNNER_TEMP`. The CA is
 installed into the operating-system trust store and into the browser-specific NSS
 database:
 
-- Chrome and Edge use the Windows Current User Root certificate store;
+- Chrome and Edge use the Windows Local Machine Root certificate store;
 - Firefox uses a dedicated profile with an explicitly imported root CA;
 - Safari uses the macOS System Keychain.
 

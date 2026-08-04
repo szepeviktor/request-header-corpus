@@ -235,8 +235,8 @@ jobs:
             throw "mkcert failed to create the server certificate"
           }
           $rootCaPath = Join-Path $env:CAROOT "rootCA.pem"
-          Write-Host "Adding the CA to the CurrentUser Root store with certutil"
-          & certutil.exe -user -f -addstore Root $rootCaPath
+          Write-Host "Adding the CA to the LocalMachine Root store with certutil"
+          & certutil.exe -f -addstore Root $rootCaPath
           if ($LASTEXITCODE -ne 0) {
             throw "certutil failed to trust the root CA"
           }
