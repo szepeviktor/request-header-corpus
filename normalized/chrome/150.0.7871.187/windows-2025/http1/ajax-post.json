@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "client": {
+    "name": "chrome",
+    "version": "150.0.7871.187",
+    "engine": "chromium",
+    "channel": "stable",
+    "driver_version": "150.0.7871.124"
+  },
+  "environment": {
+    "os": "windows-2025",
+    "architecture": "AMD64",
+    "headless": true,
+    "runner_image": "win25-vs2026",
+    "runner_image_version": "20260728.188.1"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "http/1.1",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "ajax-post",
+    "method": "POST",
+    "url": "https://http1.app.test:444/capture/ajax"
+  },
+  "request": {
+    "protocol": "http1",
+    "http_version": "1.1",
+    "headers": {
+      "accept": [
+        "*/*"
+      ],
+      "accept-encoding": [
+        "gzip, deflate, br, zstd"
+      ],
+      "accept-language": [
+        "en-US,en;q=0.9"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-length": [
+        "27"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "http1.app.test:444"
+      ],
+      "origin": [
+        "https://http1.app.test:444"
+      ],
+      "referer": [
+        "https://http1.app.test:444/scenario/ajax?token=LDjcYWkdA_9l2MOa3ZawXR9e3Wcochbj"
+      ],
+      "sec-ch-ua": [
+        "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+      ],
+      "sec-ch-ua-mobile": [
+        "?0"
+      ],
+      "sec-ch-ua-platform": [
+        "\"Windows\""
+      ],
+      "sec-fetch-dest": [
+        "empty"
+      ],
+      "sec-fetch-mode": [
+        "cors"
+      ],
+      "sec-fetch-site": [
+        "same-origin"
+      ],
+      "user-agent": [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36"
+      ]
+    }
+  }
+}

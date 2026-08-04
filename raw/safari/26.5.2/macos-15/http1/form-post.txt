@@ -1,0 +1,14 @@
+Host: http1.app.test:444
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Content-Type: application/x-www-form-urlencoded
+Origin: https://http1.app.test:444
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15
+Referer: https://http1.app.test:444/scenario/form?token=0ldvQO3nvucaLiD8heR9RHR91UX0JvVq
+Sec-Fetch-Dest: document
+Content-Length: 21
+Accept-Language: en-US,en;q=0.9
+Priority: u=0, i
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive

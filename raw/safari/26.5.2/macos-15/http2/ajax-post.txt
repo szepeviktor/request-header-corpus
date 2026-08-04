@@ -1,0 +1,16 @@
+:method: POST
+:scheme: https
+:authority: app.test
+:path: /capture/ajax?token=8Nnq_88rAx14TcCwdU-F3Y0TTN_BtSjR
+accept: */*
+content-type: application/json
+origin: https://app.test
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15
+referer: https://app.test/scenario/ajax?token=8Nnq_88rAx14TcCwdU-F3Y0TTN_BtSjR
+sec-fetch-dest: empty
+content-length: 27
+accept-language: en-US,en;q=0.9
+priority: u=3, i
+accept-encoding: gzip, deflate, br

@@ -1,0 +1,34 @@
+{
+  "schema_version": 4,
+  "client": {
+    "name": "safari",
+    "version": "26.5.2",
+    "engine": "webkit",
+    "channel": "stable",
+    "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+  },
+  "environment": {
+    "os": "macos-15",
+    "architecture": "arm64",
+    "headless": false,
+    "runner_image": "macos15",
+    "runner_image_version": "20260727.0256.1"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "http/1.1",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "ajax-post",
+    "method": "POST",
+    "url": "https://http1.app.test:444/capture/ajax"
+  },
+  "request": {
+    "raw_file": "raw/safari/26.5.2/macos-15/http1/ajax-post.txt",
+    "measurement_id": "71936cd0-539e-409d-a8b2-5f4cb44b2e65",
+    "http_version": "1.1",
+    "protocol": "http1"
+  },
+  "observed_at": "2026-08-04T07:59:18.171Z"
+}

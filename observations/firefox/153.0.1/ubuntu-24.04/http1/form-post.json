@@ -1,0 +1,34 @@
+{
+  "schema_version": 4,
+  "client": {
+    "name": "firefox",
+    "version": "153.0.1",
+    "engine": "gecko",
+    "channel": "stable",
+    "driver_version": "0.36.0"
+  },
+  "environment": {
+    "os": "ubuntu-24.04",
+    "architecture": "x86_64",
+    "headless": true,
+    "runner_image": "ubuntu24",
+    "runner_image_version": "20260720.247.2"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "http/1.1",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "form-post",
+    "method": "POST",
+    "url": "https://http1.app.test:444/capture/form"
+  },
+  "request": {
+    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/http1/form-post.txt",
+    "measurement_id": "168a3935-9283-43c8-b9d2-c309f6869905",
+    "http_version": "1.1",
+    "protocol": "http1"
+  },
+  "observed_at": "2026-08-04T07:59:38.623Z"
+}
