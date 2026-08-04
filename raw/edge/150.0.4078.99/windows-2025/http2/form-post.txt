@@ -1,7 +1,7 @@
 :method: POST
 :authority: app.test
 :scheme: https
-:path: /capture/form?token=uD9B8YzXFD1qbCKjOMtE4N35yju6Cxca
+:path: /capture/form?token=DDRnMWCZFUK7eYxhSiNIhZsN6a1Soyav
 content-length: 21
 cache-control: max-age=0
 sec-ch-ua: "Not;A=Brand";v="8", "Chromium";v="150", "Microsoft Edge";v="150"
@@ -16,7 +16,7 @@ sec-fetch-site: same-origin
 sec-fetch-mode: navigate
 sec-fetch-user: ?1
 sec-fetch-dest: document
-referer: https://app.test/scenario/form?token=uD9B8YzXFD1qbCKjOMtE4N35yju6Cxca
+referer: https://app.test/scenario/form?token=DDRnMWCZFUK7eYxhSiNIhZsN6a1Soyav
 accept-encoding: gzip, deflate, br, zstd
 accept-language: en-US,en;q=0.9
 priority: u=0, i

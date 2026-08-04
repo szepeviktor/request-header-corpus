@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=J_dERs2vDV8DjmgblnUzJCV__Fx62DKv"
+        "/capture/ajax?token=E-nzupKuCgBiAJkJGOYz7WRphfuimB9e"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=4"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=J_dERs2vDV8DjmgblnUzJCV__Fx62DKv"
+        "https://app.test/scenario/ajax?token=E-nzupKuCgBiAJkJGOYz7WRphfuimB9e"
       ],
       "sec-fetch-dest": [
         "empty"

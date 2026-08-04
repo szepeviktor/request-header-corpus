@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=z7LseMYfSY8eywt0KU3CZBiMjBvKUtc5"
+        "/capture/form?token=FMweNp-HkSxcWdW1p8QS5kG2rx7cbLKc"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=z7LseMYfSY8eywt0KU3CZBiMjBvKUtc5"
+        "https://app.test/scenario/form?token=FMweNp-HkSxcWdW1p8QS5kG2rx7cbLKc"
       ],
       "sec-fetch-dest": [
         "document"

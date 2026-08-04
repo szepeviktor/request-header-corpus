@@ -11,6 +11,6 @@ Origin: https://http1.app.test:444
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: https://http1.app.test:444/scenario/ajax?token=LTOL08fU6_blbks8mUdHk_wf4y2U5GDd
+Referer: https://http1.app.test:444/scenario/ajax?token=0N47EseALP_j7bezmMuy0GjffjIyZShW
 Accept-Encoding: gzip, deflate, br, zstd
 Accept-Language: en-US,en;q=0.9
