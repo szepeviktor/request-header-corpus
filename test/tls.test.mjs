@@ -1,32 +1,26 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { verifyTrustedTls } from '../collector/capture.mjs';
+import { assertCapture } from '../collector/capture.mjs';
 
-test('browser TLS verification rejects a non-secure context', async () => {
-  const driver = {
-    async get() {},
-    async executeScript() {
-      return false;
-    },
-    findElement() {
-      return { async getText() { return 'ok'; } };
-    },
-    async getCurrentUrl() {
-      return 'https://app.test/health';
-    },
+const protocol = { httpVersion: '2.0', alpn: 'h2' };
+const ajax = { id: 'ajax-post', method: 'POST', path: '/capture/ajax' };
+
+test('capture verification requires the browser to report a secure context', () => {
+  const raw = {
+    method: 'POST',
+    url: '/capture/ajax?token=abcdefghijklmnop&secure_context=false',
+    http_version: '2.0',
+    alpn: 'h2',
   };
-  await assert.rejects(
-    verifyTrustedTls(driver, 'https://app.test'),
-    /Browser does not trust the test CA/,
-  );
+  assert.throws(() => assertCapture(raw, ajax, protocol), /secure context/);
 });
 
-test('browser TLS verification does not suppress certificate navigation errors', async () => {
-  const certificateError = new Error('certificate verify failed');
-  const driver = {
-    async get() {
-      throw certificateError;
-    },
+test('capture verification rejects an unexpected protocol', () => {
+  const raw = {
+    method: 'POST',
+    url: '/capture/ajax?token=abcdefghijklmnop&secure_context=true',
+    http_version: '1.1',
+    alpn: 'http/1.1',
   };
-  await assert.rejects(verifyTrustedTls(driver, 'https://app.test'), certificateError);
+  assert.throws(() => assertCapture(raw, ajax, protocol), /expected 2\.0\/h2/);
 });

@@ -52,31 +52,15 @@ jobs:
         with:
           firefox-version: latest
 
-      - name: Install GeckoDriver
-        if: matrix.browser == 'firefox'
-        shell: bash
-        run: |
-          archive="$RUNNER_TEMP/geckodriver-v0.36.0-linux64.tar.gz"
-          mkdir -p "$RUNNER_TEMP/geckodriver"
-          curl --fail --location --silent --show-error \
-            --output "$archive" \
-            https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz
-          echo "0bde38707eb0a686a20c6bd50f4adcc7d60d4f73c60eb83ee9e0db8f65823e04  $archive" \
-            | sha256sum --check
-          tar -xzf "$archive" -C "$RUNNER_TEMP/geckodriver"
-          chmod 0755 "$RUNNER_TEMP/geckodriver/geckodriver"
-          echo "$RUNNER_TEMP/geckodriver" >> "$GITHUB_PATH"
-
-      - name: Record browser and driver configuration
+      - name: Record browser configuration
         shell: bash
         run: |
           case "${{ matrix.browser }}" in
             firefox)
-              "${{ steps.firefox.outputs.firefox-path }}" --version
-              geckodriver --version
+              browser_version="$("${{ steps.firefox.outputs.firefox-path }}" --version | awk '{print $3}')"
+              echo "Firefox $browser_version"
               echo "FIREFOX_BINARY=${{ steps.firefox.outputs.firefox-path }}" >> "$GITHUB_ENV"
-              echo "GECKODRIVER=$(command -v geckodriver)" >> "$GITHUB_ENV"
-              echo "DRIVER_VERSION=$(geckodriver --version | head -1 | awk '{print $2}')" >> "$GITHUB_ENV"
+              echo "BROWSER_VERSION=$browser_version" >> "$GITHUB_ENV"
               ;;
           esac
           echo "OBSERVATION_OS=ubuntu-24.04" >> "$GITHUB_ENV"
@@ -190,35 +174,24 @@ jobs:
             -ErrorAction SilentlyContinue
           Remove-Item -Force manifest.json -ErrorAction SilentlyContinue
 
-      - name: Record browser and driver configuration
+      - name: Record browser configuration
         shell: pwsh
         run: |
           if ("${{ matrix.browser }}" -eq "chrome") {
             $browserBinary = Join-Path $env:ProgramFiles "Google\Chrome\Application\chrome.exe"
-            $driverBinary = Join-Path $env:CHROMEWEBDRIVER "chromedriver.exe"
             $binaryVariable = "CHROME_BINARY"
-            $driverVariable = "CHROMEDRIVER"
           } else {
             $browserBinary = Join-Path ${env:ProgramFiles(x86)} "Microsoft\Edge\Application\msedge.exe"
-            $driverBinary = Join-Path $env:EDGEWEBDRIVER "msedgedriver.exe"
             $binaryVariable = "EDGE_BINARY"
-            $driverVariable = "EDGEDRIVER"
           }
           if (-not (Test-Path $browserBinary)) {
             throw "Browser is not installed at $browserBinary"
           }
-          if (-not (Test-Path $driverBinary)) {
-            throw "WebDriver is not installed at $driverBinary"
-          }
           $browserVersion = (Get-Item $browserBinary).VersionInfo.ProductVersion
-          $driverVersion = ((& $driverBinary --version) -split '\s+')[1]
           Write-Host "${{ matrix.browser }} $browserVersion"
-          & $driverBinary --version
           "$binaryVariable=$browserBinary" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "$driverVariable=$driverBinary" |
-            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "DRIVER_VERSION=$driverVersion" |
+          "BROWSER_VERSION=$browserVersion" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "OBSERVATION_OS=windows-2025" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -348,12 +321,11 @@ jobs:
       - name: Reset generated corpus
         run: rm -rf raw normalized manifest.json manifest-fragments
 
-      - name: Enable and record Safari
+      - name: Record Safari configuration
         run: |
-          sudo safaridriver --enable
-          safaridriver --version
-          defaults read /Applications/Safari.app/Contents/Info CFBundleShortVersionString
-          echo "DRIVER_VERSION=$(safaridriver --version | head -1)" >> "$GITHUB_ENV"
+          browser_version="$(defaults read /Applications/Safari.app/Contents/Info CFBundleShortVersionString)"
+          echo "Safari $browser_version"
+          echo "BROWSER_VERSION=$browser_version" >> "$GITHUB_ENV"
           echo "OBSERVATION_OS=macos-15" >> "$GITHUB_ENV"
           echo "OBSERVATION_ARCH=$(uname -m)" >> "$GITHUB_ENV"
           echo "HEADLESS=false" >> "$GITHUB_ENV"

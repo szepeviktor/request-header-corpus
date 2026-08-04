@@ -15,6 +15,46 @@ function html(body, script = '') {
 </html>`;
 }
 
+export function orchestrationPage(navigationToken) {
+  if (!navigationToken.endsWith('-navigation')) {
+    return html('<main id="captured">captured</main>');
+  }
+  const runToken = navigationToken.slice(0, -'-navigation'.length);
+  const ajaxToken = `${runToken}-ajax`;
+  const formToken = `${runToken}-form`;
+  return html(
+    '<main id="running">running</main>',
+    `(async () => {
+  if (!window.isSecureContext) {
+    throw new Error('The capture page is not a secure context');
+  }
+  const ajax = await fetch(
+    '/capture/ajax?token=' + encodeURIComponent(${JSON.stringify(ajaxToken)}) +
+      '&secure_context=' + encodeURIComponent(String(window.isSecureContext)),
+    {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({payload: 'header-corpus'})
+    }
+  );
+  if (!ajax.ok) throw new Error('AJAX capture failed: ' + ajax.status);
+  const form = document.createElement('form');
+  form.method = 'post';
+  form.action = '/capture/form?token=' + encodeURIComponent(${JSON.stringify(formToken)});
+  const payload = document.createElement('input');
+  payload.type = 'hidden';
+  payload.name = 'payload';
+  payload.value = 'header-corpus';
+  form.append(payload);
+  document.body.append(form);
+  form.submit();
+})().catch((error) => {
+  document.body.dataset.captureError = String(error);
+  document.querySelector('main').textContent = String(error);
+});`,
+  );
+}
+
 async function readBody(request) {
   const chunks = [];
   for await (const chunk of request) chunks.push(chunk);
@@ -64,32 +104,6 @@ export async function createCaptureServer({
         return;
       }
 
-      if (url.pathname === '/scenario/form') {
-        if (!TOKEN_PATTERN.test(token || '')) {
-          send(response, 400, 'text/plain; charset=utf-8', 'invalid token');
-          return;
-        }
-        send(
-          response,
-          200,
-          'text/html; charset=utf-8',
-          html(`<form method="post" action="/capture/form?token=${encodeURIComponent(token)}">
-  <input type="hidden" name="payload" value="header-corpus">
-  <button id="submit" type="submit">Submit</button>
-</form>`),
-        );
-        return;
-      }
-
-      if (url.pathname === '/scenario/ajax') {
-        if (!TOKEN_PATTERN.test(token || '')) {
-          send(response, 400, 'text/plain; charset=utf-8', 'invalid token');
-          return;
-        }
-        send(response, 200, 'text/html; charset=utf-8', html('<main id="ready">ready</main>'));
-        return;
-      }
-
       if (url.pathname.startsWith('/capture/')) {
         if (!TOKEN_PATTERN.test(token || '')) {
           send(response, 400, 'text/plain; charset=utf-8', 'invalid token');
@@ -99,7 +113,9 @@ export async function createCaptureServer({
         const record = snapshotRequest(request, token);
         await persistCapture(captureDirectory, token, record);
 
-        if (url.pathname === '/capture/ajax') {
+        if (url.pathname === '/capture/navigation') {
+          send(response, 200, 'text/html; charset=utf-8', orchestrationPage(token));
+        } else if (url.pathname === '/capture/ajax') {
           send(response, 200, 'application/json; charset=utf-8', '{"captured":true}');
         } else {
           send(response, 200, 'text/html; charset=utf-8', html('<main id="captured">captured</main>'));

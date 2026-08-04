@@ -6,7 +6,7 @@ import { connect as connectHttp2 } from 'node:http2';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
-import { createCaptureServer } from '../collector/server.mjs';
+import { createCaptureServer, orchestrationPage } from '../collector/server.mjs';
 
 function sendRequest({ port, ca, token }) {
   return new Promise((resolve, reject) => {
@@ -58,6 +58,15 @@ function sendHttp2Request({ port, ca, token }) {
     outgoing.end();
   });
 }
+
+test('orchestration page runs fetch and native form scenarios without remote control', () => {
+  const page = orchestrationPage('abcdefghijklmnop-navigation');
+  assert.match(page, /window\.isSecureContext/);
+  assert.match(page, /fetch\(/);
+  assert.match(page, /form\.submit\(\)/);
+  assert.match(page, /abcdefghijklmnop-ajax/);
+  assert.match(page, /abcdefghijklmnop-form/);
+});
 
 test('HTTPS capture server persists ordered raw headers and redacts secrets', async (context) => {
   const directory = await mkdtemp(join(tmpdir(), 'header-corpus-test-'));
