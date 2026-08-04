@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
 const SECRET_HEADERS = new Set(['authorization', 'cookie', 'proxy-authorization', 'set-cookie']);
 
 export function redactHeaderValue(name, value) {
@@ -30,7 +28,6 @@ export function snapshotRequest(
 ) {
   return {
     schema_version: 3,
-    measurement_id: randomUUID(),
     measurement_token: measurementToken,
     captured_at: capturedAt.toISOString(),
     method: request.method,

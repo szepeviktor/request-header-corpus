@@ -84,13 +84,12 @@
         "request": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["raw_file", "measurement_id", "http_version", "protocol"],
+          "required": ["raw_file", "http_version", "protocol"],
           "properties": {
             "raw_file": {
               "type": "string",
               "pattern": "^raw/(chrome|edge|firefox|safari)/[^/]+/[^/]+/(http1|http2)/(navigation-get|form-post|ajax-post)\\.txt$"
             },
-            "measurement_id": { "type": "string", "format": "uuid" },
             "http_version": { "enum": ["1.1", "2.0"] },
             "protocol": { "enum": ["http1", "http2"] }
           }

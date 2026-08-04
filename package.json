@@ -11,6 +11,7 @@
     "server": "node collector/server.mjs",
     "normalize": "node scripts/normalize.mjs",
     "manifest": "node scripts/generate-manifest.mjs",
+    "readme": "node scripts/update-readme.mjs",
     "validate": "node scripts/validate.mjs",
     "check:keys": "node scripts/check-private-keys.mjs",
     "test": "node --test",

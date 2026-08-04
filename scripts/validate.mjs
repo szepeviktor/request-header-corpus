@@ -62,14 +62,19 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
   }
   const scenariosByBrowser = new Map();
   const referencedRawPaths = new Set();
-  const measurementIds = new Set();
+  const observationKeys = new Set();
 
   for (const observation of manifest.observations) {
-    const path = `manifest.json:${observation.request.measurement_id}`;
-    if (measurementIds.has(observation.request.measurement_id)) {
-      throw new Error(`${path}: duplicate measurement ID`);
+    const observationKey = [
+      observation.client.name,
+      observation.request.protocol,
+      observation.scenario.id,
+    ].join('/');
+    const path = `manifest.json:${observationKey}`;
+    if (observationKeys.has(observationKey)) {
+      throw new Error(`${path}: duplicate observation`);
     }
-    measurementIds.add(observation.request.measurement_id);
+    observationKeys.add(observationKey);
     const rawPath = resolve(root, observation.request.raw_file);
     if (!observation.request.raw_file.includes(`/${observation.request.protocol}/`)) {
       throw new Error(`${path}: raw file path does not match the protocol`);

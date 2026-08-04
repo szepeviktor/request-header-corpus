@@ -16,12 +16,14 @@ malicious.
 The GitHub Actions workflow runs every Monday at 03:17 UTC and can also be started
 with **Run workflow**:
 
-| Browser | Runner | Driver |
-|---|---|---|
-| Google Chrome stable | `windows-2025` | ChromeDriver |
-| Microsoft Edge stable | `windows-2025` | MSEdgeDriver |
-| Mozilla Firefox stable | `ubuntu-24.04` | GeckoDriver |
-| System Safari | `macos-15` | SafariDriver |
+<!-- navigation-links:start -->
+| Browser | Runner | Driver | Raw `navigation-get` |
+|---|---|---|---|
+| Google Chrome stable | `windows-2025` | ChromeDriver | [HTTP/1.1](raw/chrome/150.0.7871.187/windows-2025/http1/navigation-get.txt) · [HTTP/2](raw/chrome/150.0.7871.187/windows-2025/http2/navigation-get.txt) |
+| Microsoft Edge stable | `windows-2025` | MSEdgeDriver | [HTTP/1.1](raw/edge/150.0.4078.99/windows-2025/http1/navigation-get.txt) · [HTTP/2](raw/edge/150.0.4078.99/windows-2025/http2/navigation-get.txt) |
+| Mozilla Firefox stable | `ubuntu-24.04` | GeckoDriver | [HTTP/1.1](raw/firefox/153.0.1/ubuntu-24.04/http1/navigation-get.txt) · [HTTP/2](raw/firefox/153.0.1/ubuntu-24.04/http2/navigation-get.txt) |
+| System Safari | `macos-15` | SafariDriver | [HTTP/1.1](raw/safari/26.5.2/macos-15/http1/navigation-get.txt) · [HTTP/2](raw/safari/26.5.2/macos-15/http2/navigation-get.txt) |
+<!-- navigation-links:end -->
 
 Successful runs commit the refreshed corpus to the default branch and also upload a
 30-day artifact. The repository or organization must allow GitHub Actions to write
@@ -57,19 +59,19 @@ replaced with `[REDACTED]` in the raw text files.
 
 ## Trusted HTTPS design
 
-Every job creates a disposable mkcert v1.4.4 CA under `RUNNER_TEMP`. The CA is
-installed into the operating-system trust store and into the browser-specific NSS
-database:
+Every job installs the latest available mkcert package from the runner's package
+manager and creates a disposable CA under `RUNNER_TEMP`. The CA is installed into
+the operating-system trust store and into the browser-specific NSS database:
 
 - Chrome and Edge use the Windows Local Machine Root certificate store;
 - Firefox uses a dedicated profile with an explicitly imported root CA;
 - Safari uses the macOS System Keychain.
 
-The same CA signs a certificate for `app.test`, `*.app.test`, `attacker.test`,
-`localhost`, and loopback IP addresses. The HTTP/2 endpoint listens on port 443;
-a separate HTTPS endpoint advertises only HTTP/1.1 on port 444. Both listen only
-on `127.0.0.1`. Before capture, Selenium checks the exact `/health` body and
-requires `window.isSecureContext === true` for both origins.
+The same CA signs a certificate for `app.test` and `http1.app.test`. The HTTP/2
+endpoint listens on port 443; a separate HTTPS endpoint advertises only HTTP/1.1
+on port 444. Both listen only on `127.0.0.1`. Before capture, Selenium checks the
+exact `/health` body and requires `window.isSecureContext === true` for both
+origins.
 
 No insecure-certificate WebDriver capability or browser flag is used. In
 particular, the project does not use `acceptInsecureCerts`,
@@ -99,7 +101,7 @@ npm run check:keys
 For a local capture, first map the test names:
 
 ```text
-127.0.0.1 app.test http1.app.test api.app.test attacker.test
+127.0.0.1 app.test http1.app.test
 ```
 
 Create a disposable CA outside the repository, trust it using the same browser
