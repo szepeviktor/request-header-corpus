@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [chrome, edge, firefox]
+        browser: [firefox]
 
     steps:
       - uses: actions/checkout@v6
@@ -42,13 +42,6 @@ jobs:
           cp "$(go env GOPATH)/bin/mkcert" "$RUNNER_TEMP/bin/mkcert"
           echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
-      - name: Install Microsoft Edge
-        if: matrix.browser == 'edge'
-        id: edge
-        uses: browser-actions/setup-edge@v1
-        with:
-          edge-version: stable
-
       - name: Install Firefox
         if: matrix.browser == 'firefox'
         id: firefox
@@ -67,17 +60,6 @@ jobs:
         shell: bash
         run: |
           case "${{ matrix.browser }}" in
-            chrome)
-              google-chrome --version
-              chromedriver --version
-              echo "CHROME_BINARY=$(command -v google-chrome)" >> "$GITHUB_ENV"
-              echo "CHROMEDRIVER=$(command -v chromedriver)" >> "$GITHUB_ENV"
-              echo "DRIVER_VERSION=$(chromedriver --version | awk '{print $2}')" >> "$GITHUB_ENV"
-              ;;
-            edge)
-              "${{ steps.edge.outputs.edge-path }}" --version
-              echo "EDGE_BINARY=${{ steps.edge.outputs.edge-path }}" >> "$GITHUB_ENV"
-              ;;
             firefox)
               "${{ steps.firefox.outputs.firefox-path }}" --version
               "${{ steps.geckodriver.outputs.geckodriver-path }}" --version
@@ -101,32 +83,15 @@ jobs:
             -key-file "$RUNNER_TEMP/tls/server.key" \
             app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
 
-          if [ "${{ matrix.browser }}" = "firefox" ]; then
-            FIREFOX_PROFILE="$RUNNER_TEMP/firefox-profile"
-            mkdir -p "$FIREFOX_PROFILE"
-            certutil -N --empty-password -d "sql:$FIREFOX_PROFILE"
-            certutil -A \
-              -d "sql:$FIREFOX_PROFILE" \
-              -n "GHA Header Capture Root CA" \
-              -t "CT,CT," \
-              -i "$CAROOT/rootCA.pem"
-            echo "FIREFOX_PROFILE=$FIREFOX_PROFILE" >> "$GITHUB_ENV"
-          else
-            for NSS_DB in "$HOME/.local/share/pki/nssdb" "$HOME/.pki/nssdb"; do
-              mkdir -p "$NSS_DB"
-              if [ ! -f "$NSS_DB/cert9.db" ]; then
-                certutil -N --empty-password -d "sql:$NSS_DB"
-              fi
-              certutil -D \
-                -d "sql:$NSS_DB" \
-                -n "GHA Header Capture Root CA" 2>/dev/null || true
-              certutil -A \
-                -d "sql:$NSS_DB" \
-                -n "GHA Header Capture Root CA" \
-                -t "C,," \
-                -i "$CAROOT/rootCA.pem"
-            done
-          fi
+          FIREFOX_PROFILE="$RUNNER_TEMP/firefox-profile"
+          mkdir -p "$FIREFOX_PROFILE"
+          certutil -N --empty-password -d "sql:$FIREFOX_PROFILE"
+          certutil -A \
+            -d "sql:$FIREFOX_PROFILE" \
+            -n "GHA Header Capture Root CA" \
+            -t "CT,CT," \
+            -i "$CAROOT/rootCA.pem"
+          echo "FIREFOX_PROFILE=$FIREFOX_PROFILE" >> "$GITHUB_ENV"
 
           echo "CAROOT=$CAROOT" >> "$GITHUB_ENV"
           echo "TLS_CERT=$RUNNER_TEMP/tls/server.crt" >> "$GITHUB_ENV"
@@ -175,6 +140,169 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: capture-ubuntu-${{ matrix.browser }}
+          path: |
+            raw
+            observations
+            normalized
+          if-no-files-found: error
+          retention-days: 14
+
+  windows:
+    name: Capture ${{ matrix.browser }} on Windows
+    runs-on: windows-2025
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, edge]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies and mkcert
+        shell: pwsh
+        run: |
+          npm ci
+          go install filippo.io/mkcert@v1.4.4
+
+      - name: Record browser and driver configuration
+        shell: pwsh
+        run: |
+          if ("${{ matrix.browser }}" -eq "chrome") {
+            $browserBinary = Join-Path $env:ProgramFiles "Google\Chrome\Application\chrome.exe"
+            $driverBinary = Join-Path $env:CHROMEWEBDRIVER "chromedriver.exe"
+            $binaryVariable = "CHROME_BINARY"
+            $driverVariable = "CHROMEDRIVER"
+          } else {
+            $browserBinary = Join-Path ${env:ProgramFiles(x86)} "Microsoft\Edge\Application\msedge.exe"
+            $driverBinary = Join-Path $env:EDGEWEBDRIVER "msedgedriver.exe"
+            $binaryVariable = "EDGE_BINARY"
+            $driverVariable = "EDGEDRIVER"
+          }
+          if (-not (Test-Path $browserBinary)) {
+            throw "Browser is not installed at $browserBinary"
+          }
+          if (-not (Test-Path $driverBinary)) {
+            throw "WebDriver is not installed at $driverBinary"
+          }
+          $browserVersion = (Get-Item $browserBinary).VersionInfo.ProductVersion
+          $driverVersion = ((& $driverBinary --version) -split '\s+')[1]
+          Write-Host "${{ matrix.browser }} $browserVersion"
+          & $driverBinary --version
+          "$binaryVariable=$browserBinary" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "$driverVariable=$driverBinary" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "DRIVER_VERSION=$driverVersion" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "OBSERVATION_OS=windows-2025" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "OBSERVATION_ARCH=$env:PROCESSOR_ARCHITECTURE" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "HEADLESS=true" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Create and trust the ephemeral CA
+        shell: pwsh
+        run: |
+          $env:CAROOT = Join-Path $env:RUNNER_TEMP "mkcert-ca"
+          $tls = Join-Path $env:RUNNER_TEMP "tls"
+          $captures = Join-Path $env:RUNNER_TEMP "captures"
+          New-Item -ItemType Directory -Force -Path $env:CAROOT, $tls, $captures | Out-Null
+          $mkcert = Join-Path (go env GOPATH) "bin\mkcert.exe"
+          & $mkcert -install
+          if ($LASTEXITCODE -ne 0) {
+            throw "mkcert failed to install the root CA"
+          }
+          & certutil.exe -user -addstore -f Root (Join-Path $env:CAROOT "rootCA.pem")
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to import the root CA into the Windows user trust store"
+          }
+          $certificate = Join-Path $tls "server.crt"
+          $key = Join-Path $tls "server.key"
+          & $mkcert `
+            -cert-file $certificate `
+            -key-file $key `
+            app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
+          if ($LASTEXITCODE -ne 0) {
+            throw "mkcert failed to create the server certificate"
+          }
+          "CAROOT=$env:CAROOT" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "TLS_CERT=$certificate" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "TLS_KEY=$key" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CAPTURE_DIR=$captures" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Configure local test domains
+        shell: pwsh
+        run: |
+          $hosts = Join-Path $env:SystemRoot "System32\drivers\etc\hosts"
+          "127.0.0.1 app.test api.app.test attacker.test" |
+            Out-File -FilePath $hosts -Encoding ascii -Append
+
+      - name: Start the HTTPS capture server
+        shell: pwsh
+        run: |
+          $log = Join-Path $env:RUNNER_TEMP "capture-server.log"
+          $errorLog = Join-Path $env:RUNNER_TEMP "capture-server-error.log"
+          $server = Start-Process `
+            -FilePath (Get-Command node).Source `
+            -ArgumentList "collector/server.mjs" `
+            -RedirectStandardOutput $log `
+            -RedirectStandardError $errorLog `
+            -PassThru
+          "CAPTURE_SERVER_PID=$($server.Id)" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          for ($attempt = 1; $attempt -le 30; $attempt++) {
+            try {
+              $response = Invoke-WebRequest -Uri "https://app.test/health" -UseBasicParsing
+              if ($response.StatusCode -eq 200 -and $response.Content -eq "ok") {
+                exit 0
+              }
+            } catch {
+              Start-Sleep -Seconds 1
+            }
+          }
+          if (Test-Path $log) { Get-Content $log }
+          if (Test-Path $errorLog) { Get-Content $errorLog }
+          throw "HTTPS capture server did not become healthy"
+
+      - name: Capture all three scenarios
+        shell: pwsh
+        run: node collector/capture.mjs --browser "${{ matrix.browser }}"
+
+      - name: Validate and normalize this browser
+        shell: pwsh
+        env:
+          EXPECTED_BROWSERS: ${{ matrix.browser }}
+        run: |
+          npm run validate
+          npm run normalize
+          npm run check:keys
+
+      - name: Stop capture server
+        if: always()
+        shell: pwsh
+        run: |
+          if ($env:CAPTURE_SERVER_PID) {
+            Stop-Process `
+              -Id ([int]$env:CAPTURE_SERVER_PID) `
+              -Force `
+              -ErrorAction SilentlyContinue
+          }
+
+      - name: Upload browser corpus
+        uses: actions/upload-artifact@v4
+        with:
+          name: capture-windows-${{ matrix.browser }}
           path: |
             raw
             observations
@@ -281,7 +409,7 @@ jobs:
 
   publish:
     name: Validate and publish weekly corpus
-    needs: [ubuntu, safari]
+    needs: [ubuntu, windows, safari]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:

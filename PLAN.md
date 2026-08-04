@@ -12,8 +12,8 @@ A projekt ne próbálja meg bizonyítani, hogy egy kérés támadás. A profilok
 
 ## Első verzióban támogatott böngészők
 
-* Google Chrome desktop, Ubuntu
-* Microsoft Edge desktop, Ubuntu
+* Google Chrome desktop, Windows
+* Microsoft Edge desktop, Windows
 * Mozilla Firefox desktop, Ubuntu
 * Safari desktop, macOS
 
@@ -162,6 +162,10 @@ mkcert \
 
 ### Chrome és Edge trust store
 
+A Chrome és az Edge `windows-2025` runneren fut, és a CA a Windows Current User
+Root tanúsítványtárába kerül. Az alábbi NSS-konfiguráció csak egy esetleges későbbi
+linuxos Chromium-méréshez marad referencia.
+
 Importáld a root CA-t mindkét lehetséges Chromium NSS-adatbázisba:
 
 ```text
@@ -289,7 +293,7 @@ Böngészők:
 * Firefox: `firefox` és `geckodriver`
 * Safari: `Safari.app` és `safaridriver`
 
-Linuxon a Chrome, Edge és Firefox futhat headless módban.
+Windows alatt a Chrome és Edge, Linuxon a Firefox futhat headless módban.
 
 Safari ne legyen headless.
 
@@ -335,7 +339,7 @@ Példa útvonal:
 observations/
   chrome/
     150.0.0.0/
-      ubuntu-24.04/
+      windows-2025/
         navigation-get.json
         form-post.json
         ajax-post.json
@@ -353,10 +357,10 @@ Példa JSON:
     "channel": "stable"
   },
   "environment": {
-    "os": "ubuntu-24.04",
+    "os": "windows-2025",
     "architecture": "x64",
     "headless": true,
-    "runner_image": "ubuntu-24.04",
+    "runner_image": "windows-2025",
     "runner_image_version": "unknown"
   },
   "tls": {
@@ -433,7 +437,7 @@ Készíts külön normalizált nézetet is diffeléshez, de a raw mérés mindig
 
 ## GitHub Actions workflow
 
-Készíts két jobcsoportot.
+Készíts három jobcsoportot.
 
 ### Ubuntu matrix
 
@@ -445,9 +449,19 @@ Mátrix:
 
 ```yaml
 browser:
+  - firefox
+```
+
+### Windows matrix
+
+```yaml
+runs-on: windows-2025
+```
+
+```yaml
+browser:
   - chrome
   - edge
-  - firefox
 ```
 
 ### Safari
@@ -585,7 +599,7 @@ Készíts automatizált teszteket legalább ezekre:
 A feladat akkor kész, ha:
 
 * a workflow manuálisan elindítható;
-* Chrome, Edge és Firefox Ubuntu runneren lefut;
+* Chrome és Edge Windows runneren, Firefox Ubuntu runneren lefut;
 * Safari macOS runneren lefut;
 * egyik böngésző sem használ insecure TLS override-ot;
 * mindegyik böngésző `window.isSecureContext === true` eredményt ad;

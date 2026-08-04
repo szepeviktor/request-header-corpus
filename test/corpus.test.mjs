@@ -29,7 +29,12 @@ async function copySchemas(root) {
 async function writeFixture(root, browser, engine, scenario) {
   const measurementId = randomUUID();
   const version = '1.0.0';
-  const os = browser === 'safari' ? 'macos-15' : 'ubuntu-24.04';
+  const os =
+    browser === 'safari'
+      ? 'macos-15'
+      : ['chrome', 'edge'].includes(browser)
+        ? 'windows-2025'
+        : 'ubuntu-24.04';
   const rawRelative = `raw/${browser}/${version}/${os}/${scenario.id}.json`;
   const isAjax = scenario.id === 'ajax-post';
   const isForm = scenario.id === 'form-post';

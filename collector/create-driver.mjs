@@ -16,7 +16,10 @@ export async function createDriver(browser) {
       process.env.CHROME_BINARY || 'google-chrome',
     );
     if (isHeadless()) options.addArguments('--headless=new');
-    options.addArguments('--no-sandbox', '--disable-dev-shm-usage', '--window-size=1440,1200');
+    if (process.platform === 'linux') {
+      options.addArguments('--no-sandbox', '--disable-dev-shm-usage');
+    }
+    options.addArguments('--window-size=1440,1200');
     builder = builder.setChromeOptions(options);
     if (process.env.CHROMEDRIVER) {
       builder = builder.setChromeService(new chrome.ServiceBuilder(process.env.CHROMEDRIVER));
@@ -26,7 +29,10 @@ export async function createDriver(browser) {
       process.env.EDGE_BINARY || 'microsoft-edge',
     );
     if (isHeadless()) options.addArguments('--headless=new');
-    options.addArguments('--no-sandbox', '--disable-dev-shm-usage', '--window-size=1440,1200');
+    if (process.platform === 'linux') {
+      options.addArguments('--no-sandbox', '--disable-dev-shm-usage');
+    }
+    options.addArguments('--window-size=1440,1200');
     builder = builder.setEdgeOptions(options);
     if (process.env.EDGEDRIVER) {
       builder = builder.setEdgeService(new edge.ServiceBuilder(process.env.EDGEDRIVER));

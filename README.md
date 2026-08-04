@@ -17,8 +17,8 @@ with **Run workflow**:
 
 | Browser | Runner | Driver |
 |---|---|---|
-| Google Chrome stable | `ubuntu-24.04` | ChromeDriver |
-| Microsoft Edge stable | `ubuntu-24.04` | MSEdgeDriver (via Selenium Manager) |
+| Google Chrome stable | `windows-2025` | ChromeDriver |
+| Microsoft Edge stable | `windows-2025` | MSEdgeDriver |
 | Mozilla Firefox stable | `ubuntu-24.04` | GeckoDriver |
 | System Safari | `macos-15` | SafariDriver |
 
@@ -57,7 +57,7 @@ Every job creates a disposable mkcert v1.4.4 CA under `RUNNER_TEMP`. The CA is
 installed into the operating-system trust store and into the browser-specific NSS
 database:
 
-- Chrome and Edge use both common Chromium NSS database locations;
+- Chrome and Edge use the Windows Current User Root certificate store;
 - Firefox uses a dedicated profile with an explicitly imported root CA;
 - Safari uses the macOS System Keychain.
 
