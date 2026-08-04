@@ -1,0 +1,9 @@
+node_modules/
+.tls/
+.mkcert/
+**/rootCA-key.pem
+**/*.key
+artifacts/
+tmp/
+.DS_Store
+npm-debug.log*

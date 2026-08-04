@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/request-header-corpus/raw-request.schema.json",
+  "title": "Raw browser request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "measurement_id",
+    "measurement_token",
+    "captured_at",
+    "method",
+    "url",
+    "http_version",
+    "alpn",
+    "headers",
+    "raw_headers"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "measurement_id": { "type": "string", "format": "uuid" },
+    "measurement_token": { "type": "string", "minLength": 16 },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "method": { "enum": ["GET", "POST"] },
+    "url": { "type": "string", "pattern": "^/capture/" },
+    "http_version": { "type": "string", "minLength": 1 },
+    "alpn": { "type": ["string", "null"] },
+    "headers": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          { "type": "string" },
+          { "type": "array", "items": { "type": "string" } }
+        ]
+      }
+    },
+    "raw_headers": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

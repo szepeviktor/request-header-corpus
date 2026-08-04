@@ -1,0 +1,24 @@
+{
+  "name": "request-header-corpus",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "capture": "node collector/capture.mjs",
+    "server": "node collector/server.mjs",
+    "normalize": "node scripts/normalize.mjs",
+    "validate": "node scripts/validate.mjs",
+    "report": "node scripts/generate-report.mjs",
+    "check:keys": "node scripts/check-private-keys.mjs",
+    "test": "node --test",
+    "check": "npm test && npm run validate && npm run normalize && npm run report && npm run check:keys"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "selenium-webdriver": "4.46.0"
+  }
+}
