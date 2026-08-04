@@ -1,7 +1,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export async function listJsonFiles(directory) {
+export async function listFiles(directory) {
   const files = [];
   async function visit(current) {
     let entries;
@@ -14,11 +14,15 @@ export async function listJsonFiles(directory) {
     for (const entry of entries) {
       const path = join(current, entry.name);
       if (entry.isDirectory()) await visit(path);
-      else if (entry.isFile() && entry.name.endsWith('.json')) files.push(path);
+      else if (entry.isFile()) files.push(path);
     }
   }
   await visit(directory);
   return files.sort();
+}
+
+export async function listJsonFiles(directory) {
+  return (await listFiles(directory)).filter((path) => path.endsWith('.json'));
 }
 
 export async function readJson(path) {

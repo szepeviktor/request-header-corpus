@@ -26,10 +26,10 @@ export function snapshotRequest(
   request,
   measurementToken,
   capturedAt = new Date(),
-  { alpn = request.socket?.alpnProtocol || null, wireCapture } = {},
+  { alpn = request.socket?.alpnProtocol || null } = {},
 ) {
   return {
-    schema_version: 2,
+    schema_version: 3,
     measurement_id: randomUUID(),
     measurement_token: measurementToken,
     captured_at: capturedAt.toISOString(),
@@ -39,7 +39,6 @@ export function snapshotRequest(
     alpn,
     headers: redactHeaders(request.headers),
     raw_headers: redactRawHeaders(request.rawHeaders),
-    ...(wireCapture ? { wire_capture: wireCapture } : {}),
   };
 }
 

@@ -44,7 +44,7 @@ function sendHttp2Request({ port, ca, token }) {
     const outgoing = session.request({
       ':method': 'GET',
       ':path': `/capture/navigation?token=${token}`,
-      'x-byte-exact': 'yes',
+      'x-order-check': 'yes',
     });
     outgoing.once('response', (headers) => {
       outgoing.resume();
@@ -99,7 +99,7 @@ test('HTTPS capture server persists ordered raw headers and redacts secrets', as
   assert.equal(capture.headers.cookie, '[REDACTED]');
 });
 
-test('HTTPS capture server persists the byte-exact HTTP/2 connection prefix', async (context) => {
+test('HTTPS capture server exposes HPACK-decoded HTTP/2 headers in order', async (context) => {
   const directory = await mkdtemp(join(tmpdir(), 'header-corpus-h2-test-'));
   context.after(() => rm(directory, { recursive: true, force: true }));
   const keyPath = join(directory, 'server.key');
@@ -131,13 +131,19 @@ test('HTTPS capture server persists the byte-exact HTTP/2 connection prefix', as
   const token = 'ponmlkjihgfedcba';
   assert.equal(await sendHttp2Request({ port: server.address().port, ca: cert, token }), 200);
   const capture = JSON.parse(await readFile(join(captureDirectory, `${token}.json`), 'utf8'));
-  const wire = await readFile(join(captureDirectory, `${token}.h2`));
   assert.equal(capture.http_version, '2.0');
   assert.equal(capture.alpn, 'h2');
-  assert.equal(capture.wire_capture.byte_length, wire.length);
-  assert.equal(capture.wire_capture.stream_id, 1);
-  assert.equal(wire.subarray(0, 24).toString('ascii'), 'PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n');
-  const target = capture.wire_capture.target_header_frames.at(-1);
-  assert.equal(target.offset + target.length, wire.length);
-  assert.equal(wire[target.offset + 3], target.type);
+  assert.deepEqual(capture.raw_headers.slice(0, 8), [
+    ':method',
+    'GET',
+    ':path',
+    `/capture/navigation?token=${token}`,
+    ':authority',
+    `app.test:${server.address().port}`,
+    ':scheme',
+    'https',
+  ]);
+  const customIndex = capture.raw_headers.indexOf('x-order-check');
+  assert.ok(customIndex > 6);
+  assert.equal(capture.raw_headers[customIndex + 1], 'yes');
 });

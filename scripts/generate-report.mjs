@@ -1,6 +1,7 @@
-import { mkdir, rename, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseRawHeaders } from '../collector/raw-headers.mjs';
 import { listJsonFiles, readJson } from './lib/files.mjs';
 import { normalizedHeaders } from './lib/normalize.mjs';
 
@@ -59,11 +60,12 @@ export async function renderReport(root = resolve('.')) {
   const entries = [];
   for (const path of await listJsonFiles(resolve(root, 'observations'))) {
     const observation = await readJson(path);
-    const raw = await readJson(resolve(root, observation.request.raw_file));
+    const { headers } = parseRawHeaders(
+      await readFile(resolve(root, observation.request.raw_file), 'utf8'),
+    );
     entries.push({
       observation,
-      raw,
-      normalized: normalizedHeaders(raw.headers),
+      normalized: normalizedHeaders(headers),
     });
   }
 
@@ -84,7 +86,7 @@ export async function renderReport(root = resolve('.')) {
   ];
   const history = new Map();
   for (const entry of entries) {
-    const { observation, raw, normalized } = entry;
+    const { observation, normalized } = entry;
     const key = [
       observation.client.name,
       observation.environment.os,
@@ -96,7 +98,8 @@ export async function renderReport(root = resolve('.')) {
     const names = Object.keys(normalized).join(', ');
     lines.push(
       `| ${observation.client.name} | ${observation.client.version} | ${observation.environment.os} | ` +
-        `${observation.scenario.id} | ${raw.http_version} | ${raw.alpn || '—'} | ${names || '—'} | ` +
+        `${observation.scenario.id} | ${observation.request.http_version} | ` +
+        `${observation.tls.alpn || '—'} | ${names || '—'} | ` +
         `${diff.added} | ${diff.removed} | ${diff.changed} |`,
     );
   }

@@ -1,6 +1,7 @@
-import { mkdir, rename, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseRawHeaders } from '../collector/raw-headers.mjs';
 import { listJsonFiles, readJson } from './lib/files.mjs';
 import { normalizeObservation } from './lib/normalize.mjs';
 
@@ -9,7 +10,10 @@ export async function normalizeCorpus(root = resolve('.')) {
   const output = [];
   for (const observationPath of await listJsonFiles(observationsDirectory)) {
     const observation = await readJson(observationPath);
-    const raw = await readJson(resolve(root, observation.request.raw_file));
+    const { headers } = parseRawHeaders(
+      await readFile(resolve(root, observation.request.raw_file), 'utf8'),
+    );
+    const raw = { http_version: observation.request.http_version, headers };
     const normalized = normalizeObservation(observation, raw);
     const outputPath = resolve(
       root,

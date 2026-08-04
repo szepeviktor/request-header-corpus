@@ -5,6 +5,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { By } from 'selenium-webdriver';
 import { createDriver, browserNameForSelenium } from './create-driver.mjs';
+import { formatRawHeaders } from './raw-headers.mjs';
 import * as navigation from './scenarios/navigation-get.mjs';
 import * as form from './scenarios/form-post.mjs';
 import * as ajax from './scenarios/ajax-post.mjs';
@@ -39,7 +40,7 @@ async function atomicJson(path, value) {
   await rename(temporary, path);
 }
 
-async function atomicBytes(path, value) {
+async function atomicText(path, value) {
   await mkdir(dirname(path), { recursive: true });
   const temporary = `${path}.${process.pid}.tmp`;
   await writeFile(temporary, value);
@@ -91,7 +92,7 @@ export function buildObservation({ browser, capabilities, raw, rawFile, scenario
   const headless = browser !== 'safari' && process.env.HEADLESS !== 'false';
 
   return {
-    schema_version: 2,
+    schema_version: 3,
     client: {
       name: DISPLAY_NAMES[browser],
       version,
@@ -118,7 +119,6 @@ export function buildObservation({ browser, capabilities, raw, rawFile, scenario
     },
     request: {
       raw_file: rawFile,
-      wire_file: rawFile.replace(/\.json$/, '.h2'),
       measurement_id: raw.measurement_id,
       http_version: raw.http_version,
     },
@@ -152,8 +152,8 @@ async function main() {
       const incomingPath = join(captureDirectory, `${token}.json`);
       await scenarioModule.run(driver, baseUrl, token);
       const raw = await waitForCapture(incomingPath);
-      if (raw.http_version !== '2.0' || raw.alpn !== 'h2' || !raw.wire_capture) {
-        throw new Error(`Capture ${token} did not include byte-exact HTTP/2 wire data`);
+      if (raw.http_version !== '2.0' || raw.alpn !== 'h2') {
+        throw new Error(`Capture ${token} was not HPACK-decoded from HTTP/2`);
       }
 
       const rawRelative = join(
@@ -161,16 +161,10 @@ async function main() {
         browser,
         version,
         osName,
-        `${scenarioModule.scenario.id}.json`,
+        `${scenarioModule.scenario.id}.txt`,
       );
       const rawPath = join(outputRoot, rawRelative);
-      const wireRelative = rawRelative.replace(/\.json$/, '.h2');
-      await atomicBytes(
-        join(outputRoot, wireRelative),
-        await readFile(join(captureDirectory, raw.wire_capture.file)),
-      );
-      raw.wire_capture.file = wireRelative.split('\\').join('/');
-      await atomicJson(rawPath, raw);
+      await atomicText(rawPath, formatRawHeaders(raw.raw_headers));
 
       const observation = buildObservation({
         browser,

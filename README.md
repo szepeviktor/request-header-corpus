@@ -28,32 +28,20 @@ repository contents, and branch protection must permit the bot commit.
 
 ## Repository data
 
-Each request is stored as a decoded record, a byte-exact HTTP/2 capture, and an
+Each request is stored as an HPACK-decoded raw header file and a separate
 observation:
 
 ```text
-raw/<browser>/<version>/<os>/<scenario>.json
-raw/<browser>/<version>/<os>/<scenario>.h2
+raw/<browser>/<version>/<os>/<scenario>.txt
 observations/<browser>/<version>/<os>/<scenario>.json
 ```
 
-The `.h2` file is the authoritative protocol record. It contains the exact
-decrypted client-to-server HTTP/2 connection prefix, starting with the client
-preface and ending at the last `HEADERS` or `CONTINUATION` frame of the measured
-request. Keeping the connection prefix preserves every preceding HPACK header
-block needed to reconstruct the dynamic compression table.
-
-The adjacent JSON file indexes the target stream and frame byte offsets, records
-the binary file's length and SHA-256 digest, and also retains:
-
-- the decoded raw header array exposed by Node.js;
-- header order and duplicate headers;
-- original header-name casing where the protocol/runtime exposes it;
-- the complete browser and Fetch Metadata values;
-- HTTP version and negotiated ALPN.
-
-Byte-exact records use schema version 2. Version 1 records contained only
-Node-decoded header values and are replaced on the next complete capture run.
+Each raw file is directly readable text with one `name: value` header per line.
+Lines are written in exactly the order exposed by Node.js after HPACK decoding;
+they are never sorted or combined, and duplicate headers remain separate lines.
+HTTP/2 pseudo-headers such as `:method` are retained. Observation schema version
+3 stores the browser, driver, operating system, scenario, HTTP version and ALPN
+metadata separately.
 
 `observations/` contains browser, driver, operating-system, runner, TLS and scenario
 metadata, plus a relative reference to the raw file. `normalized/` contains a
@@ -61,10 +49,7 @@ deterministic, lower-cased view intended only for diffs. `reports/latest.md`
 compares observations and highlights security-relevant header changes.
 
 `Cookie`, `Authorization`, `Proxy-Authorization`, and `Set-Cookie` values are
-replaced with `[REDACTED]` in both decoded JSON views. Binary `.h2` files cannot
-be redacted without ceasing to be byte-exact. Captures therefore run only in
-disposable browser profiles against local scenarios that do not set credentials
-or cookies. Do not point this collector at browsing sessions containing secrets.
+replaced with `[REDACTED]` in the raw text files.
 
 ## Trusted HTTPS design
 
@@ -77,10 +62,10 @@ database:
 - Safari uses the macOS System Keychain.
 
 The same CA signs a certificate for `app.test`, `*.app.test`, `attacker.test`,
-`localhost`, and loopback IP addresses. The TLS frontend listens only on
-`127.0.0.1`, records decrypted HTTP/2 bytes before parsing, and forwards them
-unchanged to an internal loopback h2c server. Before capture, Selenium checks the
-exact `/health` body and requires `window.isSecureContext === true`.
+`localhost`, and loopback IP addresses. The HTTPS/2 collector listens only on
+`127.0.0.1` and exposes the HPACK-decoded request through Node.js. Before capture,
+Selenium checks the exact `/health` body and requires
+`window.isSecureContext === true`.
 
 No insecure-certificate WebDriver capability or browser flag is used. In
 particular, the project does not use `acceptInsecureCerts`,
@@ -138,13 +123,13 @@ non-headless.
 
 ## Validation
 
-The validator checks both JSON Schemas, raw/observation cross-references,
-measurement IDs, redaction, methods, URLs, content types and expected Fetch
-Metadata context. In CI, it also requires all three scenarios for each browser.
+The validator checks the observation JSON Schema, raw/observation
+cross-references, raw `name: value` syntax, redaction, HTTP/2 negotiation, content
+types and expected Fetch Metadata context. In CI, it also requires all three
+scenarios for each browser.
 The private-key guard scans all publishable output paths by filename and PEM
 marker.
 
-The automated tests cover HTTP/2 frame-byte preservation and hashing, raw header
-ordering and duplicates, decoded-view redaction, schema validation, deterministic
-normalization, trusted-TLS failure handling, complete scenario coverage, and
-private-key detection.
+The automated tests cover HPACK-decoded raw header ordering and duplicates,
+redaction, schema validation, deterministic normalization, trusted-TLS failure
+handling, complete scenario coverage, and private-key detection.
