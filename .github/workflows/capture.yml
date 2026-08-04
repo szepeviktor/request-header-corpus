@@ -2,6 +2,10 @@ name: Capture browser request headers
 
 on:
   workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - .github/workflows/capture.yml
   schedule:
     - cron: "17 3 * * 1"
 
