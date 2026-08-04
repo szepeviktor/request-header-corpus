@@ -10,6 +10,9 @@ function isHeadless() {
 
 export async function createDriver(browser) {
   let builder = new Builder().forBrowser(browser);
+  if (process.env.ACCEPT_INSECURE_CERTS === 'true') {
+    builder = builder.setCapability('acceptInsecureCerts', true);
+  }
 
   if (browser === 'chrome') {
     const options = new chrome.Options().setChromeBinaryPath(
@@ -51,7 +54,6 @@ export async function createDriver(browser) {
     throw new Error(`Unsupported browser: ${browser}`);
   }
 
-  // No insecure-certificate capability or browser flag is set here by design.
   return builder.build();
 }
 

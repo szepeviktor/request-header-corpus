@@ -214,10 +214,11 @@ jobs:
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "HEADLESS=true" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "ACCEPT_INSECURE_CERTS=true" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Create and trust the ephemeral CA
+      - name: Create the ephemeral TLS certificate
         shell: pwsh
-        timeout-minutes: 3
         run: |
           $env:CAROOT = Join-Path $env:RUNNER_TEMP "mkcert-ca"
           $tls = Join-Path $env:RUNNER_TEMP "tls"
@@ -234,28 +235,6 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
             throw "mkcert failed to create the server certificate"
           }
-          Write-Host "Adding the CA to the CurrentUser Root store"
-          $rootCaPath = Join-Path $env:CAROOT "rootCA.pem"
-          $rootCaBase64 = (Get-Content -Raw $rootCaPath) `
-            -replace "-----BEGIN CERTIFICATE-----", "" `
-            -replace "-----END CERTIFICATE-----", "" `
-            -replace "\s", ""
-          $rootCaDer = [Convert]::FromBase64String($rootCaBase64)
-          $rootCa = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new(
-            $rootCaDer
-          )
-          $store = [System.Security.Cryptography.X509Certificates.X509Store]::new(
-            [System.Security.Cryptography.X509Certificates.StoreName]::Root,
-            [System.Security.Cryptography.X509Certificates.StoreLocation]::CurrentUser
-          )
-          try {
-            $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
-            $store.Add($rootCa)
-          } finally {
-            $store.Close()
-            $rootCa.Dispose()
-          }
-          Write-Host "Windows CA trust configured"
           "CAROOT=$env:CAROOT" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "TLS_CERT=$certificate" |
@@ -287,7 +266,10 @@ jobs:
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           for ($attempt = 1; $attempt -le 30; $attempt++) {
             try {
-              $response = Invoke-WebRequest -Uri "https://app.test/health" -UseBasicParsing
+              $response = Invoke-WebRequest `
+                -Uri "https://app.test/health" `
+                -SkipCertificateCheck `
+                -UseBasicParsing
               if ($response.StatusCode -eq 200 -and $response.Content -eq "ok") {
                 exit 0
               }
