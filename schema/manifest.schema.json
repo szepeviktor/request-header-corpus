@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["schema_version", "generated_at", "observations"],
   "properties": {
-    "schema_version": { "const": 2 },
+    "schema_version": { "const": 1 },
     "generated_at": { "type": "string", "format": "date-time" },
     "observations": {
       "type": "array",
@@ -30,23 +30,12 @@
         "client": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["name", "version", "engine", "channel"],
-          "oneOf": [
-            {
-              "required": ["launch_method"],
-              "properties": { "launch_method": true }
-            },
-            {
-              "required": ["driver_version"],
-              "properties": { "driver_version": true }
-            }
-          ],
+          "required": ["name", "version", "engine", "channel", "driver_version"],
           "properties": {
             "name": { "enum": ["chrome", "edge", "firefox", "safari"] },
             "version": { "type": "string", "minLength": 1 },
             "engine": { "enum": ["chromium", "gecko", "webkit"] },
             "channel": { "const": "stable" },
-            "launch_method": { "const": "direct" },
             "driver_version": { "type": "string", "minLength": 1 }
           }
         },

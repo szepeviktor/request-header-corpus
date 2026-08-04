@@ -50,7 +50,7 @@ async function writeFixture(root, browser, engine, protocol, scenario) {
       version,
       engine,
       channel: 'stable',
-      launch_method: 'direct',
+      driver_version: '1.0.0',
     },
     environment: {
       os,
@@ -90,15 +90,15 @@ test('schema validation requires both protocols and all scenarios for every brow
   context.after(() => rm(root, { recursive: true, force: true }));
   await copySchemas(root);
   assert.deepEqual(
-    CAPTURE_SCENARIOS.map((scenario) => scenario.id),
+    CAPTURE_SCENARIOS.map((item) => item.scenario.id),
     ['navigation-get', 'form-post', 'ajax-post'],
   );
   const observations = [];
   for (const [browser, engine] of Object.entries(BROWSERS)) {
     for (const protocol of CAPTURE_PROTOCOLS.map(({ id }) => id)) {
-      for (const scenario of CAPTURE_SCENARIOS) {
+      for (const scenarioModule of CAPTURE_SCENARIOS) {
         observations.push(
-          await writeFixture(root, browser, engine, protocol, scenario),
+          await writeFixture(root, browser, engine, protocol, scenarioModule.scenario),
         );
       }
     }

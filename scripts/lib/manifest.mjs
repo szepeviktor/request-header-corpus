@@ -16,7 +16,7 @@ export function buildManifest(observations) {
   const sorted = sortObservations(observations);
   if (sorted.length === 0) throw new Error('Cannot generate an empty manifest');
   return {
-    schema_version: 2,
+    schema_version: 1,
     generated_at: sorted
       .map(({ observed_at: observedAt }) => observedAt)
       .sort()

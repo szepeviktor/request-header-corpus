@@ -16,12 +16,12 @@ malicious.
 The GitHub Actions workflow runs every Monday at 03:17 UTC and can also be started
 with **Run workflow**:
 
-| Browser | Runner | Launch |
+| Browser | Runner | Driver |
 |---|---|---|
-| Google Chrome stable | `windows-2025` | browser executable |
-| Microsoft Edge stable | `windows-2025` | browser executable |
-| Mozilla Firefox stable | `ubuntu-24.04` | browser executable |
-| System Safari | `macos-15` | macOS Launch Services |
+| Google Chrome stable | `windows-2025` | ChromeDriver |
+| Microsoft Edge stable | `windows-2025` | MSEdgeDriver |
+| Mozilla Firefox stable | `ubuntu-24.04` | GeckoDriver |
+| System Safari | `macos-15` | SafariDriver |
 
 Successful runs commit the refreshed corpus to the default branch and also upload a
 30-day artifact. The repository or organization must allow GitHub Actions to write
@@ -41,7 +41,7 @@ Each raw file is directly readable text with one `name: value` header per line.
 Lines are written in exactly the order exposed by Node.js after HTTP/1.1 parsing
 or HTTP/2 HPACK decoding; they are never sorted or combined, and duplicate
 headers remain separate lines. HTTP/2 pseudo-headers such as `:method` are
-retained. `manifest.json` stores the browser, launch method, operating system, protocol,
+retained. `manifest.json` stores the browser, driver, operating system, protocol,
 scenario, HTTP version, ALPN, measurement ID, timestamp, and raw-file reference
 for all observations.
 
@@ -64,16 +64,12 @@ database:
 The same CA signs a certificate for `app.test`, `*.app.test`, `attacker.test`,
 `localhost`, and loopback IP addresses. The HTTP/2 endpoint listens on port 443;
 a separate HTTPS endpoint advertises only HTTP/1.1 on port 444. Both listen only
-on `127.0.0.1`. Each browser is launched directly at a navigation capture URL.
-The returned page verifies `window.isSecureContext`, sends the native `fetch()`
-request, and submits the native HTML form without remote browser control. The
-collector accepts the run only when the AJAX request explicitly reports a secure
-context and both endpoints negotiated the expected HTTP version and ALPN.
+on `127.0.0.1`. Before capture, Selenium checks the exact `/health` body and
+requires `window.isSecureContext === true` for both origins.
 
-No WebDriver, browser driver, insecure-certificate capability, or insecure
-browser flag is used. In particular, the project does not use
-`acceptInsecureCerts`, `--ignore-certificate-errors`,
-`--allow-insecure-localhost`, or `curl -k`.
+No insecure-certificate WebDriver capability or browser flag is used. In
+particular, the project does not use `acceptInsecureCerts`,
+`--ignore-certificate-errors`, `--allow-insecure-localhost`, or `curl -k`.
 
 ## Local development
 
@@ -82,7 +78,7 @@ Requirements:
 - Node.js 22 or newer;
 - OpenSSL (for the integration test);
 - mkcert and `certutil`;
-- at least one supported browser;
+- at least one supported browser and matching WebDriver;
 - permission to update `/etc/hosts`, browser trust stores, and bind local ports
   443 and 444.
 
@@ -128,10 +124,9 @@ the single repository manifest before validation:
 npm run manifest
 ```
 
-Supported values are `chrome`, `edge`, `firefox`, and `safari`. Chrome, Edge,
-and Firefox run directly in headless mode by default; set `HEADLESS=false` to
-show the browser. Safari is opened directly through macOS Launch Services and is
-always non-headless.
+Supported values are `chrome`, `edge`, `firefox`, and `safari`. Linux captures are
+headless by default; set `HEADLESS=false` to show the browser. Safari is always
+non-headless.
 
 ## Validation
 
@@ -143,6 +138,6 @@ The private-key guard scans all publishable output paths by filename and PEM
 marker.
 
 The automated tests cover HTTP/1.1 and HPACK-decoded HTTP/2 header ordering and
-duplicates, redaction, schema validation, deterministic normalization, direct
-browser launch arguments, secure-context enforcement, complete scenario
-coverage, and private-key detection.
+duplicates, redaction, schema validation, deterministic normalization,
+trusted-TLS failure handling, complete scenario coverage, and private-key
+detection.
