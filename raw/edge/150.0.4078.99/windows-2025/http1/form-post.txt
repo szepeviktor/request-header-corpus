@@ -14,6 +14,6 @@ Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: navigate
 Sec-Fetch-User: ?1
 Sec-Fetch-Dest: document
-Referer: https://http1.app.test:444/scenario/form?token=2_Gw26FRp-IAqCM26vWiPorcvP9vaBeg
+Referer: https://http1.app.test:444/scenario/form?token=63ecv-Vg6TMs0naHCwxrGku6w5A7hnTa
 Accept-Encoding: gzip, deflate, br, zstd
 Accept-Language: en-US,en;q=0.9
