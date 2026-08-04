@@ -5,7 +5,7 @@
     "version": "153.0.1",
     "engine": "gecko",
     "channel": "stable",
-    "driver_version": "0.36.0"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "ubuntu-24.04",
@@ -35,7 +35,7 @@
         "GET"
       ],
       ":path": [
-        "/capture/navigation?token=QBH2DcCTRTSbwwfvAx2t5lY5mnm0rpdp"
+        "/capture/navigation?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-navigation"
       ],
       ":scheme": [
         "https"

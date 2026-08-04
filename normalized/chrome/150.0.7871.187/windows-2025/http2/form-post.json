@@ -5,7 +5,7 @@
     "version": "150.0.7871.187",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "150.0.7871.124"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=2f_4M7tY0UG3bRcrnaUOZhXrQoDV0Mwx"
+        "/capture/form?token=7_XSC4jj7hH83q2tInwYet-y8TdKbk_X-form"
       ],
       ":scheme": [
         "https"
@@ -65,7 +65,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=2f_4M7tY0UG3bRcrnaUOZhXrQoDV0Mwx"
+        "https://app.test/capture/navigation?token=7_XSC4jj7hH83q2tInwYet-y8TdKbk_X-navigation"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
@@ -84,9 +84,6 @@
       ],
       "sec-fetch-site": [
         "same-origin"
-      ],
-      "sec-fetch-user": [
-        "?1"
       ],
       "upgrade-insecure-requests": [
         "1"

@@ -5,7 +5,7 @@
     "version": "150.0.7871.187",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "150.0.7871.124"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",
@@ -35,7 +35,7 @@
         "GET"
       ],
       ":path": [
-        "/capture/navigation?token=PZTta-VdQojJSa1j6viIrCRhJni7y14l"
+        "/capture/navigation?token=7_XSC4jj7hH83q2tInwYet-y8TdKbk_X-navigation"
       ],
       ":scheme": [
         "https"

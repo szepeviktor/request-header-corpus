@@ -5,7 +5,7 @@
     "version": "150.0.4078.99",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Edge"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",
@@ -56,7 +56,7 @@
         "https://http1.app.test:444"
       ],
       "referer": [
-        "https://http1.app.test:444/scenario/form?token=63ecv-Vg6TMs0naHCwxrGku6w5A7hnTa"
+        "https://http1.app.test:444/capture/navigation?token=b8JxSrdbz19jCPQYFOoY0uChdS3TRoIK-navigation"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\""
@@ -75,9 +75,6 @@
       ],
       "sec-fetch-site": [
         "same-origin"
-      ],
-      "sec-fetch-user": [
-        "?1"
       ],
       "upgrade-insecure-requests": [
         "1"

@@ -5,7 +5,7 @@
     "version": "26.5.2",
     "engine": "webkit",
     "channel": "stable",
-    "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "macos-15",
@@ -35,7 +35,7 @@
         "GET"
       ],
       ":path": [
-        "/capture/navigation?token=dYATeBXV3JwQBXMqrRbcaBo6Gsq4bQeZ"
+        "/capture/navigation?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-navigation"
       ],
       ":scheme": [
         "https"

@@ -5,7 +5,7 @@
     "version": "150.0.4078.99",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Edge"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",

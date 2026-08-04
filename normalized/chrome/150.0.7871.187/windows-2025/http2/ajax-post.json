@@ -5,7 +5,7 @@
     "version": "150.0.7871.187",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "150.0.7871.124"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=6axkWGzxDWeTg5DxYUgGpvTQFBYh6cPK"
+        "/capture/ajax?token=7_XSC4jj7hH83q2tInwYet-y8TdKbk_X-ajax&secure_context=true"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=1, i"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=6axkWGzxDWeTg5DxYUgGpvTQFBYh6cPK"
+        "https://app.test/capture/navigation?token=7_XSC4jj7hH83q2tInwYet-y8TdKbk_X-navigation"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""

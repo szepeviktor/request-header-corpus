@@ -5,7 +5,7 @@
     "version": "150.0.4078.99",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Edge"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=uD9B8YzXFD1qbCKjOMtE4N35yju6Cxca"
+        "/capture/form?token=LaJAzvXE17vSUUcdluBCqf6LcEWcAFGX-form"
       ],
       ":scheme": [
         "https"
@@ -65,7 +65,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=uD9B8YzXFD1qbCKjOMtE4N35yju6Cxca"
+        "https://app.test/capture/navigation?token=LaJAzvXE17vSUUcdluBCqf6LcEWcAFGX-navigation"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\""
@@ -84,9 +84,6 @@
       ],
       "sec-fetch-site": [
         "same-origin"
-      ],
-      "sec-fetch-user": [
-        "?1"
       ],
       "upgrade-insecure-requests": [
         "1"

@@ -5,7 +5,7 @@
     "version": "150.0.4078.99",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Edge"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "windows-2025",
@@ -35,7 +35,7 @@
         "GET"
       ],
       ":path": [
-        "/capture/navigation?token=5ZLjjVlQj0LJvRQnEnZhlM7L4fMY9VN8"
+        "/capture/navigation?token=LaJAzvXE17vSUUcdluBCqf6LcEWcAFGX-navigation"
       ],
       ":scheme": [
         "https"

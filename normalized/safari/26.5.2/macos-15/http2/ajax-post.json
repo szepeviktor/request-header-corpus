@@ -5,7 +5,7 @@
     "version": "26.5.2",
     "engine": "webkit",
     "channel": "stable",
-    "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "macos-15",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=RKZu-YdeTGm6Py8aIMilxuoVAafnPQRH"
+        "/capture/ajax?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-ajax&secure_context=true"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=3, i"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=RKZu-YdeTGm6Py8aIMilxuoVAafnPQRH"
+        "https://app.test/capture/navigation?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-navigation"
       ],
       "sec-fetch-dest": [
         "empty"

@@ -1,12 +1,12 @@
 :method: POST
-:path: /capture/ajax?token=J_dERs2vDV8DjmgblnUzJCV__Fx62DKv
+:path: /capture/ajax?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-ajax&secure_context=true
 :authority: app.test
 :scheme: https
 user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0
 accept: */*
 accept-language: en-US,en;q=0.9
 accept-encoding: gzip, deflate, br, zstd
-referer: https://app.test/scenario/ajax?token=J_dERs2vDV8DjmgblnUzJCV__Fx62DKv
+referer: https://app.test/capture/navigation?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-navigation
 content-type: application/json
 content-length: 27
 origin: https://app.test

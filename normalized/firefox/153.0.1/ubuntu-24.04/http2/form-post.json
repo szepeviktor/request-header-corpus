@@ -5,7 +5,7 @@
     "version": "153.0.1",
     "engine": "gecko",
     "channel": "stable",
-    "driver_version": "0.36.0"
+    "launch_method": "direct"
   },
   "environment": {
     "os": "ubuntu-24.04",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=I2sNyHXeGWaLfwf47i6YvL5J0Y9pdYd9"
+        "/capture/form?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-form"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=I2sNyHXeGWaLfwf47i6YvL5J0Y9pdYd9"
+        "https://app.test/capture/navigation?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-navigation"
       ],
       "sec-fetch-dest": [
         "document"
@@ -72,9 +72,6 @@
       ],
       "sec-fetch-site": [
         "same-origin"
-      ],
-      "sec-fetch-user": [
-        "?1"
       ],
       "te": [
         "trailers"
