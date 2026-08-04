@@ -257,18 +257,14 @@ jobs:
             Out-File -FilePath $hosts -Encoding ascii -Append
 
       - name: Start the HTTPS capture server
+        id: windows_capture_server
+        shell: pwsh
+        run: node collector/server.mjs
+        background: true
+
+      - name: Wait for the HTTPS capture server
         shell: pwsh
         run: |
-          $log = Join-Path $env:RUNNER_TEMP "capture-server.log"
-          $errorLog = Join-Path $env:RUNNER_TEMP "capture-server-error.log"
-          $server = Start-Process `
-            -FilePath (Get-Command node).Source `
-            -ArgumentList "collector/server.mjs" `
-            -RedirectStandardOutput $log `
-            -RedirectStandardError $errorLog `
-            -PassThru
-          "CAPTURE_SERVER_PID=$($server.Id)" |
-            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           for ($attempt = 1; $attempt -le 30; $attempt++) {
             try {
               $response = Invoke-WebRequest `
@@ -281,8 +277,6 @@ jobs:
               Start-Sleep -Seconds 1
             }
           }
-          if (Test-Path $log) { Get-Content $log }
-          if (Test-Path $errorLog) { Get-Content $errorLog }
           throw "HTTPS capture server did not become healthy"
 
       - name: Capture all three scenarios
@@ -299,15 +293,7 @@ jobs:
           npm run check:keys
 
       - name: Stop capture server
-        if: always()
-        shell: pwsh
-        run: |
-          if ($env:CAPTURE_SERVER_PID) {
-            Stop-Process `
-              -Id ([int]$env:CAPTURE_SERVER_PID) `
-              -Force `
-              -ErrorAction SilentlyContinue
-          }
+        cancel: windows_capture_server
 
       - name: Upload browser corpus
         uses: actions/upload-artifact@v4
