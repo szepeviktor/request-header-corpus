@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "client": {
     "name": "safari",
     "version": "26.5.2",
@@ -26,8 +26,9 @@
   },
   "request": {
     "raw_file": "raw/safari/26.5.2/macos-15/ajax-post.json",
-    "measurement_id": "7df064a4-1848-4182-959d-3fb7b8b48416",
+    "wire_file": "raw/safari/26.5.2/macos-15/ajax-post.h2",
+    "measurement_id": "e23663be-b1a7-446d-8ab6-a69f949cd46f",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T03:47:26.667Z"
+  "observed_at": "2026-08-04T04:12:46.404Z"
 }

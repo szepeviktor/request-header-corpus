@@ -1,24 +1,24 @@
 {
-  "schema_version": 1,
-  "measurement_id": "8985c0ab-5640-4179-87c5-6668ffd53792",
-  "measurement_token": "YMy4czrkVCnm7TVVKOBVi2quqyJb0ROD",
-  "captured_at": "2026-08-04T03:47:26.408Z",
+  "schema_version": 2,
+  "measurement_id": "3be0804f-448e-488e-944b-d54e486dfc2e",
+  "measurement_token": "CYh_FFhhhjZe44oTNLg0aDIMhG3rbnIK",
+  "captured_at": "2026-08-04T04:12:45.878Z",
   "method": "POST",
-  "url": "/capture/form?token=YMy4czrkVCnm7TVVKOBVi2quqyJb0ROD",
+  "url": "/capture/form?token=CYh_FFhhhjZe44oTNLg0aDIMhG3rbnIK",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "POST",
     ":scheme": "https",
     ":authority": "app.test",
-    ":path": "/capture/form?token=YMy4czrkVCnm7TVVKOBVi2quqyJb0ROD",
+    ":path": "/capture/form?token=CYh_FFhhhjZe44oTNLg0aDIMhG3rbnIK",
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "content-type": "application/x-www-form-urlencoded",
     "origin": "https://app.test",
     "sec-fetch-site": "same-origin",
     "sec-fetch-mode": "navigate",
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
-    "referer": "https://app.test/scenario/form?token=YMy4czrkVCnm7TVVKOBVi2quqyJb0ROD",
+    "referer": "https://app.test/scenario/form?token=CYh_FFhhhjZe44oTNLg0aDIMhG3rbnIK",
     "sec-fetch-dest": "document",
     "content-length": "21",
     "accept-language": "en-US,en;q=0.9",
@@ -33,7 +33,7 @@
     ":authority",
     "app.test",
     ":path",
-    "/capture/form?token=YMy4czrkVCnm7TVVKOBVi2quqyJb0ROD",
+    "/capture/form?token=CYh_FFhhhjZe44oTNLg0aDIMhG3rbnIK",
     "accept",
     "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "content-type",
@@ -47,7 +47,7 @@
     "user-agent",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
     "referer",
-    "https://app.test/scenario/form?token=YMy4czrkVCnm7TVVKOBVi2quqyJb0ROD",
+    "https://app.test/scenario/form?token=CYh_FFhhhjZe44oTNLg0aDIMhG3rbnIK",
     "sec-fetch-dest",
     "document",
     "content-length",
@@ -58,5 +58,22 @@
     "u=0, i",
     "accept-encoding",
     "gzip, deflate, br"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/safari/26.5.2/macos-15/form-post.h2",
+    "connection_id": "4ba07d1c-f3b5-4caa-bfcc-e0c53b43449f",
+    "stream_id": 9,
+    "byte_length": 744,
+    "sha256": "d6c6bda477de81530aaca71eff3835d4270d15d2d553d405f613bd846b08659d",
+    "target_header_frames": [
+      {
+        "offset": 571,
+        "length": 173,
+        "type": 1,
+        "flags": 36,
+        "stream_id": 9
+      }
+    ]
+  }
 }

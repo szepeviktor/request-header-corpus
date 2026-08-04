@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "client": {
     "name": "chrome",
     "version": "150.0.7871.187",
@@ -26,8 +26,9 @@
   },
   "request": {
     "raw_file": "raw/chrome/150.0.7871.187/windows-2025/ajax-post.json",
-    "measurement_id": "c1e93050-e9fb-4598-98a0-ef1dcb4f3ea0",
+    "wire_file": "raw/chrome/150.0.7871.187/windows-2025/ajax-post.h2",
+    "measurement_id": "626a1e5e-8c6e-477e-a556-11c94c3b6997",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T03:47:53.919Z"
+  "observed_at": "2026-08-04T04:13:19.906Z"
 }

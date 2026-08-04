@@ -1,15 +1,15 @@
 {
-  "schema_version": 1,
-  "measurement_id": "8227b5cc-c723-46ae-a061-ccb3313b5068",
-  "measurement_token": "StHckYqCmIKdI6CRqpZ619S2VDxt4en_",
-  "captured_at": "2026-08-04T03:47:51.989Z",
+  "schema_version": 2,
+  "measurement_id": "5855817b-aea8-4a4f-9096-b2464a77b93f",
+  "measurement_token": "ErAUj3jknLBqTkyyiQ5TAYS1ez0Bghmg",
+  "captured_at": "2026-08-04T04:13:02.121Z",
   "method": "GET",
-  "url": "/capture/navigation?token=StHckYqCmIKdI6CRqpZ619S2VDxt4en_",
+  "url": "/capture/navigation?token=ErAUj3jknLBqTkyyiQ5TAYS1ez0Bghmg",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "GET",
-    ":path": "/capture/navigation?token=StHckYqCmIKdI6CRqpZ619S2VDxt4en_",
+    ":path": "/capture/navigation?token=ErAUj3jknLBqTkyyiQ5TAYS1ez0Bghmg",
     ":authority": "app.test",
     ":scheme": "https",
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
@@ -28,7 +28,7 @@
     ":method",
     "GET",
     ":path",
-    "/capture/navigation?token=StHckYqCmIKdI6CRqpZ619S2VDxt4en_",
+    "/capture/navigation?token=ErAUj3jknLBqTkyyiQ5TAYS1ez0Bghmg",
     ":authority",
     "app.test",
     ":scheme",
@@ -55,5 +55,22 @@
     "u=0, i",
     "te",
     "trailers"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/firefox/153.0.1/ubuntu-24.04/navigation-get.h2",
+    "connection_id": "e3973971-70b6-4493-b76f-cfe01551c2dc",
+    "stream_id": 7,
+    "byte_length": 616,
+    "sha256": "111a7d1b0da8eab44a99fcc074d1bbee9b2dd955836e797f5cc25a90e59edf32",
+    "target_header_frames": [
+      {
+        "offset": 541,
+        "length": 75,
+        "type": 1,
+        "flags": 37,
+        "stream_id": 7
+      }
+    ]
+  }
 }

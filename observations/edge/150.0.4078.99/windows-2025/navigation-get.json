@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "client": {
     "name": "edge",
     "version": "150.0.4078.99",
@@ -26,8 +26,9 @@
   },
   "request": {
     "raw_file": "raw/edge/150.0.4078.99/windows-2025/navigation-get.json",
-    "measurement_id": "25052826-6f84-4669-8621-72d4d6cf3c97",
+    "wire_file": "raw/edge/150.0.4078.99/windows-2025/navigation-get.h2",
+    "measurement_id": "76389e13-33b2-415a-89e2-0b7f7a9d3ba6",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T03:48:06.807Z"
+  "observed_at": "2026-08-04T04:13:09.527Z"
 }

@@ -1,22 +1,22 @@
 {
-  "schema_version": 1,
-  "measurement_id": "c42da6d5-f707-4384-ab48-1930fea838a5",
-  "measurement_token": "ADFcmehC431XArUxy-RlyHxhbfdQBavn",
-  "captured_at": "2026-08-04T03:47:52.187Z",
+  "schema_version": 2,
+  "measurement_id": "f1d01659-26d6-4615-a968-fa5559379334",
+  "measurement_token": "mGVI6k3068itjxkBZ1UdtcoDzNKPtyCF",
+  "captured_at": "2026-08-04T04:13:02.563Z",
   "method": "POST",
-  "url": "/capture/ajax?token=ADFcmehC431XArUxy-RlyHxhbfdQBavn",
+  "url": "/capture/ajax?token=mGVI6k3068itjxkBZ1UdtcoDzNKPtyCF",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "POST",
-    ":path": "/capture/ajax?token=ADFcmehC431XArUxy-RlyHxhbfdQBavn",
+    ":path": "/capture/ajax?token=mGVI6k3068itjxkBZ1UdtcoDzNKPtyCF",
     ":authority": "app.test",
     ":scheme": "https",
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
     "accept": "*/*",
     "accept-language": "en-US,en;q=0.9",
     "accept-encoding": "gzip, deflate, br, zstd",
-    "referer": "https://app.test/scenario/ajax?token=ADFcmehC431XArUxy-RlyHxhbfdQBavn",
+    "referer": "https://app.test/scenario/ajax?token=mGVI6k3068itjxkBZ1UdtcoDzNKPtyCF",
     "content-type": "application/json",
     "content-length": "27",
     "origin": "https://app.test",
@@ -30,7 +30,7 @@
     ":method",
     "POST",
     ":path",
-    "/capture/ajax?token=ADFcmehC431XArUxy-RlyHxhbfdQBavn",
+    "/capture/ajax?token=mGVI6k3068itjxkBZ1UdtcoDzNKPtyCF",
     ":authority",
     "app.test",
     ":scheme",
@@ -44,7 +44,7 @@
     "accept-encoding",
     "gzip, deflate, br, zstd",
     "referer",
-    "https://app.test/scenario/ajax?token=ADFcmehC431XArUxy-RlyHxhbfdQBavn",
+    "https://app.test/scenario/ajax?token=mGVI6k3068itjxkBZ1UdtcoDzNKPtyCF",
     "content-type",
     "application/json",
     "content-length",
@@ -61,5 +61,22 @@
     "u=4",
     "te",
     "trailers"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/firefox/153.0.1/ubuntu-24.04/ajax-post.h2",
+    "connection_id": "e3973971-70b6-4493-b76f-cfe01551c2dc",
+    "stream_id": 23,
+    "byte_length": 1538,
+    "sha256": "ff2b084a272912a4a3fd9d9a70e87f767842ca45a8113fe443316897680cd979",
+    "target_header_frames": [
+      {
+        "offset": 1427,
+        "length": 111,
+        "type": 1,
+        "flags": 36,
+        "stream_id": 23
+      }
+    ]
+  }
 }

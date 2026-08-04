@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "client": {
     "name": "firefox",
     "version": "153.0.1",
@@ -26,8 +26,9 @@
   },
   "request": {
     "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/navigation-get.json",
-    "measurement_id": "8227b5cc-c723-46ae-a061-ccb3313b5068",
+    "wire_file": "raw/firefox/153.0.1/ubuntu-24.04/navigation-get.h2",
+    "measurement_id": "5855817b-aea8-4a4f-9096-b2464a77b93f",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T03:47:51.989Z"
+  "observed_at": "2026-08-04T04:13:02.121Z"
 }

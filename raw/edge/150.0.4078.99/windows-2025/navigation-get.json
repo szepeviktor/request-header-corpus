@@ -1,17 +1,17 @@
 {
-  "schema_version": 1,
-  "measurement_id": "25052826-6f84-4669-8621-72d4d6cf3c97",
-  "measurement_token": "nE8uCbup9f5hnp9nmEUtD1_zIK4MPIJ0",
-  "captured_at": "2026-08-04T03:48:06.807Z",
+  "schema_version": 2,
+  "measurement_id": "76389e13-33b2-415a-89e2-0b7f7a9d3ba6",
+  "measurement_token": "vzIPkVq_4zlnZi1iS6rBx8wE4AgeWLPk",
+  "captured_at": "2026-08-04T04:13:09.527Z",
   "method": "GET",
-  "url": "/capture/navigation?token=nE8uCbup9f5hnp9nmEUtD1_zIK4MPIJ0",
+  "url": "/capture/navigation?token=vzIPkVq_4zlnZi1iS6rBx8wE4AgeWLPk",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "GET",
     ":authority": "app.test",
     ":scheme": "https",
-    ":path": "/capture/navigation?token=nE8uCbup9f5hnp9nmEUtD1_zIK4MPIJ0",
+    ":path": "/capture/navigation?token=vzIPkVq_4zlnZi1iS6rBx8wE4AgeWLPk",
     "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\"",
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": "\"Windows\"",
@@ -34,7 +34,7 @@
     ":scheme",
     "https",
     ":path",
-    "/capture/navigation?token=nE8uCbup9f5hnp9nmEUtD1_zIK4MPIJ0",
+    "/capture/navigation?token=vzIPkVq_4zlnZi1iS6rBx8wE4AgeWLPk",
     "sec-ch-ua",
     "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\"",
     "sec-ch-ua-mobile",
@@ -61,5 +61,22 @@
     "en-US,en;q=0.9",
     "priority",
     "u=0, i"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/edge/150.0.4078.99/windows-2025/navigation-get.h2",
+    "connection_id": "1917347b-7251-4154-b053-744fafaf9d37",
+    "stream_id": 5,
+    "byte_length": 774,
+    "sha256": "4ca0483107676eabd51bb81c9aaed8a99ba7b6f6a9873cbfd43b307f6f779677",
+    "target_header_frames": [
+      {
+        "offset": 697,
+        "length": 77,
+        "type": 1,
+        "flags": 37,
+        "stream_id": 5
+      }
+    ]
+  }
 }

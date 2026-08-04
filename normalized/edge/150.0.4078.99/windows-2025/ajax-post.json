@@ -34,7 +34,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=_b3Jy9Wmm2HdFiIbjhk6ioWJ2sdrHKyq"
+        "/capture/ajax?token=rELDuctpPP2pGJoMHaIpYTegXcfSBJIc"
       ],
       ":scheme": [
         "https"
@@ -61,7 +61,7 @@
         "u=1, i"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=_b3Jy9Wmm2HdFiIbjhk6ioWJ2sdrHKyq"
+        "https://app.test/scenario/ajax?token=rELDuctpPP2pGJoMHaIpYTegXcfSBJIc"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\""

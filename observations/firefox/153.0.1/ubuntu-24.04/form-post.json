@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "client": {
     "name": "firefox",
     "version": "153.0.1",
@@ -26,8 +26,9 @@
   },
   "request": {
     "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/form-post.json",
-    "measurement_id": "694e3e63-5cc3-48f1-9446-bc2050c71b42",
+    "wire_file": "raw/firefox/153.0.1/ubuntu-24.04/form-post.h2",
+    "measurement_id": "a35837c6-c3aa-4734-87c2-a105adf8e18b",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T03:47:52.104Z"
+  "observed_at": "2026-08-04T04:13:02.341Z"
 }

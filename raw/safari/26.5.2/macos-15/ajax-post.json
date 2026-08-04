@@ -1,24 +1,24 @@
 {
-  "schema_version": 1,
-  "measurement_id": "7df064a4-1848-4182-959d-3fb7b8b48416",
-  "measurement_token": "8BLxNOJtCxf432gaiBOpprKuGpN1Dvng",
-  "captured_at": "2026-08-04T03:47:26.667Z",
+  "schema_version": 2,
+  "measurement_id": "e23663be-b1a7-446d-8ab6-a69f949cd46f",
+  "measurement_token": "Nq9oqVcwkbL-VCX1GAd7gsJhOwHFVO8H",
+  "captured_at": "2026-08-04T04:12:46.404Z",
   "method": "POST",
-  "url": "/capture/ajax?token=8BLxNOJtCxf432gaiBOpprKuGpN1Dvng",
+  "url": "/capture/ajax?token=Nq9oqVcwkbL-VCX1GAd7gsJhOwHFVO8H",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "POST",
     ":scheme": "https",
     ":authority": "app.test",
-    ":path": "/capture/ajax?token=8BLxNOJtCxf432gaiBOpprKuGpN1Dvng",
+    ":path": "/capture/ajax?token=Nq9oqVcwkbL-VCX1GAd7gsJhOwHFVO8H",
     "accept": "*/*",
     "content-type": "application/json",
     "origin": "https://app.test",
     "sec-fetch-site": "same-origin",
     "sec-fetch-mode": "cors",
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
-    "referer": "https://app.test/scenario/ajax?token=8BLxNOJtCxf432gaiBOpprKuGpN1Dvng",
+    "referer": "https://app.test/scenario/ajax?token=Nq9oqVcwkbL-VCX1GAd7gsJhOwHFVO8H",
     "sec-fetch-dest": "empty",
     "content-length": "27",
     "accept-language": "en-US,en;q=0.9",
@@ -33,7 +33,7 @@
     ":authority",
     "app.test",
     ":path",
-    "/capture/ajax?token=8BLxNOJtCxf432gaiBOpprKuGpN1Dvng",
+    "/capture/ajax?token=Nq9oqVcwkbL-VCX1GAd7gsJhOwHFVO8H",
     "accept",
     "*/*",
     "content-type",
@@ -47,7 +47,7 @@
     "user-agent",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
     "referer",
-    "https://app.test/scenario/ajax?token=8BLxNOJtCxf432gaiBOpprKuGpN1Dvng",
+    "https://app.test/scenario/ajax?token=Nq9oqVcwkbL-VCX1GAd7gsJhOwHFVO8H",
     "sec-fetch-dest",
     "empty",
     "content-length",
@@ -58,5 +58,22 @@
     "u=3, i",
     "accept-encoding",
     "gzip, deflate, br"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/safari/26.5.2/macos-15/ajax-post.h2",
+    "connection_id": "4ba07d1c-f3b5-4caa-bfcc-e0c53b43449f",
+    "stream_id": 13,
+    "byte_length": 991,
+    "sha256": "53b18ca5b7d0baae7fee3bba1d4dd7eb8a822be30f4c9044843e33d88b264cad",
+    "target_header_frames": [
+      {
+        "offset": 843,
+        "length": 148,
+        "type": 1,
+        "flags": 4,
+        "stream_id": 13
+      }
+    ]
+  }
 }

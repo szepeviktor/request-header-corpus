@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "client": {
     "name": "chrome",
     "version": "150.0.7871.187",
@@ -26,8 +26,9 @@
   },
   "request": {
     "raw_file": "raw/chrome/150.0.7871.187/windows-2025/navigation-get.json",
-    "measurement_id": "7d2a7d92-f463-43cf-89b0-5718110ccfe2",
+    "wire_file": "raw/chrome/150.0.7871.187/windows-2025/navigation-get.h2",
+    "measurement_id": "d835f949-290c-4af1-a93b-062f21911429",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T03:47:53.384Z"
+  "observed_at": "2026-08-04T04:13:19.296Z"
 }

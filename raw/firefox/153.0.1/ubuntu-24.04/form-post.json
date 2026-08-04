@@ -1,15 +1,15 @@
 {
-  "schema_version": 1,
-  "measurement_id": "694e3e63-5cc3-48f1-9446-bc2050c71b42",
-  "measurement_token": "UCJdMU08q8C1hHWHNWJCiq77TpWT610h",
-  "captured_at": "2026-08-04T03:47:52.104Z",
+  "schema_version": 2,
+  "measurement_id": "a35837c6-c3aa-4734-87c2-a105adf8e18b",
+  "measurement_token": "cOQhj_-Vt4fHQUPsIHWjHcSHA4NWJTKU",
+  "captured_at": "2026-08-04T04:13:02.341Z",
   "method": "POST",
-  "url": "/capture/form?token=UCJdMU08q8C1hHWHNWJCiq77TpWT610h",
+  "url": "/capture/form?token=cOQhj_-Vt4fHQUPsIHWjHcSHA4NWJTKU",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "POST",
-    ":path": "/capture/form?token=UCJdMU08q8C1hHWHNWJCiq77TpWT610h",
+    ":path": "/capture/form?token=cOQhj_-Vt4fHQUPsIHWjHcSHA4NWJTKU",
     ":authority": "app.test",
     ":scheme": "https",
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
@@ -19,7 +19,7 @@
     "content-type": "application/x-www-form-urlencoded",
     "content-length": "21",
     "origin": "https://app.test",
-    "referer": "https://app.test/scenario/form?token=UCJdMU08q8C1hHWHNWJCiq77TpWT610h",
+    "referer": "https://app.test/scenario/form?token=cOQhj_-Vt4fHQUPsIHWjHcSHA4NWJTKU",
     "upgrade-insecure-requests": "1",
     "sec-fetch-dest": "document",
     "sec-fetch-mode": "navigate",
@@ -32,7 +32,7 @@
     ":method",
     "POST",
     ":path",
-    "/capture/form?token=UCJdMU08q8C1hHWHNWJCiq77TpWT610h",
+    "/capture/form?token=cOQhj_-Vt4fHQUPsIHWjHcSHA4NWJTKU",
     ":authority",
     "app.test",
     ":scheme",
@@ -52,7 +52,7 @@
     "origin",
     "https://app.test",
     "referer",
-    "https://app.test/scenario/form?token=UCJdMU08q8C1hHWHNWJCiq77TpWT610h",
+    "https://app.test/scenario/form?token=cOQhj_-Vt4fHQUPsIHWjHcSHA4NWJTKU",
     "upgrade-insecure-requests",
     "1",
     "sec-fetch-dest",
@@ -67,5 +67,22 @@
     "u=0, i",
     "te",
     "trailers"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/firefox/153.0.1/ubuntu-24.04/form-post.h2",
+    "connection_id": "e3973971-70b6-4493-b76f-cfe01551c2dc",
+    "stream_id": 15,
+    "byte_length": 1077,
+    "sha256": "5c615e494f57adbd3e8e5673605a4533966b4d5562bd4d8e8007cfd628b8df2b",
+    "target_header_frames": [
+      {
+        "offset": 955,
+        "length": 122,
+        "type": 1,
+        "flags": 36,
+        "stream_id": 15
+      }
+    ]
+  }
 }

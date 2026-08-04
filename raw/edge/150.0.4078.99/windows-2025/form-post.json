@@ -1,17 +1,17 @@
 {
-  "schema_version": 1,
-  "measurement_id": "276379f4-499f-467e-8924-926f2bffca14",
-  "measurement_token": "_VeMjK2qkpd3D-5K3RCbFqDDoU9kEn_J",
-  "captured_at": "2026-08-04T03:48:07.021Z",
+  "schema_version": 2,
+  "measurement_id": "42ccabce-f980-4d56-8442-da242c588a98",
+  "measurement_token": "knvVCe2htLhS8osWrBsuTpuGQWEuMaT-",
+  "captured_at": "2026-08-04T04:13:09.725Z",
   "method": "POST",
-  "url": "/capture/form?token=_VeMjK2qkpd3D-5K3RCbFqDDoU9kEn_J",
+  "url": "/capture/form?token=knvVCe2htLhS8osWrBsuTpuGQWEuMaT-",
   "http_version": "2.0",
   "alpn": "h2",
   "headers": {
     ":method": "POST",
     ":authority": "app.test",
     ":scheme": "https",
-    ":path": "/capture/form?token=_VeMjK2qkpd3D-5K3RCbFqDDoU9kEn_J",
+    ":path": "/capture/form?token=knvVCe2htLhS8osWrBsuTpuGQWEuMaT-",
     "content-length": "21",
     "cache-control": "max-age=0",
     "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\"",
@@ -26,7 +26,7 @@
     "sec-fetch-mode": "navigate",
     "sec-fetch-user": "?1",
     "sec-fetch-dest": "document",
-    "referer": "https://app.test/scenario/form?token=_VeMjK2qkpd3D-5K3RCbFqDDoU9kEn_J",
+    "referer": "https://app.test/scenario/form?token=knvVCe2htLhS8osWrBsuTpuGQWEuMaT-",
     "accept-encoding": "gzip, deflate, br, zstd",
     "accept-language": "en-US,en;q=0.9",
     "priority": "u=0, i"
@@ -39,7 +39,7 @@
     ":scheme",
     "https",
     ":path",
-    "/capture/form?token=_VeMjK2qkpd3D-5K3RCbFqDDoU9kEn_J",
+    "/capture/form?token=knvVCe2htLhS8osWrBsuTpuGQWEuMaT-",
     "content-length",
     "21",
     "cache-control",
@@ -69,12 +69,29 @@
     "sec-fetch-dest",
     "document",
     "referer",
-    "https://app.test/scenario/form?token=_VeMjK2qkpd3D-5K3RCbFqDDoU9kEn_J",
+    "https://app.test/scenario/form?token=knvVCe2htLhS8osWrBsuTpuGQWEuMaT-",
     "accept-encoding",
     "gzip, deflate, br, zstd",
     "accept-language",
     "en-US,en;q=0.9",
     "priority",
     "u=0, i"
-  ]
+  ],
+  "wire_capture": {
+    "format": "http2-connection-prefix-v1",
+    "file": "raw/edge/150.0.4078.99/windows-2025/form-post.h2",
+    "connection_id": "1917347b-7251-4154-b053-744fafaf9d37",
+    "stream_id": 9,
+    "byte_length": 1032,
+    "sha256": "1728349c83e7f3011a2df928d5f981c949927c0b85a94b79cfd6e128d2e260b4",
+    "target_header_frames": [
+      {
+        "offset": 847,
+        "length": 185,
+        "type": 1,
+        "flags": 36,
+        "stream_id": 9
+      }
+    ]
+  }
 }
