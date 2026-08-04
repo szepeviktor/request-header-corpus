@@ -14,13 +14,9 @@ concurrency:
 
 jobs:
   ubuntu:
-    name: Capture ${{ matrix.browser }} on Ubuntu
+    name: Capture Firefox on Ubuntu
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [firefox]
 
     steps:
       - uses: actions/checkout@v6
@@ -39,30 +35,25 @@ jobs:
       - name: Install CA and NSS tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y ca-certificates libnss3-tools
-          go install filippo.io/mkcert@v1.4.4
-          mkdir -p "$RUNNER_TEMP/bin"
-          cp "$(go env GOPATH)/bin/mkcert" "$RUNNER_TEMP/bin/mkcert"
-          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          sudo apt-get install -y ca-certificates libnss3-tools mkcert
 
       - name: Install Firefox
-        if: matrix.browser == 'firefox'
         id: firefox
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: latest
 
       - name: Install GeckoDriver
-        if: matrix.browser == 'firefox'
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          archive="$RUNNER_TEMP/geckodriver-v0.36.0-linux64.tar.gz"
+          archive="$RUNNER_TEMP/geckodriver-linux64.tar.gz"
           mkdir -p "$RUNNER_TEMP/geckodriver"
-          curl --fail --location --silent --show-error \
-            --output "$archive" \
-            https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz
-          echo "0bde38707eb0a686a20c6bd50f4adcc7d60d4f73c60eb83ee9e0db8f65823e04  $archive" \
-            | sha256sum --check
+          gh release download \
+            --repo mozilla/geckodriver \
+            --pattern "geckodriver-*-linux64.tar.gz" \
+            --output "$archive"
           tar -xzf "$archive" -C "$RUNNER_TEMP/geckodriver"
           chmod 0755 "$RUNNER_TEMP/geckodriver/geckodriver"
           echo "$RUNNER_TEMP/geckodriver" >> "$GITHUB_PATH"
@@ -70,15 +61,11 @@ jobs:
       - name: Record browser and driver configuration
         shell: bash
         run: |
-          case "${{ matrix.browser }}" in
-            firefox)
-              "${{ steps.firefox.outputs.firefox-path }}" --version
-              geckodriver --version
-              echo "FIREFOX_BINARY=${{ steps.firefox.outputs.firefox-path }}" >> "$GITHUB_ENV"
-              echo "GECKODRIVER=$(command -v geckodriver)" >> "$GITHUB_ENV"
-              echo "DRIVER_VERSION=$(geckodriver --version | head -1 | awk '{print $2}')" >> "$GITHUB_ENV"
-              ;;
-          esac
+          "${{ steps.firefox.outputs.firefox-path }}" --version
+          geckodriver --version
+          echo "FIREFOX_BINARY=${{ steps.firefox.outputs.firefox-path }}" >> "$GITHUB_ENV"
+          echo "GECKODRIVER=$(command -v geckodriver)" >> "$GITHUB_ENV"
+          echo "DRIVER_VERSION=$(geckodriver --version | head -1 | awk '{print $2}')" >> "$GITHUB_ENV"
           echo "OBSERVATION_OS=ubuntu-24.04" >> "$GITHUB_ENV"
           echo "OBSERVATION_ARCH=$(uname -m)" >> "$GITHUB_ENV"
           echo "HEADLESS=true" >> "$GITHUB_ENV"
@@ -92,7 +79,7 @@ jobs:
           mkcert \
             -cert-file "$RUNNER_TEMP/tls/server.crt" \
             -key-file "$RUNNER_TEMP/tls/server.key" \
-            app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
+            app.test http1.app.test
 
           FIREFOX_PROFILE="$RUNNER_TEMP/firefox-profile"
           mkdir -p "$FIREFOX_PROFILE"
@@ -111,7 +98,7 @@ jobs:
 
       - name: Configure local test domains
         run: |
-          echo "127.0.0.1 app.test http1.app.test api.app.test attacker.test" \
+          echo "127.0.0.1 app.test http1.app.test" \
             | sudo tee -a /etc/hosts >/dev/null
 
       - name: Start the HTTPS capture server
@@ -131,11 +118,11 @@ jobs:
           exit 1
 
       - name: Capture all scenarios over HTTP/1.1 and HTTP/2
-        run: node collector/capture.mjs --browser "${{ matrix.browser }}"
+        run: node collector/capture.mjs --browser firefox
 
       - name: Validate and normalize this browser
         env:
-          EXPECTED_BROWSERS: ${{ matrix.browser }}
+          EXPECTED_BROWSERS: firefox
         run: |
           npm run validate
           npm run normalize
@@ -151,7 +138,7 @@ jobs:
       - name: Upload browser corpus
         uses: actions/upload-artifact@v4
         with:
-          name: capture-ubuntu-${{ matrix.browser }}
+          name: capture-ubuntu-firefox
           path: |
             raw
             manifest-fragments
@@ -180,7 +167,7 @@ jobs:
         shell: pwsh
         run: |
           npm ci
-          go install filippo.io/mkcert@v1.4.4
+          choco install mkcert -y
 
       - name: Reset generated corpus
         shell: pwsh
@@ -235,14 +222,14 @@ jobs:
           $tls = Join-Path $env:RUNNER_TEMP "tls"
           $captures = Join-Path $env:RUNNER_TEMP "captures"
           New-Item -ItemType Directory -Force -Path $env:CAROOT, $tls, $captures | Out-Null
-          $mkcert = Join-Path (go env GOPATH) "bin\mkcert.exe"
+          $mkcert = (Get-Command mkcert.exe).Source
           $certificate = Join-Path $tls "server.crt"
           $key = Join-Path $tls "server.key"
           Write-Host "Generating the server certificate"
           & $mkcert `
             -cert-file $certificate `
             -key-file $key `
-            app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
+            app.test http1.app.test
           if ($LASTEXITCODE -ne 0) {
             throw "mkcert failed to create the server certificate"
           }
@@ -265,7 +252,7 @@ jobs:
         shell: pwsh
         run: |
           $hosts = Join-Path $env:SystemRoot "System32\drivers\etc\hosts"
-          "127.0.0.1 app.test http1.app.test api.app.test attacker.test" |
+          "127.0.0.1 app.test http1.app.test" |
             Out-File -FilePath $hosts -Encoding ascii -Append
 
       - name: Start the HTTPS capture server
@@ -343,7 +330,6 @@ jobs:
         run: |
           npm ci
           brew install mkcert
-          test "$(mkcert -version)" = "v1.4.4"
 
       - name: Reset generated corpus
         run: rm -rf raw normalized manifest.json manifest-fragments
@@ -365,7 +351,7 @@ jobs:
           mkcert \
             -cert-file "$RUNNER_TEMP/tls/server.crt" \
             -key-file "$RUNNER_TEMP/tls/server.key" \
-            app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
+            app.test http1.app.test
           sudo security add-trusted-cert \
             -d -r trustRoot -p ssl \
             -k /Library/Keychains/System.keychain \
@@ -377,7 +363,7 @@ jobs:
 
       - name: Configure local test domains
         run: |
-          echo "127.0.0.1 app.test http1.app.test api.app.test attacker.test" \
+          echo "127.0.0.1 app.test http1.app.test" \
             | sudo tee -a /etc/hosts >/dev/null
 
       - name: Start the HTTPS capture server
@@ -457,6 +443,7 @@ jobs:
           EXPECTED_BROWSERS: chrome,edge,firefox,safari
         run: |
           npm run manifest
+          npm run readme
           npm run validate
           npm run normalize
           npm run check:keys
@@ -477,7 +464,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add raw manifest.json normalized
+          git add raw manifest.json normalized README.md
           if git diff --cached --quiet; then
             echo "Corpus is already current"
             exit 0

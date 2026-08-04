@@ -143,7 +143,6 @@ export function buildObservation({
     },
     request: {
       raw_file: rawFile,
-      measurement_id: raw.measurement_id,
       http_version: raw.http_version,
       protocol: protocol.id,
     },

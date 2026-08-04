@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { randomUUID } from 'node:crypto';
 import { mkdtemp } from 'node:fs/promises';
 import test from 'node:test';
 import {
@@ -28,7 +27,6 @@ async function copySchemas(root) {
 }
 
 async function writeFixture(root, browser, engine, protocol, scenario) {
-  const measurementId = randomUUID();
   const version = '1.0.0';
   const os =
     browser === 'safari'
@@ -77,7 +75,6 @@ async function writeFixture(root, browser, engine, protocol, scenario) {
     },
     request: {
       raw_file: rawRelative,
-      measurement_id: measurementId,
       http_version: protocol === 'http2' ? '2.0' : '1.1',
       protocol,
     },
