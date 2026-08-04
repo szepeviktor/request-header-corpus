@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "client": {
     "name": "safari",
     "version": "26.5.2",
@@ -25,10 +25,9 @@
     "url": "https://app.test/capture/form"
   },
   "request": {
-    "raw_file": "raw/safari/26.5.2/macos-15/form-post.json",
-    "wire_file": "raw/safari/26.5.2/macos-15/form-post.h2",
-    "measurement_id": "3be0804f-448e-488e-944b-d54e486dfc2e",
+    "raw_file": "raw/safari/26.5.2/macos-15/form-post.txt",
+    "measurement_id": "3a2b12bc-8d4d-4d95-bb72-2df6f5dbe93f",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T04:12:45.878Z"
+  "observed_at": "2026-08-04T04:25:39.346Z"
 }

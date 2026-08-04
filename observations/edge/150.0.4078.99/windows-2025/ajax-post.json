@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "client": {
     "name": "edge",
     "version": "150.0.4078.99",
@@ -25,10 +25,9 @@
     "url": "https://app.test/capture/ajax"
   },
   "request": {
-    "raw_file": "raw/edge/150.0.4078.99/windows-2025/ajax-post.json",
-    "wire_file": "raw/edge/150.0.4078.99/windows-2025/ajax-post.h2",
-    "measurement_id": "32191a6d-ae88-4fbe-9571-1fb082ca8bee",
+    "raw_file": "raw/edge/150.0.4078.99/windows-2025/ajax-post.txt",
+    "measurement_id": "f4dac306-1e4b-48cf-a992-67e8e658e899",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T04:13:09.975Z"
+  "observed_at": "2026-08-04T04:26:07.729Z"
 }

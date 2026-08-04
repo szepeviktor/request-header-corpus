@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "client": {
     "name": "firefox",
     "version": "153.0.1",
@@ -25,10 +25,9 @@
     "url": "https://app.test/capture/ajax"
   },
   "request": {
-    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/ajax-post.json",
-    "wire_file": "raw/firefox/153.0.1/ubuntu-24.04/ajax-post.h2",
-    "measurement_id": "f1d01659-26d6-4615-a968-fa5559379334",
+    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/ajax-post.txt",
+    "measurement_id": "f889ac09-a59d-4983-ba69-8be169ca9d70",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T04:13:02.563Z"
+  "observed_at": "2026-08-04T04:25:51.988Z"
 }

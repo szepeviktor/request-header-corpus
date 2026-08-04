@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "client": {
     "name": "chrome",
     "version": "150.0.7871.187",
@@ -25,10 +25,9 @@
     "url": "https://app.test/capture/ajax"
   },
   "request": {
-    "raw_file": "raw/chrome/150.0.7871.187/windows-2025/ajax-post.json",
-    "wire_file": "raw/chrome/150.0.7871.187/windows-2025/ajax-post.h2",
-    "measurement_id": "626a1e5e-8c6e-477e-a556-11c94c3b6997",
+    "raw_file": "raw/chrome/150.0.7871.187/windows-2025/ajax-post.txt",
+    "measurement_id": "e9e2f35e-8b18-45e7-9cff-41914092f35d",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T04:13:19.906Z"
+  "observed_at": "2026-08-04T04:26:09.571Z"
 }

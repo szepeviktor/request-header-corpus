@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "client": {
     "name": "firefox",
     "version": "153.0.1",
@@ -25,10 +25,9 @@
     "url": "https://app.test/capture/navigation"
   },
   "request": {
-    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/navigation-get.json",
-    "wire_file": "raw/firefox/153.0.1/ubuntu-24.04/navigation-get.h2",
-    "measurement_id": "5855817b-aea8-4a4f-9096-b2464a77b93f",
+    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/navigation-get.txt",
+    "measurement_id": "d55b4135-575f-46d3-9181-67ff30add75d",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T04:13:02.121Z"
+  "observed_at": "2026-08-04T04:25:51.833Z"
 }

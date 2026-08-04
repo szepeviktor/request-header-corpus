@@ -34,7 +34,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=iybrD0bFnWGxTl_2ywFGgmhmemL0qKen"
+        "/capture/ajax?token=Vif846ZGdEc70iGGOVp2g32xrYjJjt3U"
       ],
       ":scheme": [
         "https"
@@ -61,7 +61,7 @@
         "u=1, i"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=iybrD0bFnWGxTl_2ywFGgmhmemL0qKen"
+        "https://app.test/scenario/ajax?token=Vif846ZGdEc70iGGOVp2g32xrYjJjt3U"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""

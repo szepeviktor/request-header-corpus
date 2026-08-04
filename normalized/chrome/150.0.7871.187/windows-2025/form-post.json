@@ -34,7 +34,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=yi1NJ6DdT6TcmOZGhFsMkJXkPk-Vrctq"
+        "/capture/form?token=X76u2XOn3yJJOPoqS92V8XizzK0J-qjF"
       ],
       ":scheme": [
         "https"
@@ -64,7 +64,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=yi1NJ6DdT6TcmOZGhFsMkJXkPk-Vrctq"
+        "https://app.test/scenario/form?token=X76u2XOn3yJJOPoqS92V8XizzK0J-qjF"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""

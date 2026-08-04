@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "client": {
     "name": "firefox",
     "version": "153.0.1",
@@ -25,10 +25,9 @@
     "url": "https://app.test/capture/form"
   },
   "request": {
-    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/form-post.json",
-    "wire_file": "raw/firefox/153.0.1/ubuntu-24.04/form-post.h2",
-    "measurement_id": "a35837c6-c3aa-4734-87c2-a105adf8e18b",
+    "raw_file": "raw/firefox/153.0.1/ubuntu-24.04/form-post.txt",
+    "measurement_id": "29686608-7ee9-4f0a-b6d0-b9da1e6f07e2",
     "http_version": "2.0"
   },
-  "observed_at": "2026-08-04T04:13:02.341Z"
+  "observed_at": "2026-08-04T04:25:51.931Z"
 }
