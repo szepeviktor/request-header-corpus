@@ -5,7 +5,7 @@
     "version": "150.0.4078.99",
     "engine": "chromium",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "Edge"
   },
   "environment": {
     "os": "windows-2025",
@@ -53,7 +53,7 @@
         "https://http1.app.test:444"
       ],
       "referer": [
-        "https://http1.app.test:444/capture/navigation?token=b8JxSrdbz19jCPQYFOoY0uChdS3TRoIK-navigation"
+        "https://http1.app.test:444/scenario/ajax?token=LTOL08fU6_blbks8mUdHk_wf4y2U5GDd"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Microsoft Edge\";v=\"150\""

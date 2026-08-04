@@ -5,7 +5,7 @@ Origin: https://http1.app.test:444
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: navigate
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15
-Referer: https://http1.app.test:444/capture/navigation?token=lJxrnhDT16eW-Aca8jfJk4YoJsk_odwD-navigation
+Referer: https://http1.app.test:444/scenario/form?token=g2rTqVTSPpubXuCdzUZ0tcrQJL1AjbG2
 Sec-Fetch-Dest: document
 Content-Length: 21
 Accept-Language: en-US,en;q=0.9

@@ -1,14 +1,14 @@
 :method: POST
 :scheme: https
 :authority: app.test
-:path: /capture/ajax?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-ajax&secure_context=true
+:path: /capture/ajax?token=RKZu-YdeTGm6Py8aIMilxuoVAafnPQRH
 accept: */*
 content-type: application/json
 origin: https://app.test
 sec-fetch-site: same-origin
 sec-fetch-mode: cors
 user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15
-referer: https://app.test/capture/navigation?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-navigation
+referer: https://app.test/scenario/ajax?token=RKZu-YdeTGm6Py8aIMilxuoVAafnPQRH
 sec-fetch-dest: empty
 content-length: 27
 accept-language: en-US,en;q=0.9

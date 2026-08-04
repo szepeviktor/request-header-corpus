@@ -5,7 +5,7 @@
     "version": "150.0.7871.187",
     "engine": "chromium",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "150.0.7871.124"
   },
   "environment": {
     "os": "windows-2025",
@@ -56,7 +56,7 @@
         "https://http1.app.test:444"
       ],
       "referer": [
-        "https://http1.app.test:444/capture/navigation?token=MYWCTaNwaNamM4cnvYLu7n8uVL-7N0Kx-navigation"
+        "https://http1.app.test:444/scenario/form?token=r8cd1zbCl411QzNe2DJSDlNavAp08nyo"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
@@ -75,6 +75,9 @@
       ],
       "sec-fetch-site": [
         "same-origin"
+      ],
+      "sec-fetch-user": [
+        "?1"
       ],
       "upgrade-insecure-requests": [
         "1"

@@ -5,7 +5,7 @@
     "version": "26.5.2",
     "engine": "webkit",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
   },
   "environment": {
     "os": "macos-15",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-form"
+        "/capture/form?token=z7LseMYfSY8eywt0KU3CZBiMjBvKUtc5"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/capture/navigation?token=5pujH4G9OuQ_pK8AvyeZEWPdhTx9C3ma-navigation"
+        "https://app.test/scenario/form?token=z7LseMYfSY8eywt0KU3CZBiMjBvKUtc5"
       ],
       "sec-fetch-dest": [
         "document"

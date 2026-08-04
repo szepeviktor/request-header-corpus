@@ -1,5 +1,5 @@
 :method: POST
-:path: /capture/form?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-form
+:path: /capture/form?token=I2sNyHXeGWaLfwf47i6YvL5J0Y9pdYd9
 :authority: app.test
 :scheme: https
 user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0
@@ -9,10 +9,11 @@ accept-encoding: gzip, deflate, br, zstd
 content-type: application/x-www-form-urlencoded
 content-length: 21
 origin: https://app.test
-referer: https://app.test/capture/navigation?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-navigation
+referer: https://app.test/scenario/form?token=I2sNyHXeGWaLfwf47i6YvL5J0Y9pdYd9
 upgrade-insecure-requests: 1
 sec-fetch-dest: document
 sec-fetch-mode: navigate
 sec-fetch-site: same-origin
+sec-fetch-user: ?1
 priority: u=0, i
 te: trailers

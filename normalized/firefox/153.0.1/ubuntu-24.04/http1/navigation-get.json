@@ -5,7 +5,7 @@
     "version": "153.0.1",
     "engine": "gecko",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "0.36.0"
   },
   "environment": {
     "os": "ubuntu-24.04",

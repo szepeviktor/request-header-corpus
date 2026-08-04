@@ -5,7 +5,7 @@
     "version": "150.0.7871.187",
     "engine": "chromium",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "150.0.7871.124"
   },
   "environment": {
     "os": "windows-2025",
@@ -53,7 +53,7 @@
         "https://http1.app.test:444"
       ],
       "referer": [
-        "https://http1.app.test:444/capture/navigation?token=MYWCTaNwaNamM4cnvYLu7n8uVL-7N0Kx-navigation"
+        "https://http1.app.test:444/scenario/ajax?token=qItc86pS_ChmxIzQnP1kpVI-qATXGGOm"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""

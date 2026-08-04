@@ -5,7 +5,7 @@
     "version": "153.0.1",
     "engine": "gecko",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "0.36.0"
   },
   "environment": {
     "os": "ubuntu-24.04",
@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-ajax&secure_context=true"
+        "/capture/ajax?token=J_dERs2vDV8DjmgblnUzJCV__Fx62DKv"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=4"
       ],
       "referer": [
-        "https://app.test/capture/navigation?token=9B8ylho804XfkbAS3ZEP6_ACiuZUK5KO-navigation"
+        "https://app.test/scenario/ajax?token=J_dERs2vDV8DjmgblnUzJCV__Fx62DKv"
       ],
       "sec-fetch-dest": [
         "empty"

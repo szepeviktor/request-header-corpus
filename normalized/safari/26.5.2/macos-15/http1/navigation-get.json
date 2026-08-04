@@ -5,7 +5,7 @@
     "version": "26.5.2",
     "engine": "webkit",
     "channel": "stable",
-    "launch_method": "direct"
+    "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
   },
   "environment": {
     "os": "macos-15",
