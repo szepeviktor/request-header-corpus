@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/ajax?token=E-nzupKuCgBiAJkJGOYz7WRphfuimB9e"
+        "/capture/ajax?token=header-corpus-http2-ajax-post"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=4"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=E-nzupKuCgBiAJkJGOYz7WRphfuimB9e"
+        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
       ],
       "sec-fetch-dest": [
         "empty"

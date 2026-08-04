@@ -7,7 +7,7 @@ Content-Type: application/x-www-form-urlencoded
 Content-Length: 21
 Origin: https://http1.app.test:444
 Connection: keep-alive
-Referer: https://http1.app.test:444/scenario/form?token=GbKMwlycPLpLbbsLLzmRy9EdioMqj2be
+Referer: https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post
 Upgrade-Insecure-Requests: 1
 Sec-Fetch-Dest: document
 Sec-Fetch-Mode: navigate

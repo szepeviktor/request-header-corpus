@@ -56,7 +56,7 @@
         "https://http1.app.test:444"
       ],
       "referer": [
-        "https://http1.app.test:444/scenario/form?token=g7yUVLV_ieXH4jDSN5dST5cvDnAqBEjR"
+        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""

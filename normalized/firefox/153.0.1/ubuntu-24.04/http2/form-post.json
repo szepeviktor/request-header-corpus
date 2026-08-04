@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=dAhGDu1jHpF4k0-tUdI6YdYhl3N048eS"
+        "/capture/form?token=header-corpus-http2-form-post"
       ],
       ":scheme": [
         "https"
@@ -62,7 +62,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=dAhGDu1jHpF4k0-tUdI6YdYhl3N048eS"
+        "https://app.test/scenario/form?token=header-corpus-http2-form-post"
       ],
       "sec-fetch-dest": [
         "document"

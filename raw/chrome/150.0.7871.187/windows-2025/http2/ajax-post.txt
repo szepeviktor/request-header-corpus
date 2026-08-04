@@ -1,7 +1,7 @@
 :method: POST
 :authority: app.test
 :scheme: https
-:path: /capture/ajax?token=tusuCSGx_Ty3zcr4mH9rfEUMaJPIK8cW
+:path: /capture/ajax?token=header-corpus-http2-ajax-post
 content-length: 27
 sec-ch-ua-platform: "Windows"
 user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36
@@ -13,7 +13,7 @@ origin: https://app.test
 sec-fetch-site: same-origin
 sec-fetch-mode: cors
 sec-fetch-dest: empty
-referer: https://app.test/scenario/ajax?token=tusuCSGx_Ty3zcr4mH9rfEUMaJPIK8cW
+referer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post
 accept-encoding: gzip, deflate, br, zstd
 accept-language: en-US,en;q=0.9
 priority: u=1, i

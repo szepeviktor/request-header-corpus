@@ -35,7 +35,7 @@
         "POST"
       ],
       ":path": [
-        "/capture/form?token=Xkba3TQbIQxqRC34ZSLrJ-p2aTYp01PG"
+        "/capture/form?token=header-corpus-http2-form-post"
       ],
       ":scheme": [
         "https"
@@ -65,7 +65,7 @@
         "u=0, i"
       ],
       "referer": [
-        "https://app.test/scenario/form?token=Xkba3TQbIQxqRC34ZSLrJ-p2aTYp01PG"
+        "https://app.test/scenario/form?token=header-corpus-http2-form-post"
       ],
       "sec-ch-ua": [
         "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""

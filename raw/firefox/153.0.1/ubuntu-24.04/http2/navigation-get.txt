@@ -1,5 +1,5 @@
 :method: GET
-:path: /capture/navigation?token=TT_5zkVs1FRFIBplsIvRUDXSIEE-qBNO
+:path: /capture/navigation?token=header-corpus-http2-navigation-get
 :authority: app.test
 :scheme: https
 user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0

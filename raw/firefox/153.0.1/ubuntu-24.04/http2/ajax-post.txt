@@ -1,12 +1,12 @@
 :method: POST
-:path: /capture/ajax?token=E-nzupKuCgBiAJkJGOYz7WRphfuimB9e
+:path: /capture/ajax?token=header-corpus-http2-ajax-post
 :authority: app.test
 :scheme: https
 user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0
 accept: */*
 accept-language: en-US,en;q=0.9
 accept-encoding: gzip, deflate, br, zstd
-referer: https://app.test/scenario/ajax?token=E-nzupKuCgBiAJkJGOYz7WRphfuimB9e
+referer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post
 content-type: application/json
 content-length: 27
 origin: https://app.test

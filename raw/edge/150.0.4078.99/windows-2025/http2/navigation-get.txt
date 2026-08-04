@@ -1,7 +1,7 @@
 :method: GET
 :authority: app.test
 :scheme: https
-:path: /capture/navigation?token=TYL0MpXmgsN31N9OT39z4uxbHgEnuPA6
+:path: /capture/navigation?token=header-corpus-http2-navigation-get
 sec-ch-ua: "Not;A=Brand";v="8", "Chromium";v="150", "Microsoft Edge";v="150"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "Windows"

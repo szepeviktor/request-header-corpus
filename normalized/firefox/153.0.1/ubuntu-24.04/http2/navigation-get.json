@@ -35,7 +35,7 @@
         "GET"
       ],
       ":path": [
-        "/capture/navigation?token=TT_5zkVs1FRFIBplsIvRUDXSIEE-qBNO"
+        "/capture/navigation?token=header-corpus-http2-navigation-get"
       ],
       ":scheme": [
         "https"
