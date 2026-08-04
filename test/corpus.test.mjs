@@ -5,7 +5,11 @@ import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { mkdtemp } from 'node:fs/promises';
 import test from 'node:test';
-import { CAPTURE_PROTOCOLS, CAPTURE_SCENARIOS } from '../collector/capture.mjs';
+import {
+  CAPTURE_PROTOCOLS,
+  CAPTURE_SCENARIOS,
+  captureToken,
+} from '../collector/capture.mjs';
 import { findPrivateKeys } from '../scripts/check-private-keys.mjs';
 import { buildManifest } from '../scripts/lib/manifest.mjs';
 import { validateCorpus } from '../scripts/validate.mjs';
@@ -115,4 +119,19 @@ test('private key guard detects key filenames in output', async (context) => {
   const findings = await findPrivateKeys(root);
   assert.equal(findings.length, 1);
   assert.match(findings[0], /accidental\.key$/);
+});
+
+test('capture tokens are deterministic and unique per protocol and scenario', () => {
+  const tokens = CAPTURE_PROTOCOLS.flatMap((protocol) =>
+    CAPTURE_SCENARIOS.map(({ scenario }) => captureToken(protocol, scenario))
+  );
+  assert.equal(new Set(tokens).size, 6);
+  assert.deepEqual(tokens, [
+    'header-corpus-http2-navigation-get',
+    'header-corpus-http2-form-post',
+    'header-corpus-http2-ajax-post',
+    'header-corpus-http1-navigation-get',
+    'header-corpus-http1-form-post',
+    'header-corpus-http1-ajax-post',
+  ]);
 });

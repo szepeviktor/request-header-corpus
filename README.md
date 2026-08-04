@@ -48,6 +48,10 @@ for all observations.
 `normalized/` contains a deterministic, lower-cased view intended only for
 Git diffs.
 
+Capture correlation tokens are deterministic per protocol and scenario. This
+keeps request paths and referrers byte-faithful while preventing weekly token
+rotation from creating meaningless Git diffs.
+
 `Cookie`, `Authorization`, `Proxy-Authorization`, and `Set-Cookie` values are
 replaced with `[REDACTED]` in the raw text files.
 

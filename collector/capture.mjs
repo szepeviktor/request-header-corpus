@@ -1,4 +1,3 @@
-import { randomBytes } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { arch } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -45,6 +44,10 @@ function option(name, fallback) {
 
 function safeSegment(value) {
   return String(value).replace(/[^a-zA-Z0-9._-]/g, '_');
+}
+
+export function captureToken(protocol, scenario) {
+  return `header-corpus-${protocol.id}-${scenario.id}`;
 }
 
 async function atomicJson(path, value) {
@@ -172,7 +175,7 @@ async function main() {
       await verifyTrustedTls(driver, baseUrl);
 
       for (const scenarioModule of CAPTURE_SCENARIOS) {
-        const token = randomBytes(24).toString('base64url');
+        const token = captureToken(protocol, scenarioModule.scenario);
         const incomingPath = join(captureDirectory, `${token}.json`);
         await scenarioModule.run(driver, baseUrl, token);
         const raw = await waitForCapture(incomingPath);
