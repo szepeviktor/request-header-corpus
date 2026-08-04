@@ -234,14 +234,23 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
             throw "mkcert failed to create the server certificate"
           }
-          Write-Host "Importing the CA into Cert:\CurrentUser\Root"
-          $imported = Import-Certificate `
-            -FilePath (Join-Path $env:CAROOT "rootCA.pem") `
-            -CertStoreLocation "Cert:\CurrentUser\Root"
-          if (-not $imported) {
-            throw "Failed to import the root CA into the Windows user trust store"
+          Write-Host "Adding the CA to the CurrentUser Root store"
+          $rootCaPath = Join-Path $env:CAROOT "rootCA.pem"
+          $rootCa = [System.Security.Cryptography.X509Certificates.X509Certificate2]::CreateFromPemFile(
+            $rootCaPath
+          )
+          $store = [System.Security.Cryptography.X509Certificates.X509Store]::new(
+            [System.Security.Cryptography.X509Certificates.StoreName]::Root,
+            [System.Security.Cryptography.X509Certificates.StoreLocation]::CurrentUser
+          )
+          try {
+            $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+            $store.Add($rootCa)
+          } finally {
+            $store.Close()
+            $rootCa.Dispose()
           }
-          Write-Host "Windows CA import complete"
+          Write-Host "Windows CA trust configured"
           "CAROOT=$env:CAROOT" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "TLS_CERT=$certificate" |
