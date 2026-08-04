@@ -18,6 +18,7 @@ test('normalization is deterministic and sorts case-insensitive header names', (
     environment: { os: 'ubuntu-24.04' },
     tls: { trusted_by_browser: true },
     scenario: { id: 'navigation-get' },
+    request: { protocol: 'http2' },
   };
   assert.deepEqual(
     normalizeObservation(observation, { http_version: '2.0', headers }),

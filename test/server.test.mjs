@@ -18,6 +18,7 @@ function sendRequest({ port, ca, token }) {
         method: 'GET',
         ca,
         servername: 'app.test',
+        ALPNProtocols: ['http/1.1'],
         headers: {
           'X-First': 'one',
           'X-Duplicate': ['alpha', 'beta'],
@@ -84,12 +85,20 @@ test('HTTPS capture server persists ordered raw headers and redacts secrets', as
   const key = await readFile(keyPath);
   const cert = await readFile(certPath);
   const captureDirectory = join(directory, 'captures');
-  const server = await createCaptureServer({ key, cert, port: 0, captureDirectory });
+  const server = await createCaptureServer({
+    key,
+    cert,
+    port: 0,
+    captureDirectory,
+    protocol: 'http1',
+  });
   context.after(() => new Promise((resolve) => server.close(resolve)));
 
   const token = 'abcdefghijklmnop';
   assert.equal(await sendRequest({ port: server.address().port, ca: cert, token }), 200);
   const capture = JSON.parse(await readFile(join(captureDirectory, `${token}.json`), 'utf8'));
+  assert.equal(capture.http_version, '1.1');
+  assert.equal(capture.alpn, 'http/1.1');
   const firstIndex = capture.raw_headers.indexOf('X-First');
   const duplicateIndex = capture.raw_headers.indexOf('X-Duplicate');
   assert.ok(firstIndex >= 0);

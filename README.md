@@ -1,6 +1,7 @@
 # HTTP Browser Request Header Corpus
 
-This repository records three real HTTPS requests from stable desktop browsers:
+This repository records three real HTTPS requests over both HTTP/1.1 and HTTP/2
+from stable desktop browsers:
 
 - a normal document navigation (`GET`);
 - a native HTML form submission (`POST`);
@@ -28,20 +29,20 @@ repository contents, and branch protection must permit the bot commit.
 
 ## Repository data
 
-Each request is stored as an HPACK-decoded raw header file and a separate
+Each request is stored as a protocol-decoded raw header file and a separate
 observation:
 
 ```text
-raw/<browser>/<version>/<os>/<scenario>.txt
-observations/<browser>/<version>/<os>/<scenario>.json
+raw/<browser>/<version>/<os>/<http1|http2>/<scenario>.txt
+observations/<browser>/<version>/<os>/<http1|http2>/<scenario>.json
 ```
 
 Each raw file is directly readable text with one `name: value` header per line.
-Lines are written in exactly the order exposed by Node.js after HPACK decoding;
-they are never sorted or combined, and duplicate headers remain separate lines.
-HTTP/2 pseudo-headers such as `:method` are retained. Observation schema version
-3 stores the browser, driver, operating system, scenario, HTTP version and ALPN
-metadata separately.
+Lines are written in exactly the order exposed by Node.js after HTTP/1.1 parsing
+or HTTP/2 HPACK decoding; they are never sorted or combined, and duplicate
+headers remain separate lines. HTTP/2 pseudo-headers such as `:method` are
+retained. Observation schema version 4 stores the browser, driver, operating
+system, protocol, scenario, HTTP version and ALPN metadata separately.
 
 `observations/` contains browser, driver, operating-system, runner, TLS and scenario
 metadata, plus a relative reference to the raw file. `normalized/` contains a
@@ -62,10 +63,10 @@ database:
 - Safari uses the macOS System Keychain.
 
 The same CA signs a certificate for `app.test`, `*.app.test`, `attacker.test`,
-`localhost`, and loopback IP addresses. The HTTPS/2 collector listens only on
-`127.0.0.1` and exposes the HPACK-decoded request through Node.js. Before capture,
-Selenium checks the exact `/health` body and requires
-`window.isSecureContext === true`.
+`localhost`, and loopback IP addresses. The HTTP/2 endpoint listens on port 443;
+a separate HTTPS endpoint advertises only HTTP/1.1 on port 444. Both listen only
+on `127.0.0.1`. Before capture, Selenium checks the exact `/health` body and
+requires `window.isSecureContext === true` for both origins.
 
 No insecure-certificate WebDriver capability or browser flag is used. In
 particular, the project does not use `acceptInsecureCerts`,
@@ -79,7 +80,8 @@ Requirements:
 - OpenSSL (for the integration test);
 - mkcert and `certutil`;
 - at least one supported browser and matching WebDriver;
-- permission to update `/etc/hosts`, browser trust stores, and bind local port 443.
+- permission to update `/etc/hosts`, browser trust stores, and bind local ports
+  443 and 444.
 
 Install dependencies and run the non-browser checks:
 
@@ -95,7 +97,7 @@ npm run check:keys
 For a local capture, first map the test names:
 
 ```text
-127.0.0.1 app.test api.app.test attacker.test
+127.0.0.1 app.test http1.app.test api.app.test attacker.test
 ```
 
 Create a disposable CA outside the repository, trust it using the same browser
@@ -124,12 +126,13 @@ non-headless.
 ## Validation
 
 The validator checks the observation JSON Schema, raw/observation
-cross-references, raw `name: value` syntax, redaction, HTTP/2 negotiation, content
-types and expected Fetch Metadata context. In CI, it also requires all three
-scenarios for each browser.
+cross-references, raw `name: value` syntax, redaction, HTTP version and ALPN
+negotiation, content types and expected Fetch Metadata context. In CI, it
+requires all three scenarios over both protocols for each browser.
 The private-key guard scans all publishable output paths by filename and PEM
 marker.
 
-The automated tests cover HPACK-decoded raw header ordering and duplicates,
-redaction, schema validation, deterministic normalization, trusted-TLS failure
-handling, complete scenario coverage, and private-key detection.
+The automated tests cover HTTP/1.1 and HPACK-decoded HTTP/2 header ordering and
+duplicates, redaction, schema validation, deterministic normalization,
+trusted-TLS failure handling, complete scenario coverage, and private-key
+detection.

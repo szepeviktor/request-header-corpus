@@ -72,6 +72,7 @@ export async function renderReport(root = resolve('.')) {
   entries.sort(
     (left, right) =>
       left.observation.client.name.localeCompare(right.observation.client.name) ||
+      left.observation.request.protocol.localeCompare(right.observation.request.protocol) ||
       left.observation.scenario.id.localeCompare(right.observation.scenario.id) ||
       left.observation.observed_at.localeCompare(right.observation.observed_at),
   );
@@ -81,8 +82,8 @@ export async function renderReport(root = resolve('.')) {
     '',
     `Generated from ${entries.length} validated observation(s).`,
     '',
-    '| Browser | Version | OS | Scenario | HTTP | ALPN | Header names | Added | Removed | Changed |',
-    '|---|---|---|---|---|---|---|---|---|---|',
+    '| Browser | Version | OS | Protocol | Scenario | HTTP | ALPN | Header names | Added | Removed | Changed |',
+    '|---|---|---|---|---|---|---|---|---|---|---|',
   ];
   const history = new Map();
   for (const entry of entries) {
@@ -90,6 +91,7 @@ export async function renderReport(root = resolve('.')) {
     const key = [
       observation.client.name,
       observation.environment.os,
+      observation.request.protocol,
       observation.scenario.id,
     ].join('/');
     const previous = history.get(key);
@@ -98,7 +100,8 @@ export async function renderReport(root = resolve('.')) {
     const names = Object.keys(normalized).join(', ');
     lines.push(
       `| ${observation.client.name} | ${observation.client.version} | ${observation.environment.os} | ` +
-        `${observation.scenario.id} | ${observation.request.http_version} | ` +
+        `${observation.request.protocol} | ${observation.scenario.id} | ` +
+        `${observation.request.http_version} | ` +
         `${observation.tls.alpn || '—'} | ${names || '—'} | ` +
         `${diff.added} | ${diff.removed} | ${diff.changed} |`,
     );

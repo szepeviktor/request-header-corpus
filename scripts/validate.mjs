@@ -65,6 +65,15 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
       throw new Error(`${path}: ${formatErrors(validateObservation.errors)}`);
     }
     const rawPath = resolve(root, observation.request.raw_file);
+    if (!observation.request.raw_file.includes(`/${observation.request.protocol}/`)) {
+      throw new Error(`${path}: raw file path does not match the protocol`);
+    }
+    const expectedOrigin = observation.request.protocol === 'http2'
+      ? 'https://app.test'
+      : 'https://http1.app.test:444';
+    if (new URL(observation.scenario.url).origin !== expectedOrigin) {
+      throw new Error(`${path}: scenario URL does not match the protocol`);
+    }
     referencedRawPaths.add(rawPath);
     const rawText = await readFile(rawPath, 'utf8');
     if (!rawText.endsWith('\n')) {
@@ -72,15 +81,20 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
     }
     const { pairs, headers } = parseRawHeaders(rawText);
     if (pairs.length === 0) throw new Error(`${rawPath}: raw header file is empty`);
-    if (observation.request.http_version !== '2.0' || observation.tls.alpn !== 'h2') {
-      throw new Error(`${path}: raw headers must be HPACK-decoded from HTTP/2`);
+    const expectedProtocol = observation.request.protocol === 'http2'
+      ? { version: '2.0', alpn: 'h2' }
+      : { version: '1.1', alpn: 'http/1.1' };
+    if (observation.request.http_version !== expectedProtocol.version ||
+        observation.tls.alpn !== expectedProtocol.alpn) {
+      throw new Error(`${path}: HTTP version or ALPN does not match the protocol`);
     }
     assertRedacted(pairs, rawPath);
     assertScenarioMatches(observation, headers, path);
 
-    const scenarios = scenariosByBrowser.get(observation.client.name) || new Set();
+    const corpusKey = `${observation.client.name}/${observation.request.protocol}`;
+    const scenarios = scenariosByBrowser.get(corpusKey) || new Set();
     scenarios.add(observation.scenario.id);
-    scenariosByBrowser.set(observation.client.name, scenarios);
+    scenariosByBrowser.set(corpusKey, scenarios);
   }
 
   const rawPaths = await listFiles(resolve(root, 'raw'));
@@ -98,9 +112,14 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
 
   const requiredScenarios = ['navigation-get', 'form-post', 'ajax-post'];
   for (const browser of expectedBrowsers) {
-    const scenarios = scenariosByBrowser.get(browser) || new Set();
-    const missing = requiredScenarios.filter((scenario) => !scenarios.has(scenario));
-    if (missing.length) throw new Error(`${browser}: missing scenarios: ${missing.join(', ')}`);
+    for (const protocol of ['http1', 'http2']) {
+      const corpusKey = `${browser}/${protocol}`;
+      const scenarios = scenariosByBrowser.get(corpusKey) || new Set();
+      const missing = requiredScenarios.filter((scenario) => !scenarios.has(scenario));
+      if (missing.length) {
+        throw new Error(`${corpusKey}: missing scenarios: ${missing.join(', ')}`);
+      }
+    }
   }
   return observationPaths.length;
 }

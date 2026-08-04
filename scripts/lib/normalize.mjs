@@ -25,6 +25,7 @@ export function normalizeObservation(observation, raw) {
     tls: observation.tls,
     scenario: observation.scenario,
     request: {
+      protocol: observation.request.protocol,
       http_version: raw.http_version,
       headers: normalizedHeaders(raw.headers),
     },

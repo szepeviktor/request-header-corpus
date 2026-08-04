@@ -1,5 +1,6 @@
 import { readFile, mkdir, writeFile, rename } from 'node:fs/promises';
 import { createSecureServer } from 'node:http2';
+import { createServer as createHttpsServer } from 'node:https';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { snapshotRequest } from './request.mjs';
@@ -44,10 +45,14 @@ export async function createCaptureServer({
   host = '127.0.0.1',
   port = 443,
   captureDirectory = resolve('tmp/captures'),
+  protocol = 'h2',
 } = {}) {
   if (!key || !cert) throw new Error('TLS key and certificate are required');
+  if (!['h2', 'http1'].includes(protocol)) throw new Error('Protocol must be h2 or http1');
 
-  const server = createSecureServer({ key, cert, allowHTTP1: true });
+  const server = protocol === 'h2'
+    ? createSecureServer({ key, cert, allowHTTP1: true })
+    : createHttpsServer({ key, cert, ALPNProtocols: ['http/1.1'] });
 
   server.on('request', async (request, response) => {
     try {
@@ -123,18 +128,41 @@ async function main() {
   const certPath = process.env.TLS_CERT;
   if (!keyPath || !certPath) throw new Error('TLS_KEY and TLS_CERT must be set');
 
-  const server = await createCaptureServer({
-    key: await readFile(keyPath),
-    cert: await readFile(certPath),
+  const key = await readFile(keyPath);
+  const cert = await readFile(certPath);
+  const common = {
+    key,
+    cert,
     host: process.env.CAPTURE_HOST || '127.0.0.1',
-    port: Number(process.env.CAPTURE_PORT || 443),
     captureDirectory: process.env.CAPTURE_DIR || resolve('tmp/captures'),
-  });
+  };
+  const servers = await Promise.all([
+    createCaptureServer({
+      ...common,
+      port: Number(process.env.CAPTURE_PORT || 443),
+      protocol: 'h2',
+    }),
+    createCaptureServer({
+      ...common,
+      port: Number(process.env.CAPTURE_HTTP1_PORT || 444),
+      protocol: 'http1',
+    }),
+  ]);
 
-  const address = server.address();
-  process.stdout.write(`capture server listening on ${address.address}:${address.port}\n`);
+  for (const server of servers) {
+    const address = server.address();
+    process.stdout.write(`capture server listening on ${address.address}:${address.port}\n`);
+  }
 
-  const stop = () => server.close(() => process.exit(0));
+  const stop = () => {
+    let remaining = servers.length;
+    for (const server of servers) {
+      server.close(() => {
+        remaining -= 1;
+        if (remaining === 0) process.exit(0);
+      });
+    }
+  };
   process.once('SIGTERM', stop);
   process.once('SIGINT', stop);
 }

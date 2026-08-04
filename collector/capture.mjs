@@ -11,6 +11,20 @@ import * as form from './scenarios/form-post.mjs';
 import * as ajax from './scenarios/ajax-post.mjs';
 
 export const CAPTURE_SCENARIOS = [navigation, form, ajax];
+export const CAPTURE_PROTOCOLS = [
+  {
+    id: 'http2',
+    baseUrl: () => process.env.BASE_URL || 'https://app.test',
+    httpVersion: '2.0',
+    alpn: 'h2',
+  },
+  {
+    id: 'http1',
+    baseUrl: () => process.env.HTTP1_BASE_URL || 'https://http1.app.test:444',
+    httpVersion: '1.1',
+    alpn: 'http/1.1',
+  },
+];
 const DISPLAY_NAMES = {
   chrome: 'chrome',
   edge: 'edge',
@@ -86,13 +100,21 @@ function driverVersion(capabilities, browser) {
   return capabilities.get('safari:platformVersion') || 'system';
 }
 
-export function buildObservation({ browser, capabilities, raw, rawFile, scenario }) {
+export function buildObservation({
+  browser,
+  capabilities,
+  raw,
+  rawFile,
+  scenario,
+  protocol,
+  baseUrl,
+}) {
   const version = String(capabilities.get('browserVersion') || 'unknown');
   const osName = process.env.OBSERVATION_OS || `${process.platform}-${process.release.name}`;
   const headless = browser !== 'safari' && process.env.HEADLESS !== 'false';
 
   return {
-    schema_version: 3,
+    schema_version: 4,
     client: {
       name: DISPLAY_NAMES[browser],
       version,
@@ -115,12 +137,13 @@ export function buildObservation({ browser, capabilities, raw, rawFile, scenario
     scenario: {
       id: scenario.id,
       method: scenario.method,
-      url: `https://app.test${scenario.path}`,
+      url: `${baseUrl}${scenario.path}`,
     },
     request: {
       raw_file: rawFile,
       measurement_id: raw.measurement_id,
       http_version: raw.http_version,
+      protocol: protocol.id,
     },
     observed_at: raw.captured_at,
   };
@@ -132,7 +155,6 @@ async function main() {
     throw new Error('Use --browser chrome, edge, firefox, or safari');
   }
 
-  const baseUrl = process.env.BASE_URL || 'https://app.test';
   const captureDirectory = resolve(process.env.CAPTURE_DIR || 'tmp/captures');
   const outputRoot = resolve(process.env.OUTPUT_ROOT || '.');
   const driver = await createDriver(browserNameForSelenium(browser));
@@ -142,47 +164,57 @@ async function main() {
     if (capabilities.get('acceptInsecureCerts') === true) {
       throw new Error('Refusing to capture with acceptInsecureCerts enabled');
     }
-    await verifyTrustedTls(driver, baseUrl);
-
     const version = safeSegment(capabilities.get('browserVersion') || 'unknown');
     const osName = safeSegment(process.env.OBSERVATION_OS || `${process.platform}-${process.release.name}`);
 
-    for (const scenarioModule of CAPTURE_SCENARIOS) {
-      const token = randomBytes(24).toString('base64url');
-      const incomingPath = join(captureDirectory, `${token}.json`);
-      await scenarioModule.run(driver, baseUrl, token);
-      const raw = await waitForCapture(incomingPath);
-      if (raw.http_version !== '2.0' || raw.alpn !== 'h2') {
-        throw new Error(`Capture ${token} was not HPACK-decoded from HTTP/2`);
+    for (const protocol of CAPTURE_PROTOCOLS) {
+      const baseUrl = protocol.baseUrl();
+      await verifyTrustedTls(driver, baseUrl);
+
+      for (const scenarioModule of CAPTURE_SCENARIOS) {
+        const token = randomBytes(24).toString('base64url');
+        const incomingPath = join(captureDirectory, `${token}.json`);
+        await scenarioModule.run(driver, baseUrl, token);
+        const raw = await waitForCapture(incomingPath);
+        if (raw.http_version !== protocol.httpVersion || raw.alpn !== protocol.alpn) {
+          throw new Error(
+            `Capture ${token} negotiated ${raw.http_version}/${raw.alpn}, ` +
+            `expected ${protocol.httpVersion}/${protocol.alpn}`,
+          );
+        }
+
+        const rawRelative = join(
+          'raw',
+          browser,
+          version,
+          osName,
+          protocol.id,
+          `${scenarioModule.scenario.id}.txt`,
+        );
+        const rawPath = join(outputRoot, rawRelative);
+        await atomicText(rawPath, formatRawHeaders(raw.raw_headers));
+
+        const observation = buildObservation({
+          browser,
+          capabilities,
+          raw,
+          rawFile: rawRelative.split('\\').join('/'),
+          scenario: scenarioModule.scenario,
+          protocol,
+          baseUrl,
+        });
+        const observationPath = join(
+          outputRoot,
+          'observations',
+          browser,
+          version,
+          osName,
+          protocol.id,
+          `${scenarioModule.scenario.id}.json`,
+        );
+        await atomicJson(observationPath, observation);
+        process.stdout.write(`${relative(outputRoot, observationPath)}\n`);
       }
-
-      const rawRelative = join(
-        'raw',
-        browser,
-        version,
-        osName,
-        `${scenarioModule.scenario.id}.txt`,
-      );
-      const rawPath = join(outputRoot, rawRelative);
-      await atomicText(rawPath, formatRawHeaders(raw.raw_headers));
-
-      const observation = buildObservation({
-        browser,
-        capabilities,
-        raw,
-        rawFile: rawRelative.split('\\').join('/'),
-        scenario: scenarioModule.scenario,
-      });
-      const observationPath = join(
-        outputRoot,
-        'observations',
-        browser,
-        version,
-        osName,
-        `${scenarioModule.scenario.id}.json`,
-      );
-      await atomicJson(observationPath, observation);
-      process.stdout.write(`${relative(outputRoot, observationPath)}\n`);
     }
   } finally {
     await driver.quit();

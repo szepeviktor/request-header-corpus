@@ -111,7 +111,7 @@ jobs:
 
       - name: Configure local test domains
         run: |
-          echo "127.0.0.1 app.test api.app.test attacker.test" \
+          echo "127.0.0.1 app.test http1.app.test api.app.test attacker.test" \
             | sudo tee -a /etc/hosts >/dev/null
 
       - name: Start the HTTPS capture server
@@ -121,7 +121,8 @@ jobs:
             "$(command -v node)" collector/server.mjs >"$RUNNER_TEMP/capture-server.log" 2>&1 &
           echo "CAPTURE_SERVER_PID=$!" >> "$GITHUB_ENV"
           for attempt in $(seq 1 30); do
-            if curl --fail --silent --show-error https://app.test/health | grep -qx ok; then
+            if curl --fail --silent --show-error https://app.test/health | grep -qx ok &&
+               curl --fail --silent --show-error https://http1.app.test:444/health | grep -qx ok; then
               exit 0
             fi
             sleep 1
@@ -129,7 +130,7 @@ jobs:
           cat "$RUNNER_TEMP/capture-server.log"
           exit 1
 
-      - name: Capture all three scenarios
+      - name: Capture all scenarios over HTTP/1.1 and HTTP/2
         run: node collector/capture.mjs --browser "${{ matrix.browser }}"
 
       - name: Validate and normalize this browser
@@ -260,7 +261,7 @@ jobs:
         shell: pwsh
         run: |
           $hosts = Join-Path $env:SystemRoot "System32\drivers\etc\hosts"
-          "127.0.0.1 app.test api.app.test attacker.test" |
+          "127.0.0.1 app.test http1.app.test api.app.test attacker.test" |
             Out-File -FilePath $hosts -Encoding ascii -Append
 
       - name: Start the HTTPS capture server
@@ -274,10 +275,18 @@ jobs:
         run: |
           for ($attempt = 1; $attempt -le 30; $attempt++) {
             try {
-              $response = Invoke-WebRequest `
+              $http2Response = Invoke-WebRequest `
                 -Uri "https://app.test/health" `
                 -UseBasicParsing
-              if ($response.StatusCode -eq 200 -and $response.Content -eq "ok") {
+              $http1Response = Invoke-WebRequest `
+                -Uri "https://http1.app.test:444/health" `
+                -UseBasicParsing
+              if (
+                $http2Response.StatusCode -eq 200 -and
+                $http2Response.Content -eq "ok" -and
+                $http1Response.StatusCode -eq 200 -and
+                $http1Response.Content -eq "ok"
+              ) {
                 exit 0
               }
             } catch {
@@ -286,7 +295,7 @@ jobs:
           }
           throw "HTTPS capture server did not become healthy"
 
-      - name: Capture all three scenarios
+      - name: Capture all scenarios over HTTP/1.1 and HTTP/2
         shell: pwsh
         run: node collector/capture.mjs --browser "${{ matrix.browser }}"
 
@@ -364,7 +373,7 @@ jobs:
 
       - name: Configure local test domains
         run: |
-          echo "127.0.0.1 app.test api.app.test attacker.test" \
+          echo "127.0.0.1 app.test http1.app.test api.app.test attacker.test" \
             | sudo tee -a /etc/hosts >/dev/null
 
       - name: Start the HTTPS capture server
@@ -373,7 +382,8 @@ jobs:
             "$(command -v node)" collector/server.mjs >"$RUNNER_TEMP/capture-server.log" 2>&1 &
           echo "CAPTURE_SERVER_PID=$!" >> "$GITHUB_ENV"
           for attempt in $(seq 1 30); do
-            if curl --fail --silent --show-error https://app.test/health | grep -qx ok; then
+            if curl --fail --silent --show-error https://app.test/health | grep -qx ok &&
+               curl --fail --silent --show-error https://http1.app.test:444/health | grep -qx ok; then
               exit 0
             fi
             sleep 1
@@ -381,7 +391,7 @@ jobs:
           cat "$RUNNER_TEMP/capture-server.log"
           exit 1
 
-      - name: Capture all three scenarios
+      - name: Capture all scenarios over HTTP/1.1 and HTTP/2
         run: node collector/capture.mjs --browser safari
 
       - name: Validate and normalize Safari

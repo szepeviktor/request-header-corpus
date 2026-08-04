@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { mkdtemp } from 'node:fs/promises';
 import test from 'node:test';
-import { CAPTURE_SCENARIOS } from '../collector/capture.mjs';
+import { CAPTURE_PROTOCOLS, CAPTURE_SCENARIOS } from '../collector/capture.mjs';
 import { findPrivateKeys } from '../scripts/check-private-keys.mjs';
 import { validateCorpus } from '../scripts/validate.mjs';
 
@@ -22,7 +22,7 @@ async function copySchemas(root) {
   await writeFile(join(root, 'schema', name), await readFile(resolve('schema', name)));
 }
 
-async function writeFixture(root, browser, engine, scenario) {
+async function writeFixture(root, browser, engine, protocol, scenario) {
   const measurementId = randomUUID();
   const version = '1.0.0';
   const os =
@@ -31,7 +31,7 @@ async function writeFixture(root, browser, engine, scenario) {
       : ['chrome', 'edge'].includes(browser)
         ? 'windows-2025'
         : 'ubuntu-24.04';
-  const rawRelative = `raw/${browser}/${version}/${os}/${scenario.id}.txt`;
+  const rawRelative = `raw/${browser}/${version}/${os}/${protocol}/${scenario.id}.txt`;
   const isAjax = scenario.id === 'ajax-post';
   const isForm = scenario.id === 'form-post';
   const headers = {
@@ -44,7 +44,7 @@ async function writeFixture(root, browser, engine, scenario) {
     .map(([name, value]) => `${name}: ${value}`)
     .join('\n')}\n`;
   const observation = {
-    schema_version: 3,
+    schema_version: 4,
     client: {
       name: browser,
       version,
@@ -59,28 +59,43 @@ async function writeFixture(root, browser, engine, scenario) {
       runner_image: os,
       runner_image_version: 'test',
     },
-    tls: { trusted_by_browser: true, alpn: 'h2', secure_context: true },
+    tls: {
+      trusted_by_browser: true,
+      alpn: protocol === 'http2' ? 'h2' : 'http/1.1',
+      secure_context: true,
+    },
     scenario: {
       id: scenario.id,
       method: scenario.method,
-      url: `https://app.test${scenario.path}`,
+      url: protocol === 'http2'
+        ? `https://app.test${scenario.path}`
+        : `https://http1.app.test:444${scenario.path}`,
     },
     request: {
       raw_file: rawRelative,
       measurement_id: measurementId,
-      http_version: '2.0',
+      http_version: protocol === 'http2' ? '2.0' : '1.1',
+      protocol,
     },
     observed_at: '2026-08-04T00:00:00.000Z',
   };
   const rawPath = join(root, rawRelative);
-  const observationPath = join(root, 'observations', browser, version, os, `${scenario.id}.json`);
+  const observationPath = join(
+    root,
+    'observations',
+    browser,
+    version,
+    os,
+    protocol,
+    `${scenario.id}.json`,
+  );
   await mkdir(dirname(rawPath), { recursive: true });
   await mkdir(dirname(observationPath), { recursive: true });
   await writeFile(rawPath, rawText);
   await writeFile(observationPath, JSON.stringify(observation));
 }
 
-test('schema validation requires all three scenarios for every requested browser', async (context) => {
+test('schema validation requires both protocols and all scenarios for every browser', async (context) => {
   const root = await mkdtemp(join(tmpdir(), 'header-corpus-schema-'));
   context.after(() => rm(root, { recursive: true, force: true }));
   await copySchemas(root);
@@ -89,11 +104,13 @@ test('schema validation requires all three scenarios for every requested browser
     ['navigation-get', 'form-post', 'ajax-post'],
   );
   for (const [browser, engine] of Object.entries(BROWSERS)) {
-    for (const scenarioModule of CAPTURE_SCENARIOS) {
-      await writeFixture(root, browser, engine, scenarioModule.scenario);
+    for (const protocol of CAPTURE_PROTOCOLS.map(({ id }) => id)) {
+      for (const scenarioModule of CAPTURE_SCENARIOS) {
+        await writeFixture(root, browser, engine, protocol, scenarioModule.scenario);
+      }
     }
   }
-  assert.equal(await validateCorpus(root, Object.keys(BROWSERS)), 12);
+  assert.equal(await validateCorpus(root, Object.keys(BROWSERS)), 24);
 });
 
 test('private key guard detects key filenames in output', async (context) => {
