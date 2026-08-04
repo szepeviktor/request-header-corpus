@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "client": {
+    "name": "chrome",
+    "version": "150.0.7871.187",
+    "engine": "chromium",
+    "channel": "stable",
+    "driver_version": "150.0.7871.124"
+  },
+  "environment": {
+    "os": "windows-2025",
+    "architecture": "AMD64",
+    "headless": true,
+    "runner_image": "win25-vs2026",
+    "runner_image_version": "20260728.188.1"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "h2",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "navigation-get",
+    "method": "GET",
+    "url": "https://app.test/capture/navigation"
+  },
+  "request": {
+    "raw_file": "raw/chrome/150.0.7871.187/windows-2025/navigation-get.json",
+    "measurement_id": "7d2a7d92-f463-43cf-89b0-5718110ccfe2",
+    "http_version": "2.0"
+  },
+  "observed_at": "2026-08-04T03:47:53.384Z"
+}

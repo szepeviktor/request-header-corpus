@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "client": {
+    "name": "edge",
+    "version": "150.0.4078.99",
+    "engine": "chromium",
+    "channel": "stable",
+    "driver_version": "Edge"
+  },
+  "environment": {
+    "os": "windows-2025",
+    "architecture": "AMD64",
+    "headless": true,
+    "runner_image": "win25-vs2026",
+    "runner_image_version": "20260728.188.1"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "h2",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "form-post",
+    "method": "POST",
+    "url": "https://app.test/capture/form"
+  },
+  "request": {
+    "raw_file": "raw/edge/150.0.4078.99/windows-2025/form-post.json",
+    "measurement_id": "276379f4-499f-467e-8924-926f2bffca14",
+    "http_version": "2.0"
+  },
+  "observed_at": "2026-08-04T03:48:07.021Z"
+}

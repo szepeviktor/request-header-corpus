@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "client": {
+    "name": "safari",
+    "version": "26.5.2",
+    "engine": "webkit",
+    "channel": "stable",
+    "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+  },
+  "environment": {
+    "os": "macos-15",
+    "architecture": "arm64",
+    "headless": false,
+    "runner_image": "macos15",
+    "runner_image_version": "20260727.0256.1"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "h2",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "form-post",
+    "method": "POST",
+    "url": "https://app.test/capture/form"
+  },
+  "request": {
+    "raw_file": "raw/safari/26.5.2/macos-15/form-post.json",
+    "measurement_id": "8985c0ab-5640-4179-87c5-6668ffd53792",
+    "http_version": "2.0"
+  },
+  "observed_at": "2026-08-04T03:47:26.408Z"
+}
