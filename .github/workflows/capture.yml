@@ -236,8 +236,13 @@ jobs:
           }
           Write-Host "Adding the CA to the CurrentUser Root store"
           $rootCaPath = Join-Path $env:CAROOT "rootCA.pem"
-          $rootCa = [System.Security.Cryptography.X509Certificates.X509Certificate2]::CreateFromPemFile(
-            $rootCaPath
+          $rootCaBase64 = (Get-Content -Raw $rootCaPath) `
+            -replace "-----BEGIN CERTIFICATE-----", "" `
+            -replace "-----END CERTIFICATE-----", "" `
+            -replace "\s", ""
+          $rootCaDer = [Convert]::FromBase64String($rootCaBase64)
+          $rootCa = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new(
+            $rootCaDer
           )
           $store = [System.Security.Cryptography.X509Certificates.X509Store]::new(
             [System.Security.Cryptography.X509Certificates.StoreName]::Root,
