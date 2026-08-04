@@ -18,6 +18,11 @@ export async function createDriver(browser) {
     if (isHeadless()) options.addArguments('--headless=new');
     if (process.platform === 'linux') {
       options.addArguments('--no-sandbox', '--disable-dev-shm-usage');
+    } else if (process.platform === 'win32') {
+      options.addArguments(
+        '--no-proxy-server',
+        '--host-resolver-rules=MAP app.test 127.0.0.1,MAP api.app.test 127.0.0.1,MAP attacker.test 127.0.0.1',
+      );
     }
     options.addArguments('--window-size=1440,1200');
     builder = builder.setChromeOptions(options);
@@ -31,6 +36,11 @@ export async function createDriver(browser) {
     if (isHeadless()) options.addArguments('--headless=new');
     if (process.platform === 'linux') {
       options.addArguments('--no-sandbox', '--disable-dev-shm-usage');
+    } else if (process.platform === 'win32') {
+      options.addArguments(
+        '--no-proxy-server',
+        '--host-resolver-rules=MAP app.test 127.0.0.1,MAP api.app.test 127.0.0.1,MAP attacker.test 127.0.0.1',
+      );
     }
     options.addArguments('--window-size=1440,1200');
     builder = builder.setEdgeOptions(options);
