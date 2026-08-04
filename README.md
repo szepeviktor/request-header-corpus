@@ -46,8 +46,7 @@ scenario, HTTP version, ALPN, measurement ID, timestamp, and raw-file reference
 for all observations.
 
 `normalized/` contains a deterministic, lower-cased view intended only for
-diffs. `reports/latest.md` compares observations and highlights
-security-relevant header changes.
+Git diffs.
 
 `Cookie`, `Authorization`, `Proxy-Authorization`, and `Set-Cookie` values are
 replaced with `[REDACTED]` in the raw text files.
@@ -90,7 +89,6 @@ npm ci
 npm test
 npm run validate
 npm run normalize
-npm run report
 npm run check:keys
 ```
 

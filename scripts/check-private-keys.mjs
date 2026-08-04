@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOTS = ['artifacts', 'manifest-fragments', 'raw', 'normalized', 'reports'];
+const ROOTS = ['artifacts', 'manifest-fragments', 'raw', 'normalized'];
 const FILES = ['manifest.json'];
 const PRIVATE_KEY_MARKER = /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
 

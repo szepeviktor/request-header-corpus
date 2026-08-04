@@ -12,10 +12,9 @@
     "normalize": "node scripts/normalize.mjs",
     "manifest": "node scripts/generate-manifest.mjs",
     "validate": "node scripts/validate.mjs",
-    "report": "node scripts/generate-report.mjs",
     "check:keys": "node scripts/check-private-keys.mjs",
     "test": "node --test",
-    "check": "npm test && npm run validate && npm run normalize && npm run report && npm run check:keys"
+    "check": "npm test && npm run validate && npm run normalize && npm run check:keys"
   },
   "dependencies": {
     "ajv": "8.20.0",

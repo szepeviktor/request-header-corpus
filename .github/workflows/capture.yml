@@ -34,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Reset generated corpus
-        run: rm -rf raw normalized reports manifest.json manifest-fragments
+        run: rm -rf raw normalized manifest.json manifest-fragments
 
       - name: Install CA and NSS tools
         run: |
@@ -186,7 +186,7 @@ jobs:
         shell: pwsh
         run: |
           Remove-Item -Recurse -Force `
-            raw, normalized, reports, manifest-fragments `
+            raw, normalized, manifest-fragments `
             -ErrorAction SilentlyContinue
           Remove-Item -Force manifest.json -ErrorAction SilentlyContinue
 
@@ -346,7 +346,7 @@ jobs:
           test "$(mkcert -version)" = "v1.4.4"
 
       - name: Reset generated corpus
-        run: rm -rf raw normalized reports manifest.json manifest-fragments
+        run: rm -rf raw normalized manifest.json manifest-fragments
 
       - name: Enable and record Safari
         run: |
@@ -443,7 +443,7 @@ jobs:
       - run: npm ci
 
       - name: Reset generated corpus
-        run: rm -rf raw normalized reports manifest.json manifest-fragments
+        run: rm -rf raw normalized manifest.json manifest-fragments
 
       - name: Merge browser artifacts
         uses: actions/download-artifact@v5
@@ -452,14 +452,13 @@ jobs:
           path: .
           merge-multiple: true
 
-      - name: Validate complete corpus and build report
+      - name: Validate complete corpus
         env:
           EXPECTED_BROWSERS: chrome,edge,firefox,safari
         run: |
           npm run manifest
           npm run validate
           npm run normalize
-          npm run report
           npm run check:keys
 
       - name: Upload complete corpus
@@ -470,7 +469,6 @@ jobs:
             raw
             manifest.json
             normalized
-            reports/latest.md
           if-no-files-found: error
           retention-days: 30
 
@@ -479,7 +477,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add raw manifest.json normalized reports/latest.md
+          git add raw manifest.json normalized
           if git diff --cached --quiet; then
             echo "Corpus is already current"
             exit 0
