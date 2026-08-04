@@ -52,7 +52,7 @@ jobs:
       - name: Install GeckoDriver
         if: matrix.browser == 'firefox'
         id: geckodriver
-        uses: browser-actions/setup-geckodriver@v1
+        uses: browser-actions/setup-geckodriver@bf8266f624ca122cedb6d0381a031f18f6c431cd
         with:
           geckodriver-version: "0.36.0"
 
@@ -62,10 +62,10 @@ jobs:
           case "${{ matrix.browser }}" in
             firefox)
               "${{ steps.firefox.outputs.firefox-path }}" --version
-              "${{ steps.geckodriver.outputs.geckodriver-path }}" --version
+              geckodriver --version
               echo "FIREFOX_BINARY=${{ steps.firefox.outputs.firefox-path }}" >> "$GITHUB_ENV"
-              echo "GECKODRIVER=${{ steps.geckodriver.outputs.geckodriver-path }}" >> "$GITHUB_ENV"
-              echo "DRIVER_VERSION=$("${{ steps.geckodriver.outputs.geckodriver-path }}" --version | head -1 | awk '{print $2}')" >> "$GITHUB_ENV"
+              echo "GECKODRIVER=$(command -v geckodriver)" >> "$GITHUB_ENV"
+              echo "DRIVER_VERSION=$(geckodriver --version | head -1 | awk '{print $2}')" >> "$GITHUB_ENV"
               ;;
           esac
           echo "OBSERVATION_OS=ubuntu-24.04" >> "$GITHUB_ENV"
@@ -215,14 +215,6 @@ jobs:
           $captures = Join-Path $env:RUNNER_TEMP "captures"
           New-Item -ItemType Directory -Force -Path $env:CAROOT, $tls, $captures | Out-Null
           $mkcert = Join-Path (go env GOPATH) "bin\mkcert.exe"
-          & $mkcert -install
-          if ($LASTEXITCODE -ne 0) {
-            throw "mkcert failed to install the root CA"
-          }
-          & certutil.exe -user -addstore -f Root (Join-Path $env:CAROOT "rootCA.pem")
-          if ($LASTEXITCODE -ne 0) {
-            throw "Failed to import the root CA into the Windows user trust store"
-          }
           $certificate = Join-Path $tls "server.crt"
           $key = Join-Path $tls "server.key"
           & $mkcert `
@@ -231,6 +223,10 @@ jobs:
             app.test "*.app.test" attacker.test localhost 127.0.0.1 ::1
           if ($LASTEXITCODE -ne 0) {
             throw "mkcert failed to create the server certificate"
+          }
+          & certutil.exe -user -addstore -f Root (Join-Path $env:CAROOT "rootCA.pem")
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to import the root CA into the Windows user trust store"
           }
           "CAROOT=$env:CAROOT" |
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -326,10 +322,8 @@ jobs:
       - name: Install dependencies and mkcert
         run: |
           npm ci
-          go install filippo.io/mkcert@v1.4.4
-          mkdir -p "$RUNNER_TEMP/bin"
-          cp "$(go env GOPATH)/bin/mkcert" "$RUNNER_TEMP/bin/mkcert"
-          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          brew install mkcert
+          test "$(mkcert -version)" = "v1.4.4"
 
       - name: Enable and record Safari
         run: |
@@ -345,7 +339,6 @@ jobs:
         run: |
           export CAROOT="$RUNNER_TEMP/mkcert-ca"
           mkdir -p "$CAROOT" "$RUNNER_TEMP/tls" "$RUNNER_TEMP/captures"
-          mkcert -install
           mkcert \
             -cert-file "$RUNNER_TEMP/tls/server.crt" \
             -key-file "$RUNNER_TEMP/tls/server.key" \
