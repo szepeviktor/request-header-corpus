@@ -28,20 +28,32 @@ repository contents, and branch protection must permit the bot commit.
 
 ## Repository data
 
-Each request is stored in two separate files:
+Each request is stored as a decoded record, a byte-exact HTTP/2 capture, and an
+observation:
 
 ```text
 raw/<browser>/<version>/<os>/<scenario>.json
+raw/<browser>/<version>/<os>/<scenario>.h2
 observations/<browser>/<version>/<os>/<scenario>.json
 ```
 
-`raw/` is the authoritative request record. It retains:
+The `.h2` file is the authoritative protocol record. It contains the exact
+decrypted client-to-server HTTP/2 connection prefix, starting with the client
+preface and ending at the last `HEADERS` or `CONTINUATION` frame of the measured
+request. Keeping the connection prefix preserves every preceding HPACK header
+block needed to reconstruct the dynamic compression table.
 
-- the original raw header array exposed by Node.js;
+The adjacent JSON file indexes the target stream and frame byte offsets, records
+the binary file's length and SHA-256 digest, and also retains:
+
+- the decoded raw header array exposed by Node.js;
 - header order and duplicate headers;
 - original header-name casing where the protocol/runtime exposes it;
 - the complete browser and Fetch Metadata values;
 - HTTP version and negotiated ALPN.
+
+Byte-exact records use schema version 2. Version 1 records contained only
+Node-decoded header values and are replaced on the next complete capture run.
 
 `observations/` contains browser, driver, operating-system, runner, TLS and scenario
 metadata, plus a relative reference to the raw file. `normalized/` contains a
@@ -49,7 +61,10 @@ deterministic, lower-cased view intended only for diffs. `reports/latest.md`
 compares observations and highlights security-relevant header changes.
 
 `Cookie`, `Authorization`, `Proxy-Authorization`, and `Set-Cookie` values are
-replaced with `[REDACTED]` in both parsed and raw header views.
+replaced with `[REDACTED]` in both decoded JSON views. Binary `.h2` files cannot
+be redacted without ceasing to be byte-exact. Captures therefore run only in
+disposable browser profiles against local scenarios that do not set credentials
+or cookies. Do not point this collector at browsing sessions containing secrets.
 
 ## Trusted HTTPS design
 
@@ -62,9 +77,10 @@ database:
 - Safari uses the macOS System Keychain.
 
 The same CA signs a certificate for `app.test`, `*.app.test`, `attacker.test`,
-`localhost`, and loopback IP addresses. The HTTPS server listens only on
-`127.0.0.1`. Before capture, Selenium checks the exact `/health` body and requires
-`window.isSecureContext === true`.
+`localhost`, and loopback IP addresses. The TLS frontend listens only on
+`127.0.0.1`, records decrypted HTTP/2 bytes before parsing, and forwards them
+unchanged to an internal loopback h2c server. Before capture, Selenium checks the
+exact `/health` body and requires `window.isSecureContext === true`.
 
 No insecure-certificate WebDriver capability or browser flag is used. In
 particular, the project does not use `acceptInsecureCerts`,
@@ -128,6 +144,7 @@ Metadata context. In CI, it also requires all three scenarios for each browser.
 The private-key guard scans all publishable output paths by filename and PEM
 marker.
 
-The automated tests cover raw header ordering and duplicates, redaction, schema
-validation, deterministic normalization, trusted-TLS failure handling, complete
-scenario coverage, and private-key detection.
+The automated tests cover HTTP/2 frame-byte preservation and hashing, raw header
+ordering and duplicates, decoded-view redaction, schema validation, deterministic
+normalization, trusted-TLS failure handling, complete scenario coverage, and
+private-key detection.

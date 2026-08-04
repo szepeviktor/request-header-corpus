@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -63,6 +64,47 @@ function assertScenarioMatches(observation, raw, path) {
   }
 }
 
+async function assertWireCapture(root, observation, raw, path) {
+  if (raw.http_version !== '2.0' || raw.alpn !== 'h2') {
+    throw new Error(`${path}: byte-exact capture requires HTTP/2 over ALPN h2`);
+  }
+  if (observation.request.wire_file !== raw.wire_capture.file) {
+    throw new Error(`${path}: wire capture references do not match`);
+  }
+
+  const wirePath = resolve(root, observation.request.wire_file);
+  const bytes = await readFile(wirePath);
+  if (bytes.length !== raw.wire_capture.byte_length) {
+    throw new Error(`${wirePath}: byte length does not match metadata`);
+  }
+  const digest = createHash('sha256').update(bytes).digest('hex');
+  if (digest !== raw.wire_capture.sha256) {
+    throw new Error(`${wirePath}: SHA-256 does not match metadata`);
+  }
+  if (!bytes.subarray(0, 24).equals(Buffer.from('PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n'))) {
+    throw new Error(`${wirePath}: HTTP/2 client preface is missing`);
+  }
+
+  for (const frame of raw.wire_capture.target_header_frames) {
+    if (frame.stream_id !== raw.wire_capture.stream_id) {
+      throw new Error(`${wirePath}: target header frame has the wrong stream ID`);
+    }
+    if (frame.offset + frame.length > bytes.length) {
+      throw new Error(`${wirePath}: target header frame is outside the capture`);
+    }
+    const payloadLength = bytes.readUIntBE(frame.offset, 3);
+    const type = bytes[frame.offset + 3];
+    const flags = bytes[frame.offset + 4];
+    const streamId = bytes.readUInt32BE(frame.offset + 5) & 0x7fffffff;
+    if (frame.length !== payloadLength + 9 ||
+        frame.type !== type ||
+        frame.flags !== flags ||
+        frame.stream_id !== streamId) {
+      throw new Error(`${wirePath}: target header frame metadata does not match its bytes`);
+    }
+  }
+}
+
 export async function validateCorpus(root = resolve('.'), expectedBrowsers = []) {
   const observationSchema = JSON.parse(
     await readFile(resolve(root, 'schema/observation.schema.json'), 'utf8'),
@@ -92,6 +134,7 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
     }
     assertRedacted(raw, rawPath);
     assertScenarioMatches(observation, raw, path);
+    await assertWireCapture(root, observation, raw, path);
 
     const scenarios = scenariosByBrowser.get(observation.client.name) || new Set();
     scenarios.add(observation.scenario.id);

@@ -39,6 +39,13 @@ async function atomicJson(path, value) {
   await rename(temporary, path);
 }
 
+async function atomicBytes(path, value) {
+  await mkdir(dirname(path), { recursive: true });
+  const temporary = `${path}.${process.pid}.tmp`;
+  await writeFile(temporary, value);
+  await rename(temporary, path);
+}
+
 async function waitForCapture(path, timeout = 15_000) {
   const deadline = Date.now() + timeout;
   let lastError;
@@ -84,7 +91,7 @@ export function buildObservation({ browser, capabilities, raw, rawFile, scenario
   const headless = browser !== 'safari' && process.env.HEADLESS !== 'false';
 
   return {
-    schema_version: 1,
+    schema_version: 2,
     client: {
       name: DISPLAY_NAMES[browser],
       version,
@@ -111,6 +118,7 @@ export function buildObservation({ browser, capabilities, raw, rawFile, scenario
     },
     request: {
       raw_file: rawFile,
+      wire_file: rawFile.replace(/\.json$/, '.h2'),
       measurement_id: raw.measurement_id,
       http_version: raw.http_version,
     },
@@ -144,6 +152,9 @@ async function main() {
       const incomingPath = join(captureDirectory, `${token}.json`);
       await scenarioModule.run(driver, baseUrl, token);
       const raw = await waitForCapture(incomingPath);
+      if (raw.http_version !== '2.0' || raw.alpn !== 'h2' || !raw.wire_capture) {
+        throw new Error(`Capture ${token} did not include byte-exact HTTP/2 wire data`);
+      }
 
       const rawRelative = join(
         'raw',
@@ -153,6 +164,12 @@ async function main() {
         `${scenarioModule.scenario.id}.json`,
       );
       const rawPath = join(outputRoot, rawRelative);
+      const wireRelative = rawRelative.replace(/\.json$/, '.h2');
+      await atomicBytes(
+        join(outputRoot, wireRelative),
+        await readFile(join(captureDirectory, raw.wire_capture.file)),
+      );
+      raw.wire_capture.file = wireRelative.split('\\').join('/');
       await atomicJson(rawPath, raw);
 
       const observation = buildObservation({

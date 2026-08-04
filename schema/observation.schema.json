@@ -14,7 +14,7 @@
     "observed_at"
   ],
   "properties": {
-    "schema_version": { "const": 1 },
+    "schema_version": { "const": 2 },
     "client": {
       "type": "object",
       "additionalProperties": false,
@@ -74,11 +74,15 @@
     "request": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["raw_file", "measurement_id", "http_version"],
+      "required": ["raw_file", "wire_file", "measurement_id", "http_version"],
       "properties": {
         "raw_file": {
           "type": "string",
           "pattern": "^raw/(chrome|edge|firefox|safari)/[^/]+/[^/]+/(navigation-get|form-post|ajax-post)\\.json$"
+        },
+        "wire_file": {
+          "type": "string",
+          "pattern": "^raw/(chrome|edge|firefox|safari)/[^/]+/[^/]+/(navigation-get|form-post|ajax-post)\\.h2$"
         },
         "measurement_id": { "type": "string", "format": "uuid" },
         "http_version": { "type": "string", "minLength": 1 }

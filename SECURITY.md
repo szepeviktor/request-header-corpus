@@ -9,10 +9,12 @@ Use this corpus only as one input to reversible emergency controls or risk scori
 
 ## Sensitive data handling
 
-The capture pages do not set cookies or request credentials. As defense in depth,
-the collector redacts authorization and cookie-family values before any request is
-written to disk. Do not add authenticated scenarios without extending and testing
-the redaction policy first.
+The capture pages do not set cookies or request credentials. The collector
+redacts authorization and cookie-family values in decoded JSON records. The
+byte-exact `.h2` files are intentionally unmodified and therefore cannot be
+redacted. Capture only disposable browser profiles against the local scenarios;
+never use an authenticated profile. Do not add authenticated scenarios because
+their secrets would be preserved in the HPACK-encoded binary capture.
 
 Each workflow job creates a new CA and server private key under `RUNNER_TEMP`.
 Private keys must never be committed, cached, logged, transferred between jobs, or

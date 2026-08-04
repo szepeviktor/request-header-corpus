@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { mkdtemp } from 'node:fs/promises';
 import test from 'node:test';
 import { CAPTURE_SCENARIOS } from '../collector/capture.mjs';
@@ -36,6 +36,12 @@ async function writeFixture(root, browser, engine, scenario) {
         ? 'windows-2025'
         : 'ubuntu-24.04';
   const rawRelative = `raw/${browser}/${version}/${os}/${scenario.id}.json`;
+  const wireRelative = rawRelative.replace(/\.json$/, '.h2');
+  const wireBytes = Buffer.concat([
+    Buffer.from('PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n'),
+    Buffer.from([0, 0, 0, 4, 0, 0, 0, 0, 0]),
+    Buffer.from([0, 0, 1, 1, 5, 0, 0, 0, 1, 0x82]),
+  ]);
   const isAjax = scenario.id === 'ajax-post';
   const isForm = scenario.id === 'form-post';
   const headers = {
@@ -46,7 +52,7 @@ async function writeFixture(root, browser, engine, scenario) {
   if (isForm) headers['content-type'] = 'application/x-www-form-urlencoded';
   const rawHeaders = Object.entries(headers).flat();
   const raw = {
-    schema_version: 1,
+    schema_version: 2,
     measurement_id: measurementId,
     measurement_token: 'abcdefghijklmnop',
     captured_at: '2026-08-04T00:00:00.000Z',
@@ -56,9 +62,24 @@ async function writeFixture(root, browser, engine, scenario) {
     alpn: 'h2',
     headers,
     raw_headers: rawHeaders,
+    wire_capture: {
+      format: 'http2-connection-prefix-v1',
+      file: wireRelative,
+      connection_id: randomUUID(),
+      stream_id: 1,
+      byte_length: wireBytes.length,
+      sha256: createHash('sha256').update(wireBytes).digest('hex'),
+      target_header_frames: [{
+        offset: 33,
+        length: 10,
+        type: 1,
+        flags: 5,
+        stream_id: 1,
+      }],
+    },
   };
   const observation = {
-    schema_version: 1,
+    schema_version: 2,
     client: {
       name: browser,
       version,
@@ -81,6 +102,7 @@ async function writeFixture(root, browser, engine, scenario) {
     },
     request: {
       raw_file: rawRelative,
+      wire_file: wireRelative,
       measurement_id: measurementId,
       http_version: '2.0',
     },
@@ -91,6 +113,7 @@ async function writeFixture(root, browser, engine, scenario) {
   await mkdir(dirname(rawPath), { recursive: true });
   await mkdir(dirname(observationPath), { recursive: true });
   await writeFile(rawPath, JSON.stringify(raw));
+  await writeFile(join(root, wireRelative), wireBytes);
   await writeFile(observationPath, JSON.stringify(observation));
 }
 
