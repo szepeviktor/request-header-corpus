@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "client": {
+    "name": "firefox",
+    "version": "153.0.3",
+    "engine": "gecko",
+    "channel": "stable",
+    "driver_version": "0.37.1"
+  },
+  "environment": {
+    "os": "ubuntu-24.04",
+    "architecture": "x86_64",
+    "headless": true,
+    "runner_image": "ubuntu24",
+    "runner_image_version": "20260720.247.2"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "h2",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "navigation-get",
+    "method": "GET",
+    "url": "https://app.test/capture/navigation"
+  },
+  "request": {
+    "protocol": "http2",
+    "http_version": "2.0",
+    "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "GET"
+      ],
+      ":path": [
+        "/capture/navigation?token=header-corpus-http2-navigation-get"
+      ],
+      ":scheme": [
+        "https"
+      ],
+      "accept": [
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      ],
+      "accept-encoding": [
+        "gzip, deflate, br, zstd"
+      ],
+      "accept-language": [
+        "en-US,en;q=0.9"
+      ],
+      "priority": [
+        "u=0, i"
+      ],
+      "sec-fetch-dest": [
+        "document"
+      ],
+      "sec-fetch-mode": [
+        "navigate"
+      ],
+      "sec-fetch-site": [
+        "none"
+      ],
+      "sec-fetch-user": [
+        "?1"
+      ],
+      "te": [
+        "trailers"
+      ],
+      "upgrade-insecure-requests": [
+        "1"
+      ],
+      "user-agent": [
+        "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0"
+      ]
+    }
+  }
+}
