@@ -233,7 +233,7 @@ async function main() {
         process.stdout.write(`${relative(outputRoot, rawPath)}\n`);
       }
     }
-    const fragmentPath = join(outputRoot, 'manifest-fragments', `${browser}.json`);
+    const fragmentPath = join(outputRoot, 'manifest-fragments', `${browser}-${osName}.json`);
     await atomicJson(fragmentPath, { observations });
     process.stdout.write(`${relative(outputRoot, fragmentPath)}\n`);
   } finally {
