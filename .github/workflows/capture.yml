@@ -394,7 +394,15 @@ jobs:
         env:
           CAPTURE_TIMEOUT_MS: 60000
           CHROMEDRIVER_VERBOSE: true
+          CHROMEDRIVER_LOG: ${{ runner.temp }}/chromedriver.log
         run: node collector/capture.mjs --browser chrome
+
+      - name: Show ChromeDriver log
+        if: failure()
+        run: |
+          if [ -f "$RUNNER_TEMP/chromedriver.log" ]; then
+            tail -n 200 "$RUNNER_TEMP/chromedriver.log"
+          fi
 
       - name: Validate and normalize Chrome
         env:

@@ -22,7 +22,7 @@ export async function createDriver(browser) {
     if (process.platform === 'darwin') {
       options.addArguments(
         `--user-data-dir=${process.env.RUNNER_TEMP || '/tmp'}/chrome-profile`,
-        '--remote-debugging-port=0',
+        '--remote-debugging-pipe',
       );
     }
     options.addArguments(
@@ -36,7 +36,10 @@ export async function createDriver(browser) {
     if (process.env.CHROMEDRIVER) {
       const service = new chrome.ServiceBuilder(process.env.CHROMEDRIVER);
       if (process.env.CHROMEDRIVER_VERBOSE === 'true') {
-        service.enableVerboseLogging().enableChromeLogging().setStdio('inherit');
+        service.enableVerboseLogging().enableChromeLogging();
+        if (process.env.CHROMEDRIVER_LOG) {
+          service.loggingTo(process.env.CHROMEDRIVER_LOG);
+        }
       }
       builder = builder.setChromeService(service);
     }
