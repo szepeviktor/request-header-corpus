@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-17T04:03:04.876Z",
+  "generated_at": "2026-08-17T12:03:10.536Z",
   "observations": [
     {
       "client": {
@@ -32,7 +32,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:03:04.876Z"
+      "observed_at": "2026-08-17T12:03:10.536Z"
     },
     {
       "client": {
@@ -64,7 +64,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:03:04.648Z"
+      "observed_at": "2026-08-17T12:03:10.306Z"
     },
     {
       "client": {
@@ -96,7 +96,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:03:04.533Z"
+      "observed_at": "2026-08-17T12:03:10.156Z"
     },
     {
       "client": {
@@ -128,7 +128,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:03:04.457Z"
+      "observed_at": "2026-08-17T12:03:10.038Z"
     },
     {
       "client": {
@@ -160,7 +160,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:03:04.257Z"
+      "observed_at": "2026-08-17T12:03:09.823Z"
     },
     {
       "client": {
@@ -192,7 +192,199 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:03:03.956Z"
+      "observed_at": "2026-08-17T12:03:09.461Z"
+    },
+    {
+      "client": {
+        "name": "chrome",
+        "version": "151.0.7922.77",
+        "engine": "chromium",
+        "channel": "stable",
+        "driver_version": "151.0.7922.77"
+      },
+      "environment": {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "headless": true,
+        "runner_image": "macos15",
+        "runner_image_version": "20260727.0256.1"
+      },
+      "tls": {
+        "trusted_by_browser": true,
+        "alpn": "http/1.1",
+        "secure_context": true
+      },
+      "scenario": {
+        "id": "ajax-post",
+        "method": "POST",
+        "url": "https://http1.app.test:444/capture/ajax"
+      },
+      "request": {
+        "raw_file": "raw/chrome/151.0.7922.77/macos-15/http1/ajax-post.txt",
+        "http_version": "1.1",
+        "protocol": "http1"
+      },
+      "observed_at": "2026-08-17T12:02:53.495Z"
+    },
+    {
+      "client": {
+        "name": "chrome",
+        "version": "151.0.7922.77",
+        "engine": "chromium",
+        "channel": "stable",
+        "driver_version": "151.0.7922.77"
+      },
+      "environment": {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "headless": true,
+        "runner_image": "macos15",
+        "runner_image_version": "20260727.0256.1"
+      },
+      "tls": {
+        "trusted_by_browser": true,
+        "alpn": "http/1.1",
+        "secure_context": true
+      },
+      "scenario": {
+        "id": "form-post",
+        "method": "POST",
+        "url": "https://http1.app.test:444/capture/form"
+      },
+      "request": {
+        "raw_file": "raw/chrome/151.0.7922.77/macos-15/http1/form-post.txt",
+        "http_version": "1.1",
+        "protocol": "http1"
+      },
+      "observed_at": "2026-08-17T12:02:53.289Z"
+    },
+    {
+      "client": {
+        "name": "chrome",
+        "version": "151.0.7922.77",
+        "engine": "chromium",
+        "channel": "stable",
+        "driver_version": "151.0.7922.77"
+      },
+      "environment": {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "headless": true,
+        "runner_image": "macos15",
+        "runner_image_version": "20260727.0256.1"
+      },
+      "tls": {
+        "trusted_by_browser": true,
+        "alpn": "http/1.1",
+        "secure_context": true
+      },
+      "scenario": {
+        "id": "navigation-get",
+        "method": "GET",
+        "url": "https://http1.app.test:444/capture/navigation"
+      },
+      "request": {
+        "raw_file": "raw/chrome/151.0.7922.77/macos-15/http1/navigation-get.txt",
+        "http_version": "1.1",
+        "protocol": "http1"
+      },
+      "observed_at": "2026-08-17T12:02:53.043Z"
+    },
+    {
+      "client": {
+        "name": "chrome",
+        "version": "151.0.7922.77",
+        "engine": "chromium",
+        "channel": "stable",
+        "driver_version": "151.0.7922.77"
+      },
+      "environment": {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "headless": true,
+        "runner_image": "macos15",
+        "runner_image_version": "20260727.0256.1"
+      },
+      "tls": {
+        "trusted_by_browser": true,
+        "alpn": "h2",
+        "secure_context": true
+      },
+      "scenario": {
+        "id": "ajax-post",
+        "method": "POST",
+        "url": "https://app.test/capture/ajax"
+      },
+      "request": {
+        "raw_file": "raw/chrome/151.0.7922.77/macos-15/http2/ajax-post.txt",
+        "http_version": "2.0",
+        "protocol": "http2"
+      },
+      "observed_at": "2026-08-17T12:02:52.973Z"
+    },
+    {
+      "client": {
+        "name": "chrome",
+        "version": "151.0.7922.77",
+        "engine": "chromium",
+        "channel": "stable",
+        "driver_version": "151.0.7922.77"
+      },
+      "environment": {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "headless": true,
+        "runner_image": "macos15",
+        "runner_image_version": "20260727.0256.1"
+      },
+      "tls": {
+        "trusted_by_browser": true,
+        "alpn": "h2",
+        "secure_context": true
+      },
+      "scenario": {
+        "id": "form-post",
+        "method": "POST",
+        "url": "https://app.test/capture/form"
+      },
+      "request": {
+        "raw_file": "raw/chrome/151.0.7922.77/macos-15/http2/form-post.txt",
+        "http_version": "2.0",
+        "protocol": "http2"
+      },
+      "observed_at": "2026-08-17T12:02:52.646Z"
+    },
+    {
+      "client": {
+        "name": "chrome",
+        "version": "151.0.7922.77",
+        "engine": "chromium",
+        "channel": "stable",
+        "driver_version": "151.0.7922.77"
+      },
+      "environment": {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "headless": true,
+        "runner_image": "macos15",
+        "runner_image_version": "20260727.0256.1"
+      },
+      "tls": {
+        "trusted_by_browser": true,
+        "alpn": "h2",
+        "secure_context": true
+      },
+      "scenario": {
+        "id": "navigation-get",
+        "method": "GET",
+        "url": "https://app.test/capture/navigation"
+      },
+      "request": {
+        "raw_file": "raw/chrome/151.0.7922.77/macos-15/http2/navigation-get.txt",
+        "http_version": "2.0",
+        "protocol": "http2"
+      },
+      "observed_at": "2026-08-17T12:02:52.330Z"
     },
     {
       "client": {
@@ -224,7 +416,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:50.096Z"
+      "observed_at": "2026-08-17T12:03:04.499Z"
     },
     {
       "client": {
@@ -256,7 +448,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:49.798Z"
+      "observed_at": "2026-08-17T12:03:04.417Z"
     },
     {
       "client": {
@@ -288,7 +480,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:49.673Z"
+      "observed_at": "2026-08-17T12:03:04.297Z"
     },
     {
       "client": {
@@ -320,7 +512,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:49.592Z"
+      "observed_at": "2026-08-17T12:03:04.219Z"
     },
     {
       "client": {
@@ -352,7 +544,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:49.314Z"
+      "observed_at": "2026-08-17T12:03:04.132Z"
     },
     {
       "client": {
@@ -384,7 +576,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:49.153Z"
+      "observed_at": "2026-08-17T12:03:03.970Z"
     },
     {
       "client": {
@@ -416,7 +608,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:41.498Z"
+      "observed_at": "2026-08-17T12:02:59.399Z"
     },
     {
       "client": {
@@ -448,7 +640,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:41.413Z"
+      "observed_at": "2026-08-17T12:02:59.275Z"
     },
     {
       "client": {
@@ -480,7 +672,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:41.272Z"
+      "observed_at": "2026-08-17T12:02:59.040Z"
     },
     {
       "client": {
@@ -512,7 +704,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:41.165Z"
+      "observed_at": "2026-08-17T12:02:58.797Z"
     },
     {
       "client": {
@@ -544,7 +736,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:41.092Z"
+      "observed_at": "2026-08-17T12:02:58.730Z"
     },
     {
       "client": {
@@ -576,7 +768,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:41.012Z"
+      "observed_at": "2026-08-17T12:02:58.631Z"
     },
     {
       "client": {
@@ -608,7 +800,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:54.794Z"
+      "observed_at": "2026-08-17T12:02:43.912Z"
     },
     {
       "client": {
@@ -640,7 +832,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:54.500Z"
+      "observed_at": "2026-08-17T12:02:42.851Z"
     },
     {
       "client": {
@@ -672,7 +864,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-17T04:02:53.889Z"
+      "observed_at": "2026-08-17T12:02:42.619Z"
     },
     {
       "client": {
@@ -704,7 +896,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:53.152Z"
+      "observed_at": "2026-08-17T12:02:42.493Z"
     },
     {
       "client": {
@@ -736,7 +928,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:52.692Z"
+      "observed_at": "2026-08-17T12:02:41.832Z"
     },
     {
       "client": {
@@ -768,7 +960,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-17T04:02:51.879Z"
+      "observed_at": "2026-08-17T12:02:40.772Z"
     }
   ]
 }
