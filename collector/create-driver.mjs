@@ -19,10 +19,26 @@ export async function createDriver(browser) {
     if (process.platform === 'linux') {
       options.addArguments('--no-sandbox', '--disable-dev-shm-usage');
     }
-    options.addArguments('--window-size=1440,1200');
+    if (process.platform === 'darwin') {
+      options.addArguments(
+        `--user-data-dir=${process.env.RUNNER_TEMP || '/tmp'}/chrome-profile`,
+        '--remote-debugging-port=0',
+      );
+    }
+    options.addArguments(
+      '--disable-background-networking',
+      '--disable-component-update',
+      '--no-default-browser-check',
+      '--no-first-run',
+      '--window-size=1440,1200',
+    );
     builder = builder.setChromeOptions(options);
     if (process.env.CHROMEDRIVER) {
-      builder = builder.setChromeService(new chrome.ServiceBuilder(process.env.CHROMEDRIVER));
+      const service = new chrome.ServiceBuilder(process.env.CHROMEDRIVER);
+      if (process.env.CHROMEDRIVER_VERBOSE === 'true') {
+        service.enableVerboseLogging().enableChromeLogging().setStdio('inherit');
+      }
+      builder = builder.setChromeService(service);
     }
   } else if (browser === 'MicrosoftEdge') {
     const options = new edge.Options().setEdgeChromiumBinaryPath(

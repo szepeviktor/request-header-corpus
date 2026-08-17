@@ -108,8 +108,8 @@ jobs:
             "$(command -v node)" collector/server.mjs >"$RUNNER_TEMP/capture-server.log" 2>&1 &
           echo "CAPTURE_SERVER_PID=$!" >> "$GITHUB_ENV"
           for attempt in $(seq 1 30); do
-            if curl --fail --silent --show-error https://app.test/health | grep -qx ok &&
-               curl --fail --silent --show-error https://http1.app.test:444/health | grep -qx ok; then
+            if curl --fail --silent https://app.test/health | grep -qx ok &&
+               curl --fail --silent https://http1.app.test:444/health | grep -qx ok; then
               exit 0
             fi
             sleep 1
@@ -313,6 +313,115 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  macos_chrome:
+    name: Capture Chrome on macOS
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Chrome and ChromeDriver
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+
+      - name: Install dependencies and mkcert
+        run: |
+          npm ci
+          brew install mkcert
+
+      - name: Reset generated corpus
+        run: rm -rf raw normalized manifest.json manifest-fragments
+
+      - name: Record Chrome and driver configuration
+        run: |
+          "${{ steps.setup-chrome.outputs.chrome-path }}" --version
+          "${{ steps.setup-chrome.outputs.chromedriver-path }}" --version
+          echo "CHROME_BINARY=${{ steps.setup-chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
+          echo "CHROMEDRIVER=${{ steps.setup-chrome.outputs.chromedriver-path }}" >> "$GITHUB_ENV"
+          echo "DRIVER_VERSION=${{ steps.setup-chrome.outputs.chromedriver-version }}" >> "$GITHUB_ENV"
+          echo "OBSERVATION_OS=macos-15" >> "$GITHUB_ENV"
+          echo "OBSERVATION_ARCH=$(uname -m)" >> "$GITHUB_ENV"
+          echo "HEADLESS=true" >> "$GITHUB_ENV"
+
+      - name: Create and trust the ephemeral CA
+        run: |
+          export CAROOT="$RUNNER_TEMP/mkcert-ca"
+          mkdir -p "$CAROOT" "$RUNNER_TEMP/tls" "$RUNNER_TEMP/captures"
+          mkcert \
+            -cert-file "$RUNNER_TEMP/tls/server.crt" \
+            -key-file "$RUNNER_TEMP/tls/server.key" \
+            app.test http1.app.test
+          sudo security add-trusted-cert \
+            -d -r trustRoot -p ssl \
+            -k /Library/Keychains/System.keychain \
+            "$CAROOT/rootCA.pem"
+          echo "CAROOT=$CAROOT" >> "$GITHUB_ENV"
+          echo "TLS_CERT=$RUNNER_TEMP/tls/server.crt" >> "$GITHUB_ENV"
+          echo "TLS_KEY=$RUNNER_TEMP/tls/server.key" >> "$GITHUB_ENV"
+          echo "CAPTURE_DIR=$RUNNER_TEMP/captures" >> "$GITHUB_ENV"
+
+      - name: Configure local test domains
+        run: |
+          echo "127.0.0.1 app.test http1.app.test" \
+            | sudo tee -a /etc/hosts >/dev/null
+
+      - name: Start the HTTPS capture server
+        run: |
+          sudo --preserve-env=TLS_CERT,TLS_KEY,CAPTURE_DIR \
+            "$(command -v node)" collector/server.mjs >"$RUNNER_TEMP/capture-server.log" 2>&1 &
+          echo "CAPTURE_SERVER_PID=$!" >> "$GITHUB_ENV"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent https://app.test/health | grep -qx ok &&
+               curl --fail --silent https://http1.app.test:444/health | grep -qx ok; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/capture-server.log"
+          exit 1
+
+      - name: Capture all scenarios over HTTP/1.1 and HTTP/2
+        timeout-minutes: 1
+        env:
+          CAPTURE_TIMEOUT_MS: 60000
+          CHROMEDRIVER_VERBOSE: true
+        run: node collector/capture.mjs --browser chrome
+
+      - name: Validate and normalize Chrome
+        env:
+          EXPECTED_BROWSERS: chrome
+        run: |
+          npm run validate
+          npm run normalize
+          npm run check:keys
+
+      - name: Stop capture server
+        if: always()
+        run: |
+          if [ -n "${CAPTURE_SERVER_PID:-}" ]; then
+            sudo kill "$CAPTURE_SERVER_PID" 2>/dev/null || true
+          fi
+
+      - name: Upload Chrome corpus
+        uses: actions/upload-artifact@v4
+        with:
+          name: capture-macos-chrome
+          path: |
+            raw
+            manifest-fragments
+            normalized
+          if-no-files-found: error
+          retention-days: 14
+
   safari:
     name: Capture Safari on macOS
     runs-on: macos-15
@@ -412,7 +521,7 @@ jobs:
 
   publish:
     name: Validate and publish weekly corpus
-    needs: [ubuntu, windows, safari]
+    needs: [ubuntu, windows, macos_chrome, safari]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:

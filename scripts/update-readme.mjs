@@ -7,6 +7,7 @@ const START = '<!-- navigation-links:start -->';
 const END = '<!-- navigation-links:end -->';
 const BROWSERS = [
   ['chrome', 'Google Chrome stable', 'windows-2025', 'ChromeDriver'],
+  ['chrome', 'Google Chrome stable', 'macos-15', 'ChromeDriver'],
   ['edge', 'Microsoft Edge stable', 'windows-2025', 'MSEdgeDriver'],
   ['firefox', 'Mozilla Firefox stable', 'ubuntu-24.04', 'GeckoDriver'],
   ['safari', 'System Safari', 'macos-15', 'SafariDriver'],
@@ -30,16 +31,24 @@ export async function updateReadme(root = resolve('.')) {
   ];
 
   for (const [browser, label, runner, driver] of BROWSERS) {
-    const links = ['http1', 'http2'].map((protocol) => {
-      const observation = manifest.observations.find(
+    const observations = ['http1', 'http2'].map((protocol) => ({
+      protocol,
+      observation: manifest.observations.find(
         (item) =>
           item.client.name === browser
+          && item.environment.os === runner
           && item.request.protocol === protocol
           && item.scenario.id === 'navigation-get',
-      );
+      ),
+    }));
 
+    if (observations.every(({ observation }) => observation === undefined)) {
+      continue;
+    }
+
+    const links = observations.map(({ protocol, observation }) => {
       if (observation === undefined) {
-        throw new Error(`Missing ${browser}/${protocol}/navigation-get observation`);
+        throw new Error(`Missing ${browser}/${runner}/${protocol}/navigation-get observation`);
       }
 
       const linkLabel = protocol === 'http1' ? 'HTTP/1.1' : 'HTTP/2';

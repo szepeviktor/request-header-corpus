@@ -36,6 +36,13 @@ const ENGINES = {
   firefox: 'gecko',
   safari: 'webkit',
 };
+const DRIVER_TIMEOUTS = {
+  implicit: 0,
+  pageLoad: 30_000,
+  script: 30_000,
+};
+const CAPTURE_TIMEOUT = Number(process.env.CAPTURE_TIMEOUT_MS || 0);
+let activeStep = 'starting capture';
 
 function option(name, fallback) {
   const index = process.argv.indexOf(`--${name}`);
@@ -158,9 +165,22 @@ async function main() {
 
   const captureDirectory = resolve(process.env.CAPTURE_DIR || 'tmp/captures');
   const outputRoot = resolve(process.env.OUTPUT_ROOT || '.');
-  const driver = await createDriver(browserNameForSelenium(browser));
+  const watchdog = CAPTURE_TIMEOUT > 0
+    ? setTimeout(() => {
+      process.stderr.write(`Capture timed out while ${activeStep}\n`);
+      process.exit(124);
+    }, CAPTURE_TIMEOUT)
+    : undefined;
+
+  let driver;
 
   try {
+    activeStep = `creating ${browser} WebDriver`;
+    process.stdout.write(`Creating ${browser} WebDriver\n`);
+    driver = await createDriver(browserNameForSelenium(browser));
+    activeStep = 'configuring WebDriver timeouts';
+    await driver.manage().setTimeouts(DRIVER_TIMEOUTS);
+    activeStep = 'reading WebDriver capabilities';
     const capabilities = await driver.getCapabilities();
     if (capabilities.get('acceptInsecureCerts') === true) {
       throw new Error('Refusing to capture with acceptInsecureCerts enabled');
@@ -171,12 +191,17 @@ async function main() {
 
     for (const protocol of CAPTURE_PROTOCOLS) {
       const baseUrl = protocol.baseUrl();
+      activeStep = `verifying ${protocol.id} TLS at ${baseUrl}`;
+      process.stdout.write(`Verifying ${protocol.id} TLS at ${baseUrl}\n`);
       await verifyTrustedTls(driver, baseUrl);
 
       for (const scenarioModule of CAPTURE_SCENARIOS) {
         const token = captureToken(protocol, scenarioModule.scenario);
         const incomingPath = join(captureDirectory, `${token}.json`);
+        activeStep = `capturing ${protocol.id}/${scenarioModule.scenario.id}`;
+        process.stdout.write(`Capturing ${protocol.id}/${scenarioModule.scenario.id}\n`);
         await scenarioModule.run(driver, baseUrl, token);
+        activeStep = `waiting for ${protocol.id}/${scenarioModule.scenario.id}`;
         const raw = await waitForCapture(incomingPath);
         if (raw.http_version !== protocol.httpVersion || raw.alpn !== protocol.alpn) {
           throw new Error(
@@ -212,7 +237,8 @@ async function main() {
     await atomicJson(fragmentPath, { observations });
     process.stdout.write(`${relative(outputRoot, fragmentPath)}\n`);
   } finally {
-    await driver.quit();
+    clearTimeout(watchdog);
+    await driver?.quit();
   }
 }
 

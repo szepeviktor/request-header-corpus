@@ -67,6 +67,8 @@ export async function validateCorpus(root = resolve('.'), expectedBrowsers = [])
   for (const observation of manifest.observations) {
     const observationKey = [
       observation.client.name,
+      observation.client.version,
+      observation.environment.os,
       observation.request.protocol,
       observation.scenario.id,
     ].join('/');
