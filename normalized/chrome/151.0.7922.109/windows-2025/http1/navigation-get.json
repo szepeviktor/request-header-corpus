@@ -2,44 +2,32 @@
   "schema_version": 1,
   "client": {
     "name": "chrome",
-    "version": "151.0.7922.72",
+    "version": "151.0.7922.109",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "151.0.7922.71"
+    "driver_version": "151.0.7922.77"
   },
   "environment": {
     "os": "windows-2025",
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20260803.193.1"
+    "runner_image_version": "20260810.198.2"
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "h2",
+    "alpn": "http/1.1",
     "secure_context": true
   },
   "scenario": {
     "id": "navigation-get",
     "method": "GET",
-    "url": "https://app.test/capture/navigation"
+    "url": "https://http1.app.test:444/capture/navigation"
   },
   "request": {
-    "protocol": "http2",
-    "http_version": "2.0",
+    "protocol": "http1",
+    "http_version": "1.1",
     "headers": {
-      ":authority": [
-        "app.test"
-      ],
-      ":method": [
-        "GET"
-      ],
-      ":path": [
-        "/capture/navigation?token=header-corpus-http2-navigation-get"
-      ],
-      ":scheme": [
-        "https"
-      ],
       "accept": [
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
       ],
@@ -49,8 +37,11 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
-      "priority": [
-        "u=0, i"
+      "connection": [
+        "keep-alive"
+      ],
+      "host": [
+        "http1.app.test:444"
       ],
       "sec-ch-ua": [
         "\"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\""

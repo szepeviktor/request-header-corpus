@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-10T04:54:43.022Z",
+  "generated_at": "2026-08-17T04:03:04.876Z",
   "observations": [
     {
       "client": {
         "name": "chrome",
-        "version": "151.0.7922.72",
+        "version": "151.0.7922.109",
         "engine": "chromium",
         "channel": "stable",
-        "driver_version": "151.0.7922.71"
+        "driver_version": "151.0.7922.77"
       },
       "environment": {
         "os": "windows-2025",
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -28,26 +28,26 @@
         "url": "https://http1.app.test:444/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/chrome/151.0.7922.72/windows-2025/http1/ajax-post.txt",
+        "raw_file": "raw/chrome/151.0.7922.109/windows-2025/http1/ajax-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:39.798Z"
+      "observed_at": "2026-08-17T04:03:04.876Z"
     },
     {
       "client": {
         "name": "chrome",
-        "version": "151.0.7922.72",
+        "version": "151.0.7922.109",
         "engine": "chromium",
         "channel": "stable",
-        "driver_version": "151.0.7922.71"
+        "driver_version": "151.0.7922.77"
       },
       "environment": {
         "os": "windows-2025",
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -60,26 +60,26 @@
         "url": "https://http1.app.test:444/capture/form"
       },
       "request": {
-        "raw_file": "raw/chrome/151.0.7922.72/windows-2025/http1/form-post.txt",
+        "raw_file": "raw/chrome/151.0.7922.109/windows-2025/http1/form-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:39.530Z"
+      "observed_at": "2026-08-17T04:03:04.648Z"
     },
     {
       "client": {
         "name": "chrome",
-        "version": "151.0.7922.72",
+        "version": "151.0.7922.109",
         "engine": "chromium",
         "channel": "stable",
-        "driver_version": "151.0.7922.71"
+        "driver_version": "151.0.7922.77"
       },
       "environment": {
         "os": "windows-2025",
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -92,26 +92,26 @@
         "url": "https://http1.app.test:444/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/chrome/151.0.7922.72/windows-2025/http1/navigation-get.txt",
+        "raw_file": "raw/chrome/151.0.7922.109/windows-2025/http1/navigation-get.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:39.419Z"
+      "observed_at": "2026-08-17T04:03:04.533Z"
     },
     {
       "client": {
         "name": "chrome",
-        "version": "151.0.7922.72",
+        "version": "151.0.7922.109",
         "engine": "chromium",
         "channel": "stable",
-        "driver_version": "151.0.7922.71"
+        "driver_version": "151.0.7922.77"
       },
       "environment": {
         "os": "windows-2025",
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -124,26 +124,26 @@
         "url": "https://app.test/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/chrome/151.0.7922.72/windows-2025/http2/ajax-post.txt",
+        "raw_file": "raw/chrome/151.0.7922.109/windows-2025/http2/ajax-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:39.349Z"
+      "observed_at": "2026-08-17T04:03:04.457Z"
     },
     {
       "client": {
         "name": "chrome",
-        "version": "151.0.7922.72",
+        "version": "151.0.7922.109",
         "engine": "chromium",
         "channel": "stable",
-        "driver_version": "151.0.7922.71"
+        "driver_version": "151.0.7922.77"
       },
       "environment": {
         "os": "windows-2025",
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -156,26 +156,26 @@
         "url": "https://app.test/capture/form"
       },
       "request": {
-        "raw_file": "raw/chrome/151.0.7922.72/windows-2025/http2/form-post.txt",
+        "raw_file": "raw/chrome/151.0.7922.109/windows-2025/http2/form-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:39.152Z"
+      "observed_at": "2026-08-17T04:03:04.257Z"
     },
     {
       "client": {
         "name": "chrome",
-        "version": "151.0.7922.72",
+        "version": "151.0.7922.109",
         "engine": "chromium",
         "channel": "stable",
-        "driver_version": "151.0.7922.71"
+        "driver_version": "151.0.7922.77"
       },
       "environment": {
         "os": "windows-2025",
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -188,16 +188,16 @@
         "url": "https://app.test/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/chrome/151.0.7922.72/windows-2025/http2/navigation-get.txt",
+        "raw_file": "raw/chrome/151.0.7922.109/windows-2025/http2/navigation-get.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:38.868Z"
+      "observed_at": "2026-08-17T04:03:03.956Z"
     },
     {
       "client": {
         "name": "edge",
-        "version": "151.0.4129.59",
+        "version": "151.0.4129.72",
         "engine": "chromium",
         "channel": "stable",
         "driver_version": "Edge"
@@ -207,7 +207,7 @@
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -220,16 +220,16 @@
         "url": "https://http1.app.test:444/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/edge/151.0.4129.59/windows-2025/http1/ajax-post.txt",
+        "raw_file": "raw/edge/151.0.4129.72/windows-2025/http1/ajax-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:43.022Z"
+      "observed_at": "2026-08-17T04:02:50.096Z"
     },
     {
       "client": {
         "name": "edge",
-        "version": "151.0.4129.59",
+        "version": "151.0.4129.72",
         "engine": "chromium",
         "channel": "stable",
         "driver_version": "Edge"
@@ -239,7 +239,7 @@
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -252,16 +252,16 @@
         "url": "https://http1.app.test:444/capture/form"
       },
       "request": {
-        "raw_file": "raw/edge/151.0.4129.59/windows-2025/http1/form-post.txt",
+        "raw_file": "raw/edge/151.0.4129.72/windows-2025/http1/form-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:42.784Z"
+      "observed_at": "2026-08-17T04:02:49.798Z"
     },
     {
       "client": {
         "name": "edge",
-        "version": "151.0.4129.59",
+        "version": "151.0.4129.72",
         "engine": "chromium",
         "channel": "stable",
         "driver_version": "Edge"
@@ -271,7 +271,7 @@
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -284,16 +284,16 @@
         "url": "https://http1.app.test:444/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/edge/151.0.4129.59/windows-2025/http1/navigation-get.txt",
+        "raw_file": "raw/edge/151.0.4129.72/windows-2025/http1/navigation-get.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:42.659Z"
+      "observed_at": "2026-08-17T04:02:49.673Z"
     },
     {
       "client": {
         "name": "edge",
-        "version": "151.0.4129.59",
+        "version": "151.0.4129.72",
         "engine": "chromium",
         "channel": "stable",
         "driver_version": "Edge"
@@ -303,7 +303,7 @@
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -316,16 +316,16 @@
         "url": "https://app.test/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/edge/151.0.4129.59/windows-2025/http2/ajax-post.txt",
+        "raw_file": "raw/edge/151.0.4129.72/windows-2025/http2/ajax-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:42.583Z"
+      "observed_at": "2026-08-17T04:02:49.592Z"
     },
     {
       "client": {
         "name": "edge",
-        "version": "151.0.4129.59",
+        "version": "151.0.4129.72",
         "engine": "chromium",
         "channel": "stable",
         "driver_version": "Edge"
@@ -335,7 +335,7 @@
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -348,16 +348,16 @@
         "url": "https://app.test/capture/form"
       },
       "request": {
-        "raw_file": "raw/edge/151.0.4129.59/windows-2025/http2/form-post.txt",
+        "raw_file": "raw/edge/151.0.4129.72/windows-2025/http2/form-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:42.301Z"
+      "observed_at": "2026-08-17T04:02:49.314Z"
     },
     {
       "client": {
         "name": "edge",
-        "version": "151.0.4129.59",
+        "version": "151.0.4129.72",
         "engine": "chromium",
         "channel": "stable",
         "driver_version": "Edge"
@@ -367,7 +367,7 @@
         "architecture": "AMD64",
         "headless": true,
         "runner_image": "win25-vs2026",
-        "runner_image_version": "20260803.193.1"
+        "runner_image_version": "20260810.198.2"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -380,16 +380,16 @@
         "url": "https://app.test/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/edge/151.0.4129.59/windows-2025/http2/navigation-get.txt",
+        "raw_file": "raw/edge/151.0.4129.72/windows-2025/http2/navigation-get.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:42.148Z"
+      "observed_at": "2026-08-17T04:02:49.153Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "153.0.3",
+        "version": "153.0.4",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -399,7 +399,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260720.247.2"
+        "runner_image_version": "20260810.271.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -412,16 +412,16 @@
         "url": "https://http1.app.test:444/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/firefox/153.0.3/ubuntu-24.04/http1/ajax-post.txt",
+        "raw_file": "raw/firefox/153.0.4/ubuntu-24.04/http1/ajax-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:40.854Z"
+      "observed_at": "2026-08-17T04:02:41.498Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "153.0.3",
+        "version": "153.0.4",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -431,7 +431,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260720.247.2"
+        "runner_image_version": "20260810.271.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -444,16 +444,16 @@
         "url": "https://http1.app.test:444/capture/form"
       },
       "request": {
-        "raw_file": "raw/firefox/153.0.3/ubuntu-24.04/http1/form-post.txt",
+        "raw_file": "raw/firefox/153.0.4/ubuntu-24.04/http1/form-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:40.809Z"
+      "observed_at": "2026-08-17T04:02:41.413Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "153.0.3",
+        "version": "153.0.4",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -463,7 +463,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260720.247.2"
+        "runner_image_version": "20260810.271.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -476,16 +476,16 @@
         "url": "https://http1.app.test:444/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/firefox/153.0.3/ubuntu-24.04/http1/navigation-get.txt",
+        "raw_file": "raw/firefox/153.0.4/ubuntu-24.04/http1/navigation-get.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:40.746Z"
+      "observed_at": "2026-08-17T04:02:41.272Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "153.0.3",
+        "version": "153.0.4",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -495,7 +495,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260720.247.2"
+        "runner_image_version": "20260810.271.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -508,16 +508,16 @@
         "url": "https://app.test/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/firefox/153.0.3/ubuntu-24.04/http2/ajax-post.txt",
+        "raw_file": "raw/firefox/153.0.4/ubuntu-24.04/http2/ajax-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:40.673Z"
+      "observed_at": "2026-08-17T04:02:41.165Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "153.0.3",
+        "version": "153.0.4",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -527,7 +527,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260720.247.2"
+        "runner_image_version": "20260810.271.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -540,16 +540,16 @@
         "url": "https://app.test/capture/form"
       },
       "request": {
-        "raw_file": "raw/firefox/153.0.3/ubuntu-24.04/http2/form-post.txt",
+        "raw_file": "raw/firefox/153.0.4/ubuntu-24.04/http2/form-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:40.605Z"
+      "observed_at": "2026-08-17T04:02:41.092Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "153.0.3",
+        "version": "153.0.4",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -559,7 +559,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260720.247.2"
+        "runner_image_version": "20260810.271.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -572,11 +572,11 @@
         "url": "https://app.test/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/firefox/153.0.3/ubuntu-24.04/http2/navigation-get.txt",
+        "raw_file": "raw/firefox/153.0.4/ubuntu-24.04/http2/navigation-get.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:40.494Z"
+      "observed_at": "2026-08-17T04:02:41.012Z"
     },
     {
       "client": {
@@ -608,7 +608,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:31.608Z"
+      "observed_at": "2026-08-17T04:02:54.794Z"
     },
     {
       "client": {
@@ -640,7 +640,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:31.347Z"
+      "observed_at": "2026-08-17T04:02:54.500Z"
     },
     {
       "client": {
@@ -672,7 +672,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-10T04:54:30.601Z"
+      "observed_at": "2026-08-17T04:02:53.889Z"
     },
     {
       "client": {
@@ -704,7 +704,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:30.469Z"
+      "observed_at": "2026-08-17T04:02:53.152Z"
     },
     {
       "client": {
@@ -736,7 +736,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:30.188Z"
+      "observed_at": "2026-08-17T04:02:52.692Z"
     },
     {
       "client": {
@@ -768,7 +768,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-10T04:54:29.463Z"
+      "observed_at": "2026-08-17T04:02:51.879Z"
     }
   ]
 }

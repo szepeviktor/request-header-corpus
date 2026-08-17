@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "153.0.3",
+    "version": "153.0.4",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -12,7 +12,7 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20260720.247.2"
+    "runner_image_version": "20260810.271.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -20,16 +20,16 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "navigation-get",
-    "method": "GET",
-    "url": "https://http1.app.test:444/capture/navigation"
+    "id": "ajax-post",
+    "method": "POST",
+    "url": "https://http1.app.test:444/capture/ajax"
   },
   "request": {
     "protocol": "http1",
     "http_version": "1.1",
     "headers": {
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        "*/*"
       ],
       "accept-encoding": [
         "gzip, deflate, br, zstd"
@@ -40,26 +40,32 @@
       "connection": [
         "keep-alive"
       ],
+      "content-length": [
+        "27"
+      ],
+      "content-type": [
+        "application/json"
+      ],
       "host": [
         "http1.app.test:444"
       ],
+      "origin": [
+        "https://http1.app.test:444"
+      ],
       "priority": [
-        "u=0, i"
+        "u=4"
+      ],
+      "referer": [
+        "https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post"
       ],
       "sec-fetch-dest": [
-        "document"
+        "empty"
       ],
       "sec-fetch-mode": [
-        "navigate"
+        "cors"
       ],
       "sec-fetch-site": [
-        "none"
-      ],
-      "sec-fetch-user": [
-        "?1"
-      ],
-      "upgrade-insecure-requests": [
-        "1"
+        "same-origin"
       ],
       "user-agent": [
         "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0"

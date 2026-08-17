@@ -2,17 +2,17 @@
   "schema_version": 1,
   "client": {
     "name": "chrome",
-    "version": "151.0.7922.72",
+    "version": "151.0.7922.109",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "151.0.7922.71"
+    "driver_version": "151.0.7922.77"
   },
   "environment": {
     "os": "windows-2025",
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20260803.193.1"
+    "runner_image_version": "20260810.198.2"
   },
   "tls": {
     "trusted_by_browser": true,

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "edge",
-    "version": "151.0.4129.59",
+    "version": "151.0.4129.72",
     "engine": "chromium",
     "channel": "stable",
     "driver_version": "Edge"
@@ -12,22 +12,34 @@
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20260803.193.1"
+    "runner_image_version": "20260810.198.2"
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "http/1.1",
+    "alpn": "h2",
     "secure_context": true
   },
   "scenario": {
     "id": "form-post",
     "method": "POST",
-    "url": "https://http1.app.test:444/capture/form"
+    "url": "https://app.test/capture/form"
   },
   "request": {
-    "protocol": "http1",
-    "http_version": "1.1",
+    "protocol": "http2",
+    "http_version": "2.0",
     "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "POST"
+      ],
+      ":path": [
+        "/capture/form?token=header-corpus-http2-form-post"
+      ],
+      ":scheme": [
+        "https"
+      ],
       "accept": [
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
       ],
@@ -40,23 +52,20 @@
       "cache-control": [
         "max-age=0"
       ],
-      "connection": [
-        "keep-alive"
-      ],
       "content-length": [
         "21"
       ],
       "content-type": [
         "application/x-www-form-urlencoded"
       ],
-      "host": [
-        "http1.app.test:444"
-      ],
       "origin": [
-        "https://http1.app.test:444"
+        "https://app.test"
+      ],
+      "priority": [
+        "u=0, i"
       ],
       "referer": [
-        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
+        "https://app.test/scenario/form?token=header-corpus-http2-form-post"
       ],
       "sec-ch-ua": [
         "\"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\""

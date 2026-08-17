@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "edge",
-    "version": "151.0.4129.59",
-    "engine": "chromium",
+    "name": "firefox",
+    "version": "153.0.4",
+    "engine": "gecko",
     "channel": "stable",
-    "driver_version": "Edge"
+    "driver_version": "0.37.1"
   },
   "environment": {
-    "os": "windows-2025",
-    "architecture": "AMD64",
+    "os": "ubuntu-24.04",
+    "architecture": "x86_64",
     "headless": true,
-    "runner_image": "win25-vs2026",
-    "runner_image_version": "20260803.193.1"
+    "runner_image": "ubuntu24",
+    "runner_image_version": "20260810.271.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -41,7 +41,7 @@
         "https"
       ],
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
       ],
       "accept-encoding": [
         "gzip, deflate, br, zstd"
@@ -51,15 +51,6 @@
       ],
       "priority": [
         "u=0, i"
-      ],
-      "sec-ch-ua": [
-        "\"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\""
-      ],
-      "sec-ch-ua-mobile": [
-        "?0"
-      ],
-      "sec-ch-ua-platform": [
-        "\"Windows\""
       ],
       "sec-fetch-dest": [
         "document"
@@ -73,11 +64,14 @@
       "sec-fetch-user": [
         "?1"
       ],
+      "te": [
+        "trailers"
+      ],
       "upgrade-insecure-requests": [
         "1"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0"
       ]
     }
   }
