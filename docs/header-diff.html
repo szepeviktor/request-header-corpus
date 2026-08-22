@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Header Diff</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #101010;
+    --panel: #181818;
+    --line: #2e2e2e;
+    --text: #d6d6d6;
+    --muted: #969696;
+    --add-bg: #003c00;
+    --add-fg: #80ff80;
+    --del-bg: #3c0000;
+    --del-fg: #ff8080;
+    --chg-bg: #3c3c00;
+    --chg-fg: #ffff80;
+    --move-bg: #003c3c;
+    --move-fg: #80ffff;
+    --focus: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  .app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    background: #0b0b0b;
+  }
+
+  h1 {
+    margin: 0;
+    font: 700 16px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: minmax(220px, 520px) auto auto 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+  }
+
+  select,
+  button {
+    height: 34px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #111;
+    color: var(--text);
+    font: inherit;
+  }
+
+  select { width: 100%; padding: 0 8px; }
+
+  button {
+    padding: 0 12px;
+    cursor: pointer;
+  }
+
+  button:hover { border-color: #777; }
+
+  .stats {
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .main {
+    display: grid;
+    grid-template-columns: minmax(260px, 28vw) 1fr;
+    min-height: 0;
+  }
+
+  .input {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-width: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .label {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    background: #141414;
+  }
+
+  textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    resize: none;
+    border: 0;
+    outline: 0;
+    padding: 10px;
+    background: #090909;
+    color: var(--text);
+    font: inherit;
+    white-space: pre;
+    overflow: auto;
+  }
+
+  .diff {
+    min-width: 0;
+    overflow: auto;
+  }
+
+  .diff-head,
+  .row {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) 28px minmax(320px, 1fr);
+  }
+
+  .diff-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-bottom: 1px solid var(--line);
+    background: #141414;
+    color: var(--muted);
+  }
+
+  .diff-head div,
+  .cell,
+  .mark {
+    padding: 3px 8px;
+    min-height: 24px;
+  }
+
+  .row {
+    border-bottom: 1px solid #191919;
+  }
+
+  .cell {
+    overflow: hidden;
+    white-space: pre;
+    text-overflow: ellipsis;
+  }
+
+  .mark {
+    text-align: center;
+    color: var(--muted);
+    border-left: 1px solid #1f1f1f;
+    border-right: 1px solid #1f1f1f;
+  }
+
+  .same .cell { color: var(--text); }
+  .changed .cell { background: var(--chg-bg); color: var(--chg-fg); }
+  .left-only .left { background: var(--del-bg); color: var(--del-fg); }
+  .right-only .right { background: var(--add-bg); color: var(--add-fg); }
+  .moved .right { background: var(--move-bg); color: var(--move-fg); cursor: pointer; }
+  .moved .right:hover { outline: 1px solid var(--focus); outline-offset: -1px; }
+  .blank { color: #555; }
+  .target { outline: 2px solid var(--focus); outline-offset: -2px; }
+
+  @media (max-width: 900px) {
+    .controls { grid-template-columns: 1fr 1fr; }
+    .main { grid-template-columns: 1fr; grid-template-rows: 260px 1fr; }
+    .input { border-right: 0; border-bottom: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Header Diff</h1>
+  </header>
+
+  <div class="controls">
+    <select id="corpus"></select>
+    <button id="resetInput">Reset</button>
+    <button id="sortInput">Move all misplaced</button>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <main class="main">
+    <section class="input">
+      <div class="label">Input headers</div>
+      <textarea id="input" spellcheck="false"></textarea>
+    </section>
+
+    <section class="diff">
+      <div class="diff-head">
+        <div>Corpus</div>
+        <div></div>
+        <div>Input</div>
+      </div>
+      <div id="rows"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const CORPUS = {
+  "raw/chrome/151.0.7922.109/windows-2025/http1/ajax-post.txt": "Host: http1.app.test:444\nConnection: keep-alive\nContent-Length: 27\nsec-ch-ua-platform: \"Windows\"\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\nContent-Type: application/json\nsec-ch-ua-mobile: ?0\nAccept: */*\nOrigin: https://http1.app.test:444\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post\nAccept-Encoding: gzip, deflate, br, zstd\nAccept-Language: en-US,en;q=0.9\n",
+  "raw/chrome/151.0.7922.109/windows-2025/http1/form-post.txt": "Host: http1.app.test:444\nConnection: keep-alive\nContent-Length: 21\nCache-Control: max-age=0\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nUpgrade-Insecure-Requests: 1\nContent-Type: application/x-www-form-urlencoded\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nOrigin: https://http1.app.test:444\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: navigate\nSec-Fetch-User: ?1\nSec-Fetch-Dest: document\nReferer: https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post\nAccept-Encoding: gzip, deflate, br, zstd\nAccept-Language: en-US,en;q=0.9\n",
+  "raw/chrome/151.0.7922.109/windows-2025/http1/navigation-get.txt": "Host: http1.app.test:444\nConnection: keep-alive\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nUpgrade-Insecure-Requests: 1\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nSec-Fetch-Site: none\nSec-Fetch-Mode: navigate\nSec-Fetch-User: ?1\nSec-Fetch-Dest: document\nAccept-Encoding: gzip, deflate, br, zstd\nAccept-Language: en-US,en;q=0.9\n",
+  "raw/chrome/151.0.7922.109/windows-2025/http2/navigation-get.txt": ":method: GET\n:authority: app.test\n:scheme: https\n:path: /capture/navigation?token=header-corpus-http2-navigation-get\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nupgrade-insecure-requests: 1\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nsec-fetch-site: none\nsec-fetch-mode: navigate\nsec-fetch-user: ?1\nsec-fetch-dest: document\naccept-encoding: gzip, deflate, br, zstd\naccept-language: en-US,en;q=0.9\npriority: u=0, i\n",
+  "raw/chrome/151.0.7922.77/macos-15/http1/navigation-get.txt": "Host: http1.app.test:444\nConnection: keep-alive\nsec-ch-ua: \"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"macOS\"\nAccept-Language: en-US,en;q=0.9\nUpgrade-Insecure-Requests: 1\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nSec-Fetch-Site: none\nSec-Fetch-Mode: navigate\nSec-Fetch-User: ?1\nSec-Fetch-Dest: document\nAccept-Encoding: gzip, deflate, br, zstd\n",
+  "raw/chrome/151.0.7922.77/macos-15/http1/ajax-post.txt": "Host: http1.app.test:444\nConnection: keep-alive\nContent-Length: 27\nsec-ch-ua-platform: \"macOS\"\nAccept-Language: en-US,en;q=0.9\nsec-ch-ua: \"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\"\nContent-Type: application/json\nsec-ch-ua-mobile: ?0\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nAccept: */*\nOrigin: https://http1.app.test:444\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post\nAccept-Encoding: gzip, deflate, br, zstd\n",
+  "raw/firefox/153.0.4/ubuntu-24.04/http1/navigation-get.txt": "Host: http1.app.test:444\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\nAccept-Language: en-US,en;q=0.9\nAccept-Encoding: gzip, deflate, br, zstd\nConnection: keep-alive\nUpgrade-Insecure-Requests: 1\nSec-Fetch-Dest: document\nSec-Fetch-Mode: navigate\nSec-Fetch-Site: none\nSec-Fetch-User: ?1\nPriority: u=0, i\n",
+  "raw/safari/26.5.2/macos-15/http1/navigation-get.txt": "Host: http1.app.test:444\nSec-Fetch-Dest: document\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\nSec-Fetch-Site: none\nSec-Fetch-Mode: navigate\nAccept-Language: en-US,en;q=0.9\nPriority: u=0, i\nAccept-Encoding: gzip, deflate, br\nConnection: keep-alive\n"
+};
+
+Object.assign(CORPUS, {
+  "raw/chrome/151.0.7922.109/windows-2025/http2/ajax-post.txt": ":method: POST\n:authority: app.test\n:scheme: https\n:path: /capture/ajax?token=header-corpus-http2-ajax-post\ncontent-length: 27\nsec-ch-ua-platform: \"Windows\"\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\ncontent-type: application/json\nsec-ch-ua-mobile: ?0\naccept: */*\norigin: https://app.test\nsec-fetch-site: same-origin\nsec-fetch-mode: cors\nsec-fetch-dest: empty\nreferer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post\naccept-encoding: gzip, deflate, br, zstd\naccept-language: en-US,en;q=0.9\npriority: u=1, i\n",
+  "raw/chrome/151.0.7922.109/windows-2025/http2/form-post.txt": ":method: POST\n:authority: app.test\n:scheme: https\n:path: /capture/form?token=header-corpus-http2-form-post\ncontent-length: 21\ncache-control: max-age=0\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nupgrade-insecure-requests: 1\ncontent-type: application/x-www-form-urlencoded\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\norigin: https://app.test\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nsec-fetch-site: same-origin\nsec-fetch-mode: navigate\nsec-fetch-user: ?1\nsec-fetch-dest: document\nreferer: https://app.test/scenario/form?token=header-corpus-http2-form-post\naccept-encoding: gzip, deflate, br, zstd\naccept-language: en-US,en;q=0.9\npriority: u=0, i\n",
+  "raw/chrome/151.0.7922.77/macos-15/http1/form-post.txt": "Host: http1.app.test:444\nConnection: keep-alive\nContent-Length: 21\nCache-Control: max-age=0\nsec-ch-ua: \"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"macOS\"\nAccept-Language: en-US,en;q=0.9\nUpgrade-Insecure-Requests: 1\nContent-Type: application/x-www-form-urlencoded\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\nOrigin: https://http1.app.test:444\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: navigate\nSec-Fetch-User: ?1\nSec-Fetch-Dest: document\nReferer: https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post\nAccept-Encoding: gzip, deflate, br, zstd\n",
+  "raw/chrome/151.0.7922.77/macos-15/http2/ajax-post.txt": ":method: POST\n:authority: app.test\n:scheme: https\n:path: /capture/ajax?token=header-corpus-http2-ajax-post\ncontent-length: 27\nsec-ch-ua-platform: \"macOS\"\naccept-language: en-US,en;q=0.9\nsec-ch-ua: \"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\"\ncontent-type: application/json\nsec-ch-ua-mobile: ?0\nuser-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\naccept: */*\norigin: https://app.test\nsec-fetch-site: same-origin\nsec-fetch-mode: cors\nsec-fetch-dest: empty\nreferer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post\naccept-encoding: gzip, deflate, br, zstd\npriority: u=1, i\n",
+  "raw/chrome/151.0.7922.77/macos-15/http2/form-post.txt": ":method: POST\n:authority: app.test\n:scheme: https\n:path: /capture/form?token=header-corpus-http2-form-post\ncontent-length: 21\ncache-control: max-age=0\nsec-ch-ua: \"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"macOS\"\naccept-language: en-US,en;q=0.9\nupgrade-insecure-requests: 1\ncontent-type: application/x-www-form-urlencoded\nuser-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\norigin: https://app.test\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nsec-fetch-site: same-origin\nsec-fetch-mode: navigate\nsec-fetch-user: ?1\nsec-fetch-dest: document\nreferer: https://app.test/scenario/form?token=header-corpus-http2-form-post\naccept-encoding: gzip, deflate, br, zstd\npriority: u=0, i\n",
+  "raw/chrome/151.0.7922.77/macos-15/http2/navigation-get.txt": ":method: GET\n:authority: app.test\n:scheme: https\n:path: /capture/navigation?token=header-corpus-http2-navigation-get\nsec-ch-ua: \"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"macOS\"\naccept-language: en-US,en;q=0.9\nupgrade-insecure-requests: 1\nuser-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nsec-fetch-site: none\nsec-fetch-mode: navigate\nsec-fetch-user: ?1\nsec-fetch-dest: document\naccept-encoding: gzip, deflate, br, zstd\npriority: u=0, i\n",
+  "raw/edge/151.0.4129.72/windows-2025/http1/ajax-post.txt": "Host: http1.app.test:444\nConnection: keep-alive\nContent-Length: 27\nsec-ch-ua-platform: \"Windows\"\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\"\nContent-Type: application/json\nsec-ch-ua-mobile: ?0\nAccept: */*\nOrigin: https://http1.app.test:444\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post\nAccept-Encoding: gzip, deflate, br, zstd\nAccept-Language: en-US,en;q=0.9\n",
+  "raw/edge/151.0.4129.72/windows-2025/http1/form-post.txt": "Host: http1.app.test:444\nConnection: keep-alive\nContent-Length: 21\nCache-Control: max-age=0\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nUpgrade-Insecure-Requests: 1\nContent-Type: application/x-www-form-urlencoded\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0\nOrigin: https://http1.app.test:444\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: navigate\nSec-Fetch-User: ?1\nSec-Fetch-Dest: document\nReferer: https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post\nAccept-Encoding: gzip, deflate, br, zstd\nAccept-Language: en-US,en;q=0.9\n",
+  "raw/edge/151.0.4129.72/windows-2025/http1/navigation-get.txt": "Host: http1.app.test:444\nConnection: keep-alive\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nUpgrade-Insecure-Requests: 1\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nSec-Fetch-Site: none\nSec-Fetch-Mode: navigate\nSec-Fetch-User: ?1\nSec-Fetch-Dest: document\nAccept-Encoding: gzip, deflate, br, zstd\nAccept-Language: en-US,en;q=0.9\n",
+  "raw/edge/151.0.4129.72/windows-2025/http2/ajax-post.txt": ":method: POST\n:authority: app.test\n:scheme: https\n:path: /capture/ajax?token=header-corpus-http2-ajax-post\ncontent-length: 27\nsec-ch-ua-platform: \"Windows\"\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\"\ncontent-type: application/json\nsec-ch-ua-mobile: ?0\naccept: */*\norigin: https://app.test\nsec-fetch-site: same-origin\nsec-fetch-mode: cors\nsec-fetch-dest: empty\nreferer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post\naccept-encoding: gzip, deflate, br, zstd\naccept-language: en-US,en;q=0.9\npriority: u=1, i\n",
+  "raw/edge/151.0.4129.72/windows-2025/http2/form-post.txt": ":method: POST\n:authority: app.test\n:scheme: https\n:path: /capture/form?token=header-corpus-http2-form-post\ncontent-length: 21\ncache-control: max-age=0\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nupgrade-insecure-requests: 1\ncontent-type: application/x-www-form-urlencoded\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0\norigin: https://app.test\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nsec-fetch-site: same-origin\nsec-fetch-mode: navigate\nsec-fetch-user: ?1\nsec-fetch-dest: document\nreferer: https://app.test/scenario/form?token=header-corpus-http2-form-post\naccept-encoding: gzip, deflate, br, zstd\naccept-language: en-US,en;q=0.9\npriority: u=0, i\n",
+  "raw/edge/151.0.4129.72/windows-2025/http2/navigation-get.txt": ":method: GET\n:authority: app.test\n:scheme: https\n:path: /capture/navigation?token=header-corpus-http2-navigation-get\nsec-ch-ua: \"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\"\nsec-ch-ua-mobile: ?0\nsec-ch-ua-platform: \"Windows\"\nupgrade-insecure-requests: 1\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\nsec-fetch-site: none\nsec-fetch-mode: navigate\nsec-fetch-user: ?1\nsec-fetch-dest: document\naccept-encoding: gzip, deflate, br, zstd\naccept-language: en-US,en;q=0.9\npriority: u=0, i\n",
+  "raw/firefox/153.0.4/ubuntu-24.04/http1/ajax-post.txt": "Host: http1.app.test:444\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0\nAccept: */*\nAccept-Language: en-US,en;q=0.9\nAccept-Encoding: gzip, deflate, br, zstd\nReferer: https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post\nContent-Type: application/json\nContent-Length: 27\nOrigin: https://http1.app.test:444\nConnection: keep-alive\nSec-Fetch-Dest: empty\nSec-Fetch-Mode: cors\nSec-Fetch-Site: same-origin\nPriority: u=4\n",
+  "raw/firefox/153.0.4/ubuntu-24.04/http1/form-post.txt": "Host: http1.app.test:444\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\nAccept-Language: en-US,en;q=0.9\nAccept-Encoding: gzip, deflate, br, zstd\nContent-Type: application/x-www-form-urlencoded\nContent-Length: 21\nOrigin: https://http1.app.test:444\nConnection: keep-alive\nReferer: https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post\nUpgrade-Insecure-Requests: 1\nSec-Fetch-Dest: document\nSec-Fetch-Mode: navigate\nSec-Fetch-Site: same-origin\nSec-Fetch-User: ?1\nPriority: u=0, i\n",
+  "raw/firefox/153.0.4/ubuntu-24.04/http2/ajax-post.txt": ":method: POST\n:path: /capture/ajax?token=header-corpus-http2-ajax-post\n:authority: app.test\n:scheme: https\nuser-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0\naccept: */*\naccept-language: en-US,en;q=0.9\naccept-encoding: gzip, deflate, br, zstd\nreferer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post\ncontent-type: application/json\ncontent-length: 27\norigin: https://app.test\nsec-fetch-dest: empty\nsec-fetch-mode: cors\nsec-fetch-site: same-origin\npriority: u=4\nte: trailers\n",
+  "raw/firefox/153.0.4/ubuntu-24.04/http2/form-post.txt": ":method: POST\n:path: /capture/form?token=header-corpus-http2-form-post\n:authority: app.test\n:scheme: https\nuser-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\naccept-language: en-US,en;q=0.9\naccept-encoding: gzip, deflate, br, zstd\ncontent-type: application/x-www-form-urlencoded\ncontent-length: 21\norigin: https://app.test\nreferer: https://app.test/scenario/form?token=header-corpus-http2-form-post\nupgrade-insecure-requests: 1\nsec-fetch-dest: document\nsec-fetch-mode: navigate\nsec-fetch-site: same-origin\nsec-fetch-user: ?1\npriority: u=0, i\nte: trailers\n",
+  "raw/firefox/153.0.4/ubuntu-24.04/http2/navigation-get.txt": ":method: GET\n:path: /capture/navigation?token=header-corpus-http2-navigation-get\n:authority: app.test\n:scheme: https\nuser-agent: Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\naccept-language: en-US,en;q=0.9\naccept-encoding: gzip, deflate, br, zstd\nupgrade-insecure-requests: 1\nsec-fetch-dest: document\nsec-fetch-mode: navigate\nsec-fetch-site: none\nsec-fetch-user: ?1\npriority: u=0, i\nte: trailers\n",
+  "raw/safari/26.5.2/macos-15/http1/ajax-post.txt": "Host: http1.app.test:444\nAccept: */*\nContent-Type: application/json\nOrigin: https://http1.app.test:444\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15\nReferer: https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post\nSec-Fetch-Dest: empty\nContent-Length: 27\nAccept-Language: en-US,en;q=0.9\nPriority: u=3, i\nAccept-Encoding: gzip, deflate, br\nConnection: keep-alive\n",
+  "raw/safari/26.5.2/macos-15/http1/form-post.txt": "Host: http1.app.test:444\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\nContent-Type: application/x-www-form-urlencoded\nOrigin: https://http1.app.test:444\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: navigate\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15\nReferer: https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post\nSec-Fetch-Dest: document\nContent-Length: 21\nAccept-Language: en-US,en;q=0.9\nPriority: u=0, i\nAccept-Encoding: gzip, deflate, br\nConnection: keep-alive\n",
+  "raw/safari/26.5.2/macos-15/http2/ajax-post.txt": ":method: POST\n:scheme: https\n:authority: app.test\n:path: /capture/ajax?token=header-corpus-http2-ajax-post\naccept: */*\ncontent-type: application/json\norigin: https://app.test\nsec-fetch-site: same-origin\nsec-fetch-mode: cors\nuser-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15\nreferer: https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post\nsec-fetch-dest: empty\ncontent-length: 27\naccept-language: en-US,en;q=0.9\npriority: u=3, i\naccept-encoding: gzip, deflate, br\n",
+  "raw/safari/26.5.2/macos-15/http2/form-post.txt": ":method: POST\n:scheme: https\n:authority: app.test\n:path: /capture/form?token=header-corpus-http2-form-post\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\ncontent-type: application/x-www-form-urlencoded\norigin: https://app.test\nsec-fetch-site: same-origin\nsec-fetch-mode: navigate\nuser-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15\nreferer: https://app.test/scenario/form?token=header-corpus-http2-form-post\nsec-fetch-dest: document\ncontent-length: 21\naccept-language: en-US,en;q=0.9\npriority: u=0, i\naccept-encoding: gzip, deflate, br\n",
+  "raw/safari/26.5.2/macos-15/http2/navigation-get.txt": ":method: GET\n:scheme: https\n:authority: app.test\n:path: /capture/navigation?token=header-corpus-http2-navigation-get\nsec-fetch-dest: document\nuser-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\nsec-fetch-site: none\nsec-fetch-mode: navigate\naccept-language: en-US,en;q=0.9\npriority: u=0, i\naccept-encoding: gzip, deflate, br\n"
+});
+
+const corpusSelect = document.querySelector('#corpus');
+const input = document.querySelector('#input');
+const rows = document.querySelector('#rows');
+const stats = document.querySelector('#stats');
+let resetInput = '';
+let internalInputChange = false;
+
+for (const path of Object.keys(CORPUS).sort()) {
+  const option = document.createElement('option');
+  option.value = path;
+  option.textContent = labelPath(path);
+  corpusSelect.append(option);
+}
+
+corpusSelect.value = 'raw/chrome/151.0.7922.77/macos-15/http1/navigation-get.txt';
+input.value = '';
+
+document.querySelector('#resetInput').addEventListener('click', () => {
+  setInputValue(resetInput, false);
+  render();
+});
+
+document.querySelector('#sortInput').addEventListener('click', () => {
+  setInputValue(reorderAll(parseLines(CORPUS[corpusSelect.value]), parseLines(input.value)).join('\n'), true);
+  render();
+});
+
+corpusSelect.addEventListener('change', render);
+input.addEventListener('input', () => {
+  if (!internalInputChange) resetInput = input.value;
+  render();
+});
+
+function parseLines(text) {
+  return text.replace(/\r\n?/g, '\n').split('\n').filter(line => line.trim() !== '').map((line, index) => ({
+    text: line,
+    name: headerName(line),
+    index
+  }));
+}
+
+function setInputValue(value, internal) {
+  internalInputChange = internal;
+  input.value = value;
+  internalInputChange = false;
+}
+
+function labelPath(path) {
+  return path.replace(/^raw\//, '').replace(/\.txt$/, '');
+}
+
+function headerName(line) {
+  const http2 = line.match(/^(:[^:]+):\s*/);
+  if (http2) return http2[1].toLowerCase();
+
+  const pos = line.indexOf(':');
+  return (pos === -1 ? line : line.slice(0, pos)).trim().toLowerCase();
+}
+
+function lcs(a, b) {
+  const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = a.length - 1; i >= 0; i--) {
+    for (let j = b.length - 1; j >= 0; j--) {
+      dp[i][j] = a[i].name === b[j].name ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+
+  const out = [];
+  let i = 0;
+  let j = 0;
+  while (i < a.length || j < b.length) {
+    if (i < a.length && j < b.length && a[i].name === b[j].name) {
+      out.push([a[i++], b[j++]]);
+    } else if (j < b.length && (i === a.length || dp[i][j + 1] >= dp[i + 1][j])) {
+      out.push([null, b[j++]]);
+    } else {
+      out.push([a[i++], null]);
+    }
+  }
+  return out;
+}
+
+function indexByName(lines) {
+  const map = new Map();
+  lines.forEach((line, index) => {
+    if (!map.has(line.name)) map.set(line.name, index);
+  });
+  return map;
+}
+
+function rowClass(left, right, corpusIndex, inputIndex) {
+  if (!left) return corpusIndex.has(right.name) ? 'right-only moved' : 'right-only';
+  if (!right) return inputIndex.has(left.name) ? 'left-only moved' : 'left-only';
+  if (left.text === right.text) return corpusIndex.get(left.name) === inputIndex.get(right.name) ? 'same' : 'moved';
+  return corpusIndex.get(left.name) === inputIndex.get(right.name) ? 'changed' : 'changed moved';
+}
+
+function mark(left, right) {
+  if (!left) return '>';
+  if (!right) return '<';
+  if (left.text === right.text) return ' ';
+  return '|';
+}
+
+function render() {
+  const corpus = parseLines(CORPUS[corpusSelect.value]);
+  const user = parseLines(input.value);
+  const corpusIndex = indexByName(corpus);
+  const inputIndex = indexByName(user);
+  const diff = lcs(corpus, user);
+  rows.textContent = '';
+
+  let changed = 0;
+  let moved = 0;
+
+  diff.forEach(([left, right]) => {
+    const cls = rowClass(left, right, corpusIndex, inputIndex);
+    if (cls !== 'same') changed++;
+    if (cls.includes('moved')) moved++;
+
+    const row = document.createElement('div');
+    row.className = `row ${cls}`;
+    row.dataset.name = (right || left).name;
+
+    const leftCell = cell('left', left ? left.text : '');
+    const mid = document.createElement('div');
+    mid.className = 'mark';
+    mid.textContent = mark(left, right);
+    const rightCell = cell('right', right ? right.text : '');
+
+    if (right && corpusIndex.has(right.name) && corpusIndex.get(right.name) !== inputIndex.get(right.name)) {
+      rightCell.title = 'Move this input header to the corpus position';
+      rightCell.addEventListener('click', () => moveInputHeader(right.name));
+    }
+
+    row.append(leftCell, mid, rightCell);
+    rows.append(row);
+  });
+
+  stats.textContent = `${user.length} input headers, ${corpus.length} corpus headers, ${changed} diff rows, ${moved} misplaced`;
+}
+
+function cell(side, text) {
+  const div = document.createElement('div');
+  div.className = `cell ${side}${text ? '' : ' blank'}`;
+  div.textContent = text;
+  return div;
+}
+
+function moveInputHeader(name) {
+  const corpus = parseLines(CORPUS[corpusSelect.value]);
+  const user = parseLines(input.value);
+  const corpusOrder = indexByName(corpus);
+  const targetIndex = corpusOrder.get(name);
+  const currentIndex = user.findIndex(line => line.name === name);
+
+  if (targetIndex === undefined || currentIndex === -1) return;
+
+  const [line] = user.splice(currentIndex, 1);
+  let insertAt = 0;
+
+  for (let index = 0; index < user.length; index++) {
+    const otherIndex = corpusOrder.get(user[index].name);
+
+    if (otherIndex !== undefined && otherIndex < targetIndex) {
+      insertAt = index + 1;
+    }
+  }
+
+  user.splice(insertAt, 0, line);
+  setInputValue(user.map(item => item.text).join('\n'), true);
+  render();
+
+  const row = rows.querySelector(`[data-name="${CSS.escape(name)}"]`);
+  if (row) {
+    row.scrollIntoView({ block: 'center' });
+    row.classList.add('target');
+    setTimeout(() => row.classList.remove('target'), 900);
+  }
+}
+
+function reorderAll(corpus, user) {
+  const corpusOrder = new Map(corpus.map((line, index) => [line.name, index]));
+  return [...user].sort((a, b) => {
+    const ai = corpusOrder.has(a.name) ? corpusOrder.get(a.name) : Number.MAX_SAFE_INTEGER;
+    const bi = corpusOrder.has(b.name) ? corpusOrder.get(b.name) : Number.MAX_SAFE_INTEGER;
+    return ai - bi || a.index - b.index;
+  }).map(line => line.text);
+}
+
+render();
+</script>
+</body>
+</html>
