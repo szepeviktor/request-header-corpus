@@ -19,10 +19,10 @@ with **Run workflow**:
 <!-- navigation-links:start -->
 | Browser | Runner | Driver | Raw `navigation-get` |
 |---|---|---|---|
-| Google Chrome stable | `windows-2025` | ChromeDriver | [HTTP/1.1](raw/chrome/151.0.7922.109/windows-2025/http1/navigation-get.txt) · [HTTP/2](raw/chrome/151.0.7922.109/windows-2025/http2/navigation-get.txt) |
+| Google Chrome stable | `windows-2025` | ChromeDriver | [HTTP/1.1](raw/chrome/151.0.7922.170/windows-2025/http1/navigation-get.txt) · [HTTP/2](raw/chrome/151.0.7922.170/windows-2025/http2/navigation-get.txt) |
 | Google Chrome stable | `macos-15` | ChromeDriver | [HTTP/1.1](raw/chrome/151.0.7922.77/macos-15/http1/navigation-get.txt) · [HTTP/2](raw/chrome/151.0.7922.77/macos-15/http2/navigation-get.txt) |
-| Microsoft Edge stable | `windows-2025` | MSEdgeDriver | [HTTP/1.1](raw/edge/151.0.4129.72/windows-2025/http1/navigation-get.txt) · [HTTP/2](raw/edge/151.0.4129.72/windows-2025/http2/navigation-get.txt) |
-| Mozilla Firefox stable | `ubuntu-24.04` | GeckoDriver | [HTTP/1.1](raw/firefox/153.0.4/ubuntu-24.04/http1/navigation-get.txt) · [HTTP/2](raw/firefox/153.0.4/ubuntu-24.04/http2/navigation-get.txt) |
+| Microsoft Edge stable | `windows-2025` | MSEdgeDriver | [HTTP/1.1](raw/edge/151.0.4129.93/windows-2025/http1/navigation-get.txt) · [HTTP/2](raw/edge/151.0.4129.93/windows-2025/http2/navigation-get.txt) |
+| Mozilla Firefox stable | `ubuntu-24.04` | GeckoDriver | [HTTP/1.1](raw/firefox/154.0/ubuntu-24.04/http1/navigation-get.txt) · [HTTP/2](raw/firefox/154.0/ubuntu-24.04/http2/navigation-get.txt) |
 | System Safari | `macos-15` | SafariDriver | [HTTP/1.1](raw/safari/26.5.2/macos-15/http1/navigation-get.txt) · [HTTP/2](raw/safari/26.5.2/macos-15/http2/navigation-get.txt) |
 <!-- navigation-links:end -->
 

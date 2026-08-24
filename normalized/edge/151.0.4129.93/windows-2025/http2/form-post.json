@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "client": {
+    "name": "edge",
+    "version": "151.0.4129.93",
+    "engine": "chromium",
+    "channel": "stable",
+    "driver_version": "Edge"
+  },
+  "environment": {
+    "os": "windows-2025",
+    "architecture": "AMD64",
+    "headless": true,
+    "runner_image": "win25-vs2026",
+    "runner_image_version": "20260818.207.1"
+  },
+  "tls": {
+    "trusted_by_browser": true,
+    "alpn": "h2",
+    "secure_context": true
+  },
+  "scenario": {
+    "id": "form-post",
+    "method": "POST",
+    "url": "https://app.test/capture/form"
+  },
+  "request": {
+    "protocol": "http2",
+    "http_version": "2.0",
+    "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "POST"
+      ],
+      ":path": [
+        "/capture/form?token=header-corpus-http2-form-post"
+      ],
+      ":scheme": [
+        "https"
+      ],
+      "accept": [
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+      ],
+      "accept-encoding": [
+        "gzip, deflate, br, zstd"
+      ],
+      "accept-language": [
+        "en-US,en;q=0.9"
+      ],
+      "cache-control": [
+        "max-age=0"
+      ],
+      "content-length": [
+        "21"
+      ],
+      "content-type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "origin": [
+        "https://app.test"
+      ],
+      "priority": [
+        "u=0, i"
+      ],
+      "referer": [
+        "https://app.test/scenario/form?token=header-corpus-http2-form-post"
+      ],
+      "sec-ch-ua": [
+        "\"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\""
+      ],
+      "sec-ch-ua-mobile": [
+        "?0"
+      ],
+      "sec-ch-ua-platform": [
+        "\"Windows\""
+      ],
+      "sec-fetch-dest": [
+        "document"
+      ],
+      "sec-fetch-mode": [
+        "navigate"
+      ],
+      "sec-fetch-site": [
+        "same-origin"
+      ],
+      "sec-fetch-user": [
+        "?1"
+      ],
+      "upgrade-insecure-requests": [
+        "1"
+      ],
+      "user-agent": [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0"
+      ]
+    }
+  }
+}
