@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "154.0",
+    "version": "154.0.1",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -12,24 +12,36 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20260816.277.1"
+    "runner_image_version": "20260823.283.1"
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "http/1.1",
+    "alpn": "h2",
     "secure_context": true
   },
   "scenario": {
-    "id": "form-post",
+    "id": "ajax-post",
     "method": "POST",
-    "url": "https://http1.app.test:444/capture/form"
+    "url": "https://app.test/capture/ajax"
   },
   "request": {
-    "protocol": "http1",
-    "http_version": "1.1",
+    "protocol": "http2",
+    "http_version": "2.0",
     "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "POST"
+      ],
+      ":path": [
+        "/capture/ajax?token=header-corpus-http2-ajax-post"
+      ],
+      ":scheme": [
+        "https"
+      ],
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        "*/*"
       ],
       "accept-encoding": [
         "gzip, deflate, br, zstd"
@@ -37,41 +49,32 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
-      "connection": [
-        "keep-alive"
-      ],
       "content-length": [
-        "21"
+        "27"
       ],
       "content-type": [
-        "application/x-www-form-urlencoded"
-      ],
-      "host": [
-        "http1.app.test:444"
+        "application/json"
       ],
       "origin": [
-        "https://http1.app.test:444"
+        "https://app.test"
       ],
       "priority": [
-        "u=0, i"
+        "u=4"
       ],
       "referer": [
-        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
+        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
       ],
       "sec-fetch-dest": [
-        "document"
+        "empty"
       ],
       "sec-fetch-mode": [
-        "navigate"
+        "cors"
       ],
       "sec-fetch-site": [
         "same-origin"
       ],
-      "sec-fetch-user": [
-        "?1"
-      ],
-      "upgrade-insecure-requests": [
-        "1"
+      "te": [
+        "trailers"
       ],
       "user-agent": [
         "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0"

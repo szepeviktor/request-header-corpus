@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "154.0",
+    "version": "154.0.1",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -12,22 +12,34 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20260816.277.1"
+    "runner_image_version": "20260823.283.1"
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "http/1.1",
+    "alpn": "h2",
     "secure_context": true
   },
   "scenario": {
     "id": "navigation-get",
     "method": "GET",
-    "url": "https://http1.app.test:444/capture/navigation"
+    "url": "https://app.test/capture/navigation"
   },
   "request": {
-    "protocol": "http1",
-    "http_version": "1.1",
+    "protocol": "http2",
+    "http_version": "2.0",
     "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "GET"
+      ],
+      ":path": [
+        "/capture/navigation?token=header-corpus-http2-navigation-get"
+      ],
+      ":scheme": [
+        "https"
+      ],
       "accept": [
         "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
       ],
@@ -36,12 +48,6 @@
       ],
       "accept-language": [
         "en-US,en;q=0.9"
-      ],
-      "connection": [
-        "keep-alive"
-      ],
-      "host": [
-        "http1.app.test:444"
       ],
       "priority": [
         "u=0, i"
@@ -57,6 +63,9 @@
       ],
       "sec-fetch-user": [
         "?1"
+      ],
+      "te": [
+        "trailers"
       ],
       "upgrade-insecure-requests": [
         "1"

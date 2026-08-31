@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "chrome",
-    "version": "151.0.7922.170",
+    "name": "edge",
+    "version": "151.0.4129.101",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "151.0.7922.138"
+    "driver_version": "Edge"
   },
   "environment": {
     "os": "windows-2025",
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20260818.207.1"
+    "runner_image_version": "20260824.214.3"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -20,9 +20,9 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "form-post",
-    "method": "POST",
-    "url": "https://http1.app.test:444/capture/form"
+    "id": "navigation-get",
+    "method": "GET",
+    "url": "https://http1.app.test:444/capture/navigation"
   },
   "request": {
     "protocol": "http1",
@@ -37,29 +37,14 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
-      "cache-control": [
-        "max-age=0"
-      ],
       "connection": [
         "keep-alive"
-      ],
-      "content-length": [
-        "21"
-      ],
-      "content-type": [
-        "application/x-www-form-urlencoded"
       ],
       "host": [
         "http1.app.test:444"
       ],
-      "origin": [
-        "https://http1.app.test:444"
-      ],
-      "referer": [
-        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
-      ],
       "sec-ch-ua": [
-        "\"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\""
+        "\"Not=A?Brand\";v=\"99\", \"Microsoft Edge\";v=\"151\", \"Chromium\";v=\"151\""
       ],
       "sec-ch-ua-mobile": [
         "?0"
@@ -74,7 +59,7 @@
         "navigate"
       ],
       "sec-fetch-site": [
-        "same-origin"
+        "none"
       ],
       "sec-fetch-user": [
         "?1"
@@ -83,7 +68,7 @@
         "1"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36 Edg/151.0.0.0"
       ]
     }
   }

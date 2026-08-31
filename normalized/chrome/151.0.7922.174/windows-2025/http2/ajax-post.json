@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "firefox",
-    "version": "154.0",
-    "engine": "gecko",
+    "name": "chrome",
+    "version": "151.0.7922.174",
+    "engine": "chromium",
     "channel": "stable",
-    "driver_version": "0.37.1"
+    "driver_version": "151.0.7922.138"
   },
   "environment": {
-    "os": "ubuntu-24.04",
-    "architecture": "x86_64",
+    "os": "windows-2025",
+    "architecture": "AMD64",
     "headless": true,
-    "runner_image": "ubuntu24",
-    "runner_image_version": "20260816.277.1"
+    "runner_image": "win25-vs2026",
+    "runner_image_version": "20260824.214.3"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -59,10 +59,19 @@
         "https://app.test"
       ],
       "priority": [
-        "u=4"
+        "u=1, i"
       ],
       "referer": [
         "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
+      ],
+      "sec-ch-ua": [
+        "\"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\""
+      ],
+      "sec-ch-ua-mobile": [
+        "?0"
+      ],
+      "sec-ch-ua-platform": [
+        "\"Windows\""
       ],
       "sec-fetch-dest": [
         "empty"
@@ -73,11 +82,8 @@
       "sec-fetch-site": [
         "same-origin"
       ],
-      "te": [
-        "trailers"
-      ],
       "user-agent": [
-        "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
       ]
     }
   }
