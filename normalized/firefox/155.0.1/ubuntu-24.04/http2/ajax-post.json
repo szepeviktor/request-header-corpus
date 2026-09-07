@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "chrome",
-    "version": "151.0.7922.77",
-    "engine": "chromium",
+    "name": "firefox",
+    "version": "155.0.1",
+    "engine": "gecko",
     "channel": "stable",
-    "driver_version": "151.0.7922.77"
+    "driver_version": "0.37.1"
   },
   "environment": {
-    "os": "macos-15",
-    "architecture": "arm64",
+    "os": "ubuntu-24.04",
+    "architecture": "x86_64",
     "headless": true,
-    "runner_image": "macos15",
-    "runner_image_version": "20260829.0321.1"
+    "runner_image": "ubuntu24",
+    "runner_image_version": "20260831.293.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -59,19 +59,10 @@
         "https://app.test"
       ],
       "priority": [
-        "u=1, i"
+        "u=4"
       ],
       "referer": [
         "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
-      ],
-      "sec-ch-ua": [
-        "\"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\""
-      ],
-      "sec-ch-ua-mobile": [
-        "?0"
-      ],
-      "sec-ch-ua-platform": [
-        "\"macOS\""
       ],
       "sec-fetch-dest": [
         "empty"
@@ -82,8 +73,11 @@
       "sec-fetch-site": [
         "same-origin"
       ],
+      "te": [
+        "trailers"
+      ],
       "user-agent": [
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0"
       ]
     }
   }

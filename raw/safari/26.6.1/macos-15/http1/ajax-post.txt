@@ -1,0 +1,14 @@
+Host: http1.app.test:444
+Accept: */*
+Content-Type: application/json
+Origin: https://http1.app.test:444
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15
+Referer: https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post
+Sec-Fetch-Dest: empty
+Content-Length: 27
+Accept-Language: en-US,en;q=0.9
+Priority: u=3, i
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive

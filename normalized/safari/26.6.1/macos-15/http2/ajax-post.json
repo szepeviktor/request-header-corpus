@@ -1,44 +1,53 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "chrome",
-    "version": "151.0.7922.77",
-    "engine": "chromium",
+    "name": "safari",
+    "version": "26.6.1",
+    "engine": "webkit",
     "channel": "stable",
-    "driver_version": "151.0.7922.77"
+    "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
   },
   "environment": {
     "os": "macos-15",
     "architecture": "arm64",
-    "headless": true,
+    "headless": false,
     "runner_image": "macos15",
     "runner_image_version": "20260829.0321.1"
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "http/1.1",
+    "alpn": "h2",
     "secure_context": true
   },
   "scenario": {
     "id": "ajax-post",
     "method": "POST",
-    "url": "https://http1.app.test:444/capture/ajax"
+    "url": "https://app.test/capture/ajax"
   },
   "request": {
-    "protocol": "http1",
-    "http_version": "1.1",
+    "protocol": "http2",
+    "http_version": "2.0",
     "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "POST"
+      ],
+      ":path": [
+        "/capture/ajax?token=header-corpus-http2-ajax-post"
+      ],
+      ":scheme": [
+        "https"
+      ],
       "accept": [
         "*/*"
       ],
       "accept-encoding": [
-        "gzip, deflate, br, zstd"
+        "gzip, deflate, br"
       ],
       "accept-language": [
         "en-US,en;q=0.9"
-      ],
-      "connection": [
-        "keep-alive"
       ],
       "content-length": [
         "27"
@@ -46,23 +55,14 @@
       "content-type": [
         "application/json"
       ],
-      "host": [
-        "http1.app.test:444"
-      ],
       "origin": [
-        "https://http1.app.test:444"
+        "https://app.test"
+      ],
+      "priority": [
+        "u=3, i"
       ],
       "referer": [
-        "https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post"
-      ],
-      "sec-ch-ua": [
-        "\"Chromium\";v=\"151\", \"Not=A?Brand\";v=\"99\""
-      ],
-      "sec-ch-ua-mobile": [
-        "?0"
-      ],
-      "sec-ch-ua-platform": [
-        "\"macOS\""
+        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
       ],
       "sec-fetch-dest": [
         "empty"
@@ -74,7 +74,7 @@
         "same-origin"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15"
       ]
     }
   }

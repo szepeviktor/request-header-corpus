@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-31T09:45:45.221Z",
+  "generated_at": "2026-09-07T08:19:13.208Z",
   "observations": [
     {
       "client": {
@@ -32,7 +32,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:37.620Z"
+      "observed_at": "2026-09-07T08:19:13.208Z"
     },
     {
       "client": {
@@ -64,7 +64,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:37.343Z"
+      "observed_at": "2026-09-07T08:19:12.967Z"
     },
     {
       "client": {
@@ -96,7 +96,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:37.234Z"
+      "observed_at": "2026-09-07T08:19:12.816Z"
     },
     {
       "client": {
@@ -128,7 +128,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:37.149Z"
+      "observed_at": "2026-09-07T08:19:12.707Z"
     },
     {
       "client": {
@@ -160,7 +160,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:36.941Z"
+      "observed_at": "2026-09-07T08:19:12.504Z"
     },
     {
       "client": {
@@ -192,7 +192,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:36.665Z"
+      "observed_at": "2026-09-07T08:19:12.203Z"
     },
     {
       "client": {
@@ -207,7 +207,7 @@
         "architecture": "arm64",
         "headless": true,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -224,7 +224,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:31.784Z"
+      "observed_at": "2026-09-07T08:18:50.932Z"
     },
     {
       "client": {
@@ -239,7 +239,7 @@
         "architecture": "arm64",
         "headless": true,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -256,7 +256,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:31.598Z"
+      "observed_at": "2026-09-07T08:18:50.855Z"
     },
     {
       "client": {
@@ -271,7 +271,7 @@
         "architecture": "arm64",
         "headless": true,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -288,7 +288,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:31.329Z"
+      "observed_at": "2026-09-07T08:18:50.748Z"
     },
     {
       "client": {
@@ -303,7 +303,7 @@
         "architecture": "arm64",
         "headless": true,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -320,7 +320,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:31.241Z"
+      "observed_at": "2026-09-07T08:18:50.688Z"
     },
     {
       "client": {
@@ -335,7 +335,7 @@
         "architecture": "arm64",
         "headless": true,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -352,7 +352,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:31.027Z"
+      "observed_at": "2026-09-07T08:18:50.507Z"
     },
     {
       "client": {
@@ -367,7 +367,7 @@
         "architecture": "arm64",
         "headless": true,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -384,7 +384,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:30.570Z"
+      "observed_at": "2026-09-07T08:18:49.997Z"
     },
     {
       "client": {
@@ -416,7 +416,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:45.221Z"
+      "observed_at": "2026-09-07T08:19:10.894Z"
     },
     {
       "client": {
@@ -448,7 +448,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:44.955Z"
+      "observed_at": "2026-09-07T08:19:10.812Z"
     },
     {
       "client": {
@@ -480,7 +480,7 @@
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:44.823Z"
+      "observed_at": "2026-09-07T08:19:10.696Z"
     },
     {
       "client": {
@@ -512,7 +512,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:44.742Z"
+      "observed_at": "2026-09-07T08:19:10.618Z"
     },
     {
       "client": {
@@ -544,7 +544,7 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:44.651Z"
+      "observed_at": "2026-09-07T08:19:10.369Z"
     },
     {
       "client": {
@@ -576,12 +576,12 @@
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:44.463Z"
+      "observed_at": "2026-09-07T08:19:10.202Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "154.0.1",
+        "version": "155.0.1",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -591,7 +591,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260823.283.1"
+        "runner_image_version": "20260831.293.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -604,16 +604,16 @@
         "url": "https://http1.app.test:444/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/firefox/154.0.1/ubuntu-24.04/http1/ajax-post.txt",
+        "raw_file": "raw/firefox/155.0.1/ubuntu-24.04/http1/ajax-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:40.632Z"
+      "observed_at": "2026-09-07T08:18:51.918Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "154.0.1",
+        "version": "155.0.1",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -623,7 +623,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260823.283.1"
+        "runner_image_version": "20260831.293.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -636,16 +636,16 @@
         "url": "https://http1.app.test:444/capture/form"
       },
       "request": {
-        "raw_file": "raw/firefox/154.0.1/ubuntu-24.04/http1/form-post.txt",
+        "raw_file": "raw/firefox/155.0.1/ubuntu-24.04/http1/form-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:40.601Z"
+      "observed_at": "2026-09-07T08:18:51.878Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "154.0.1",
+        "version": "155.0.1",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -655,7 +655,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260823.283.1"
+        "runner_image_version": "20260831.293.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -668,16 +668,16 @@
         "url": "https://http1.app.test:444/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/firefox/154.0.1/ubuntu-24.04/http1/navigation-get.txt",
+        "raw_file": "raw/firefox/155.0.1/ubuntu-24.04/http1/navigation-get.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:40.565Z"
+      "observed_at": "2026-09-07T08:18:51.825Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "154.0.1",
+        "version": "155.0.1",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -687,7 +687,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260823.283.1"
+        "runner_image_version": "20260831.293.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -700,16 +700,16 @@
         "url": "https://app.test/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/firefox/154.0.1/ubuntu-24.04/http2/ajax-post.txt",
+        "raw_file": "raw/firefox/155.0.1/ubuntu-24.04/http2/ajax-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:40.521Z"
+      "observed_at": "2026-09-07T08:18:51.781Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "154.0.1",
+        "version": "155.0.1",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -719,7 +719,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260823.283.1"
+        "runner_image_version": "20260831.293.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -732,16 +732,16 @@
         "url": "https://app.test/capture/form"
       },
       "request": {
-        "raw_file": "raw/firefox/154.0.1/ubuntu-24.04/http2/form-post.txt",
+        "raw_file": "raw/firefox/155.0.1/ubuntu-24.04/http2/form-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:40.477Z"
+      "observed_at": "2026-09-07T08:18:51.719Z"
     },
     {
       "client": {
         "name": "firefox",
-        "version": "154.0.1",
+        "version": "155.0.1",
         "engine": "gecko",
         "channel": "stable",
         "driver_version": "0.37.1"
@@ -751,7 +751,7 @@
         "architecture": "x86_64",
         "headless": true,
         "runner_image": "ubuntu24",
-        "runner_image_version": "20260823.283.1"
+        "runner_image_version": "20260831.293.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -764,26 +764,26 @@
         "url": "https://app.test/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/firefox/154.0.1/ubuntu-24.04/http2/navigation-get.txt",
+        "raw_file": "raw/firefox/155.0.1/ubuntu-24.04/http2/navigation-get.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:40.376Z"
+      "observed_at": "2026-09-07T08:18:51.622Z"
     },
     {
       "client": {
         "name": "safari",
-        "version": "26.5.2",
+        "version": "26.6.1",
         "engine": "webkit",
         "channel": "stable",
-        "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+        "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
       },
       "environment": {
         "os": "macos-15",
         "architecture": "arm64",
         "headless": false,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -796,26 +796,26 @@
         "url": "https://http1.app.test:444/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/safari/26.5.2/macos-15/http1/ajax-post.txt",
+        "raw_file": "raw/safari/26.6.1/macos-15/http1/ajax-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:27.000Z"
+      "observed_at": "2026-09-07T08:18:51.842Z"
     },
     {
       "client": {
         "name": "safari",
-        "version": "26.5.2",
+        "version": "26.6.1",
         "engine": "webkit",
         "channel": "stable",
-        "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+        "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
       },
       "environment": {
         "os": "macos-15",
         "architecture": "arm64",
         "headless": false,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -828,26 +828,26 @@
         "url": "https://http1.app.test:444/capture/form"
       },
       "request": {
-        "raw_file": "raw/safari/26.5.2/macos-15/http1/form-post.txt",
+        "raw_file": "raw/safari/26.6.1/macos-15/http1/form-post.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:26.654Z"
+      "observed_at": "2026-09-07T08:18:50.125Z"
     },
     {
       "client": {
         "name": "safari",
-        "version": "26.5.2",
+        "version": "26.6.1",
         "engine": "webkit",
         "channel": "stable",
-        "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+        "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
       },
       "environment": {
         "os": "macos-15",
         "architecture": "arm64",
         "headless": false,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -860,26 +860,26 @@
         "url": "https://http1.app.test:444/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/safari/26.5.2/macos-15/http1/navigation-get.txt",
+        "raw_file": "raw/safari/26.6.1/macos-15/http1/navigation-get.txt",
         "http_version": "1.1",
         "protocol": "http1"
       },
-      "observed_at": "2026-08-31T09:45:26.534Z"
+      "observed_at": "2026-09-07T08:18:49.964Z"
     },
     {
       "client": {
         "name": "safari",
-        "version": "26.5.2",
+        "version": "26.6.1",
         "engine": "webkit",
         "channel": "stable",
-        "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+        "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
       },
       "environment": {
         "os": "macos-15",
         "architecture": "arm64",
         "headless": false,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -892,26 +892,26 @@
         "url": "https://app.test/capture/ajax"
       },
       "request": {
-        "raw_file": "raw/safari/26.5.2/macos-15/http2/ajax-post.txt",
+        "raw_file": "raw/safari/26.6.1/macos-15/http2/ajax-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:26.177Z"
+      "observed_at": "2026-09-07T08:18:49.863Z"
     },
     {
       "client": {
         "name": "safari",
-        "version": "26.5.2",
+        "version": "26.6.1",
         "engine": "webkit",
         "channel": "stable",
-        "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+        "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
       },
       "environment": {
         "os": "macos-15",
         "architecture": "arm64",
         "headless": false,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -924,26 +924,26 @@
         "url": "https://app.test/capture/form"
       },
       "request": {
-        "raw_file": "raw/safari/26.5.2/macos-15/http2/form-post.txt",
+        "raw_file": "raw/safari/26.6.1/macos-15/http2/form-post.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:25.863Z"
+      "observed_at": "2026-09-07T08:18:49.615Z"
     },
     {
       "client": {
         "name": "safari",
-        "version": "26.5.2",
+        "version": "26.6.1",
         "engine": "webkit",
         "channel": "stable",
-        "driver_version": "Included with Safari 26.5.2 (20624.2.5.18.7)"
+        "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
       },
       "environment": {
         "os": "macos-15",
         "architecture": "arm64",
         "headless": false,
         "runner_image": "macos15",
-        "runner_image_version": "20260727.0256.1"
+        "runner_image_version": "20260829.0321.1"
       },
       "tls": {
         "trusted_by_browser": true,
@@ -956,11 +956,11 @@
         "url": "https://app.test/capture/navigation"
       },
       "request": {
-        "raw_file": "raw/safari/26.5.2/macos-15/http2/navigation-get.txt",
+        "raw_file": "raw/safari/26.6.1/macos-15/http2/navigation-get.txt",
         "http_version": "2.0",
         "protocol": "http2"
       },
-      "observed_at": "2026-08-31T09:45:25.187Z"
+      "observed_at": "2026-09-07T08:18:49.210Z"
     }
   ]
 }
