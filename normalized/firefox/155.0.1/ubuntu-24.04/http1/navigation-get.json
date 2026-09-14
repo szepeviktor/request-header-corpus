@@ -12,7 +12,7 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20260831.293.1"
+    "runner_image_version": "20260907.300.1"
   },
   "tls": {
     "trusted_by_browser": true,

@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "safari",
-    "version": "26.6.1",
-    "engine": "webkit",
+    "name": "chrome",
+    "version": "152.0.7977.83",
+    "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Included with Safari 26.6.1 (20624.5.1.18.3)"
+    "driver_version": "152.0.7977.82"
   },
   "environment": {
-    "os": "macos-15",
-    "architecture": "arm64",
-    "headless": false,
-    "runner_image": "macos15",
-    "runner_image_version": "20260907.0337.1"
+    "os": "windows-2025",
+    "architecture": "AMD64",
+    "headless": true,
+    "runner_image": "win25-vs2026",
+    "runner_image_version": "20260907.229.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -41,16 +41,25 @@
         "https"
       ],
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
       ],
       "accept-encoding": [
-        "gzip, deflate, br"
+        "gzip, deflate, br, zstd"
       ],
       "accept-language": [
         "en-US,en;q=0.9"
       ],
       "priority": [
         "u=0, i"
+      ],
+      "sec-ch-ua": [
+        "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\""
+      ],
+      "sec-ch-ua-mobile": [
+        "?0"
+      ],
+      "sec-ch-ua-platform": [
+        "\"Windows\""
       ],
       "sec-fetch-dest": [
         "document"
@@ -61,8 +70,14 @@
       "sec-fetch-site": [
         "none"
       ],
+      "sec-fetch-user": [
+        "?1"
+      ],
+      "upgrade-insecure-requests": [
+        "1"
+      ],
       "user-agent": [
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
       ]
     }
   }
