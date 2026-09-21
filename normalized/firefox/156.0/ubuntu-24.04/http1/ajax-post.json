@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "155.0.1",
+    "version": "156.0",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -16,30 +16,18 @@
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "h2",
+    "alpn": "http/1.1",
     "secure_context": true
   },
   "scenario": {
     "id": "ajax-post",
     "method": "POST",
-    "url": "https://app.test/capture/ajax"
+    "url": "https://http1.app.test:444/capture/ajax"
   },
   "request": {
-    "protocol": "http2",
-    "http_version": "2.0",
+    "protocol": "http1",
+    "http_version": "1.1",
     "headers": {
-      ":authority": [
-        "app.test"
-      ],
-      ":method": [
-        "POST"
-      ],
-      ":path": [
-        "/capture/ajax?token=header-corpus-http2-ajax-post"
-      ],
-      ":scheme": [
-        "https"
-      ],
       "accept": [
         "*/*"
       ],
@@ -49,20 +37,26 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
+      "connection": [
+        "keep-alive"
+      ],
       "content-length": [
         "27"
       ],
       "content-type": [
         "application/json"
       ],
+      "host": [
+        "http1.app.test:444"
+      ],
       "origin": [
-        "https://app.test"
+        "https://http1.app.test:444"
       ],
       "priority": [
         "u=4"
       ],
       "referer": [
-        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
+        "https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post"
       ],
       "sec-fetch-dest": [
         "empty"
@@ -73,11 +67,8 @@
       "sec-fetch-site": [
         "same-origin"
       ],
-      "te": [
-        "trailers"
-      ],
       "user-agent": [
-        "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0"
       ]
     }
   }

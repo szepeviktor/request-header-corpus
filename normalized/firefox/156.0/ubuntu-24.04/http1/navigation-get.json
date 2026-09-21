@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "155.0.1",
+    "version": "156.0",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -20,9 +20,9 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "form-post",
-    "method": "POST",
-    "url": "https://http1.app.test:444/capture/form"
+    "id": "navigation-get",
+    "method": "GET",
+    "url": "https://http1.app.test:444/capture/navigation"
   },
   "request": {
     "protocol": "http1",
@@ -40,23 +40,11 @@
       "connection": [
         "keep-alive"
       ],
-      "content-length": [
-        "21"
-      ],
-      "content-type": [
-        "application/x-www-form-urlencoded"
-      ],
       "host": [
         "http1.app.test:444"
       ],
-      "origin": [
-        "https://http1.app.test:444"
-      ],
       "priority": [
         "u=0, i"
-      ],
-      "referer": [
-        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
       ],
       "sec-fetch-dest": [
         "document"
@@ -65,7 +53,7 @@
         "navigate"
       ],
       "sec-fetch-site": [
-        "same-origin"
+        "none"
       ],
       "sec-fetch-user": [
         "?1"
@@ -74,7 +62,7 @@
         "1"
       ],
       "user-agent": [
-        "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0"
       ]
     }
   }
