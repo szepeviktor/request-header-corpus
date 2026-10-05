@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "edge",
-    "version": "153.0.4234.48",
+    "name": "chrome",
+    "version": "154.0.8037.58",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Edge"
+    "driver_version": "154.0.8037.57"
   },
   "environment": {
     "os": "windows-2025",
@@ -16,18 +16,30 @@
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "http/1.1",
+    "alpn": "h2",
     "secure_context": true
   },
   "scenario": {
     "id": "ajax-post",
     "method": "POST",
-    "url": "https://http1.app.test:444/capture/ajax"
+    "url": "https://app.test/capture/ajax"
   },
   "request": {
-    "protocol": "http1",
-    "http_version": "1.1",
+    "protocol": "http2",
+    "http_version": "2.0",
     "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "POST"
+      ],
+      ":path": [
+        "/capture/ajax?token=header-corpus-http2-ajax-post"
+      ],
+      ":scheme": [
+        "https"
+      ],
       "accept": [
         "*/*"
       ],
@@ -37,26 +49,23 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
-      "connection": [
-        "keep-alive"
-      ],
       "content-length": [
         "27"
       ],
       "content-type": [
         "application/json"
       ],
-      "host": [
-        "http1.app.test:444"
-      ],
       "origin": [
-        "https://http1.app.test:444"
+        "https://app.test"
+      ],
+      "priority": [
+        "u=1, i"
       ],
       "referer": [
-        "https://http1.app.test:444/scenario/ajax?token=header-corpus-http1-ajax-post"
+        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
       ],
       "sec-ch-ua": [
-        "\"Microsoft Edge\";v=\"153\", \"Not_A Brand\";v=\"8\", \"Chromium\";v=\"153\""
+        "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\""
       ],
       "sec-ch-ua-mobile": [
         "?0"
@@ -74,7 +83,7 @@
         "same-origin"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36"
       ]
     }
   }

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "edge",
-    "version": "153.0.4234.48",
+    "name": "chrome",
+    "version": "154.0.8037.58",
     "engine": "chromium",
     "channel": "stable",
-    "driver_version": "Edge"
+    "driver_version": "154.0.8037.57"
   },
   "environment": {
     "os": "windows-2025",
@@ -16,18 +16,30 @@
   },
   "tls": {
     "trusted_by_browser": true,
-    "alpn": "http/1.1",
+    "alpn": "h2",
     "secure_context": true
   },
   "scenario": {
-    "id": "navigation-get",
-    "method": "GET",
-    "url": "https://http1.app.test:444/capture/navigation"
+    "id": "form-post",
+    "method": "POST",
+    "url": "https://app.test/capture/form"
   },
   "request": {
-    "protocol": "http1",
-    "http_version": "1.1",
+    "protocol": "http2",
+    "http_version": "2.0",
     "headers": {
+      ":authority": [
+        "app.test"
+      ],
+      ":method": [
+        "POST"
+      ],
+      ":path": [
+        "/capture/form?token=header-corpus-http2-form-post"
+      ],
+      ":scheme": [
+        "https"
+      ],
       "accept": [
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
       ],
@@ -37,14 +49,26 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
-      "connection": [
-        "keep-alive"
+      "cache-control": [
+        "max-age=0"
       ],
-      "host": [
-        "http1.app.test:444"
+      "content-length": [
+        "21"
+      ],
+      "content-type": [
+        "application/x-www-form-urlencoded"
+      ],
+      "origin": [
+        "https://app.test"
+      ],
+      "priority": [
+        "u=0, i"
+      ],
+      "referer": [
+        "https://app.test/scenario/form?token=header-corpus-http2-form-post"
       ],
       "sec-ch-ua": [
-        "\"Microsoft Edge\";v=\"153\", \"Not_A Brand\";v=\"8\", \"Chromium\";v=\"153\""
+        "\"Chromium\";v=\"154\", \"Google Chrome\";v=\"154\", \"Not A(Brand\";v=\"99\""
       ],
       "sec-ch-ua-mobile": [
         "?0"
@@ -59,7 +83,7 @@
         "navigate"
       ],
       "sec-fetch-site": [
-        "none"
+        "same-origin"
       ],
       "sec-fetch-user": [
         "?1"
@@ -68,7 +92,7 @@
         "1"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36"
       ]
     }
   }

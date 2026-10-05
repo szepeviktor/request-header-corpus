@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "client": {
-    "name": "edge",
-    "version": "153.0.4234.48",
-    "engine": "chromium",
+    "name": "firefox",
+    "version": "157.0",
+    "engine": "gecko",
     "channel": "stable",
-    "driver_version": "Edge"
+    "driver_version": "0.37.1"
   },
   "environment": {
-    "os": "windows-2025",
-    "architecture": "AMD64",
+    "os": "ubuntu-24.04",
+    "architecture": "x86_64",
     "headless": true,
-    "runner_image": "win25-vs2026",
-    "runner_image_version": "20260925.250.1"
+    "runner_image": "ubuntu24",
+    "runner_image_version": "20260927.320.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -20,16 +20,16 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "navigation-get",
-    "method": "GET",
-    "url": "https://http1.app.test:444/capture/navigation"
+    "id": "form-post",
+    "method": "POST",
+    "url": "https://http1.app.test:444/capture/form"
   },
   "request": {
     "protocol": "http1",
     "http_version": "1.1",
     "headers": {
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
       ],
       "accept-encoding": [
         "gzip, deflate, br, zstd"
@@ -40,17 +40,23 @@
       "connection": [
         "keep-alive"
       ],
+      "content-length": [
+        "21"
+      ],
+      "content-type": [
+        "application/x-www-form-urlencoded"
+      ],
       "host": [
         "http1.app.test:444"
       ],
-      "sec-ch-ua": [
-        "\"Microsoft Edge\";v=\"153\", \"Not_A Brand\";v=\"8\", \"Chromium\";v=\"153\""
+      "origin": [
+        "https://http1.app.test:444"
       ],
-      "sec-ch-ua-mobile": [
-        "?0"
+      "priority": [
+        "u=0, i"
       ],
-      "sec-ch-ua-platform": [
-        "\"Windows\""
+      "referer": [
+        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
       ],
       "sec-fetch-dest": [
         "document"
@@ -59,7 +65,7 @@
         "navigate"
       ],
       "sec-fetch-site": [
-        "none"
+        "same-origin"
       ],
       "sec-fetch-user": [
         "?1"
@@ -68,7 +74,7 @@
         "1"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0"
       ]
     }
   }
