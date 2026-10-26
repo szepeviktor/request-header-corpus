@@ -136,7 +136,7 @@ jobs:
           fi
 
       - name: Upload browser corpus
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: capture-ubuntu-firefox
           path: |
@@ -303,7 +303,7 @@ jobs:
         cancel: windows_capture_server
 
       - name: Upload browser corpus
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: capture-windows-${{ matrix.browser }}
           path: |
@@ -420,7 +420,7 @@ jobs:
           fi
 
       - name: Upload Chrome corpus
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: capture-macos-chrome
           path: |
@@ -517,7 +517,7 @@ jobs:
           fi
 
       - name: Upload Safari corpus
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: capture-macos-safari
           path: |
@@ -566,7 +566,7 @@ jobs:
           npm run check:keys
 
       - name: Upload complete corpus
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: request-header-corpus
           path: |
