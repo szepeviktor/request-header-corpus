@@ -12,7 +12,7 @@
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20261030.294.1"
+    "runner_image_version": "20261103.298.1"
   },
   "tls": {
     "trusted_by_browser": true,

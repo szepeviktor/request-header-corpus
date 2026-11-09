@@ -12,7 +12,7 @@
     "architecture": "arm64",
     "headless": false,
     "runner_image": "macos15",
-    "runner_image_version": "20261028.0489.1"
+    "runner_image_version": "20261104.0514.1"
   },
   "tls": {
     "trusted_by_browser": true,

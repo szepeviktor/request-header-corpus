@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "159.0",
+    "version": "159.0.1",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -12,7 +12,7 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20261026.354.1"
+    "runner_image_version": "20261101.360.1"
   },
   "tls": {
     "trusted_by_browser": true,

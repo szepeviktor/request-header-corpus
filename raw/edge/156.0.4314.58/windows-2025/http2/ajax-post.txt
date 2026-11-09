@@ -4,8 +4,8 @@
 :path: /capture/ajax?token=header-corpus-http2-ajax-post
 content-length: 27
 sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0
-sec-ch-ua: "Microsoft Edge";v="155", "Chromium";v="155", "Not(A:Brand";v="24"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0
+sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "Microsoft Edge";v="156"
 content-type: application/json
 sec-ch-ua-mobile: ?0
 accept: */*

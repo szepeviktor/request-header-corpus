@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "159.0",
+    "version": "159.0.1",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -12,7 +12,7 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20261026.354.1"
+    "runner_image_version": "20261101.360.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -20,9 +20,9 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "form-post",
-    "method": "POST",
-    "url": "https://http1.app.test:444/capture/form"
+    "id": "navigation-get",
+    "method": "GET",
+    "url": "https://http1.app.test:444/capture/navigation"
   },
   "request": {
     "protocol": "http1",
@@ -40,23 +40,11 @@
       "connection": [
         "keep-alive"
       ],
-      "content-length": [
-        "21"
-      ],
-      "content-type": [
-        "application/x-www-form-urlencoded"
-      ],
       "host": [
         "http1.app.test:444"
       ],
-      "origin": [
-        "https://http1.app.test:444"
-      ],
       "priority": [
         "u=0, i"
-      ],
-      "referer": [
-        "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
       ],
       "sec-fetch-dest": [
         "document"
@@ -65,7 +53,7 @@
         "navigate"
       ],
       "sec-fetch-site": [
-        "same-origin"
+        "none"
       ],
       "sec-fetch-user": [
         "?1"

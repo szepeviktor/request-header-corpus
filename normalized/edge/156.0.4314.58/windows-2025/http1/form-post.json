@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "edge",
-    "version": "155.0.4283.62",
+    "version": "156.0.4314.58",
     "engine": "chromium",
     "channel": "stable",
     "driver_version": "Edge"
@@ -12,7 +12,7 @@
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20261021.278.1"
+    "runner_image_version": "20261103.298.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -59,7 +59,7 @@
         "https://http1.app.test:444/scenario/form?token=header-corpus-http1-form-post"
       ],
       "sec-ch-ua": [
-        "\"Microsoft Edge\";v=\"155\", \"Chromium\";v=\"155\", \"Not(A:Brand\";v=\"24\""
+        "\"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"156\", \"Microsoft Edge\";v=\"156\""
       ],
       "sec-ch-ua-mobile": [
         "?0"
@@ -83,7 +83,7 @@
         "1"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0"
       ]
     }
   }

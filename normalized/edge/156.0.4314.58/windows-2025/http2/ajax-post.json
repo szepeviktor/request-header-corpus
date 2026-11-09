@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "edge",
-    "version": "155.0.4283.62",
+    "version": "156.0.4314.58",
     "engine": "chromium",
     "channel": "stable",
     "driver_version": "Edge"
@@ -12,7 +12,7 @@
     "architecture": "AMD64",
     "headless": true,
     "runner_image": "win25-vs2026",
-    "runner_image_version": "20261021.278.1"
+    "runner_image_version": "20261103.298.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -20,9 +20,9 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "navigation-get",
-    "method": "GET",
-    "url": "https://app.test/capture/navigation"
+    "id": "ajax-post",
+    "method": "POST",
+    "url": "https://app.test/capture/ajax"
   },
   "request": {
     "protocol": "http2",
@@ -32,16 +32,16 @@
         "app.test"
       ],
       ":method": [
-        "GET"
+        "POST"
       ],
       ":path": [
-        "/capture/navigation?token=header-corpus-http2-navigation-get"
+        "/capture/ajax?token=header-corpus-http2-ajax-post"
       ],
       ":scheme": [
         "https"
       ],
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+        "*/*"
       ],
       "accept-encoding": [
         "gzip, deflate, br, zstd"
@@ -49,11 +49,23 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
+      "content-length": [
+        "27"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "origin": [
+        "https://app.test"
+      ],
       "priority": [
-        "u=0, i"
+        "u=1, i"
+      ],
+      "referer": [
+        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
       ],
       "sec-ch-ua": [
-        "\"Microsoft Edge\";v=\"155\", \"Chromium\";v=\"155\", \"Not(A:Brand\";v=\"24\""
+        "\"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"156\", \"Microsoft Edge\";v=\"156\""
       ],
       "sec-ch-ua-mobile": [
         "?0"
@@ -62,22 +74,16 @@
         "\"Windows\""
       ],
       "sec-fetch-dest": [
-        "document"
+        "empty"
       ],
       "sec-fetch-mode": [
-        "navigate"
+        "cors"
       ],
       "sec-fetch-site": [
-        "none"
-      ],
-      "sec-fetch-user": [
-        "?1"
-      ],
-      "upgrade-insecure-requests": [
-        "1"
+        "same-origin"
       ],
       "user-agent": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0"
       ]
     }
   }
