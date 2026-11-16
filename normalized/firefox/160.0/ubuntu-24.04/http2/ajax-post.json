@@ -2,7 +2,7 @@
   "schema_version": 1,
   "client": {
     "name": "firefox",
-    "version": "159.0.1",
+    "version": "160.0",
     "engine": "gecko",
     "channel": "stable",
     "driver_version": "0.37.1"
@@ -12,7 +12,7 @@
     "architecture": "x86_64",
     "headless": true,
     "runner_image": "ubuntu24",
-    "runner_image_version": "20261101.360.1"
+    "runner_image_version": "20261111.127.1"
   },
   "tls": {
     "trusted_by_browser": true,
@@ -20,9 +20,9 @@
     "secure_context": true
   },
   "scenario": {
-    "id": "navigation-get",
-    "method": "GET",
-    "url": "https://app.test/capture/navigation"
+    "id": "ajax-post",
+    "method": "POST",
+    "url": "https://app.test/capture/ajax"
   },
   "request": {
     "protocol": "http2",
@@ -32,16 +32,16 @@
         "app.test"
       ],
       ":method": [
-        "GET"
+        "POST"
       ],
       ":path": [
-        "/capture/navigation?token=header-corpus-http2-navigation-get"
+        "/capture/ajax?token=header-corpus-http2-ajax-post"
       ],
       ":scheme": [
         "https"
       ],
       "accept": [
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        "*/*"
       ],
       "accept-encoding": [
         "gzip, deflate, br, zstd"
@@ -49,29 +49,35 @@
       "accept-language": [
         "en-US,en;q=0.9"
       ],
+      "content-length": [
+        "27"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "origin": [
+        "https://app.test"
+      ],
       "priority": [
-        "u=0, i"
+        "u=4"
+      ],
+      "referer": [
+        "https://app.test/scenario/ajax?token=header-corpus-http2-ajax-post"
       ],
       "sec-fetch-dest": [
-        "document"
+        "empty"
       ],
       "sec-fetch-mode": [
-        "navigate"
+        "cors"
       ],
       "sec-fetch-site": [
-        "none"
-      ],
-      "sec-fetch-user": [
-        "?1"
+        "same-origin"
       ],
       "te": [
         "trailers"
       ],
-      "upgrade-insecure-requests": [
-        "1"
-      ],
       "user-agent": [
-        "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0"
+        "Mozilla/5.0 (X11; Linux x86_64; rv:160.0) Gecko/20100101 Firefox/160.0"
       ]
     }
   }
